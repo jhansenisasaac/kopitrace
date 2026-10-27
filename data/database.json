@@ -1,7 +1,0 @@
-{
-  "coffeeData": [],
-  "registeredUsers": [
-    { "name": "Developer Super Admin", "user": "dev", "pass": "m0r94n", "role": "dev" },
-    { "name": "Bpk. Hendra (Petani)", "user": "farmer", "pass": "farmer2026", "role": "farmer" }
-  ]
-}
