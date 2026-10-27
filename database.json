@@ -102,6 +102,25 @@
       "fotoUrl": "",
       "distribusi": [],
       "createdBy": "farmer"
+    },
+    {
+      "zona": "CRM",
+      "metode": "NAT",
+      "tahun": "2026",
+      "batch": "004",
+      "petani": "bpk. budi sitisna",
+      "varietas": "Arabika G.ciremay",
+      "mdpl": "3.078 mdpl",
+      "lat": -6.891667,
+      "lng": 108.4,
+      "destName": "guadang rancakalong",
+      "destLat": 0,
+      "destLng": 0,
+      "sertifikasi": "organik",
+      "cupping": "contoh",
+      "fotoUrl": "",
+      "distribusi": [],
+      "createdBy": "dev"
     }
   ],
   "registeredUsers": [
