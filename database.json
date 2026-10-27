@@ -1,5 +1,25 @@
 {
-  "coffeeData": [],
+  "coffeeData": [
+    {
+      "zona": "SLT",
+      "metode": "NAT",
+      "tahun": "2026",
+      "batch": "001",
+      "petani": "hernansyah",
+      "varietas": "robusta",
+      "mdpl": "600 mdpl",
+      "lat": 1,
+      "lng": 1,
+      "destName": "",
+      "destLat": 0,
+      "destLng": 0,
+      "sertifikasi": "organik",
+      "cupping": "coklat",
+      "fotoUrl": "",
+      "distribusi": [],
+      "createdBy": "dev"
+    }
+  ],
   "registeredUsers": [
     {
       "name": "Developer Super Admin",
