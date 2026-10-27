@@ -278,7 +278,7 @@
                 <button onclick="closeGitHubConfigModal()" class="text-stone-400 hover:text-stone-700"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="space-y-3 text-sm">
-                <p class="text-xs text-stone-500">Repository diset otomatis ke <code>jhansenisaac/kopitrace</code> (branch <code>master</code>). Masukkan Token PAT Anda sekali di perangkat admin agar dapat menyimpan perubahan data.</p>
+                <p class="text-xs text-stone-500">Repository diset otomatis ke <code>jhansenisaac/kopitrace</code> (branch <code>main</code>). Masukkan Token PAT Anda sekali di perangkat admin agar dapat menyimpan perubahan data.</p>
                 <div>
                     <label class="block text-xs font-semibold text-stone-700 mb-1">GitHub Personal Access Token (PAT)</label>
                     <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-700 focus:outline-none font-mono text-xs">
@@ -399,7 +399,7 @@
         </div>
     </div>
 
-    <!-- SCRIPT LOGIC (GITHUB, DISCORD WEBHOOK & DISCORD OAUTH2) -->
+    <!-- SCRIPT LOGIC (GITHUB, DISCORD WEBHOOKS & DISCORD OAUTH2 WITH GUILD & ROLE CHECK) -->
     <script>
         const GITHUB_CONFIG = {
             owner: 'jhansenisasaac',
@@ -408,35 +408,63 @@
             branch: 'main'
         };
 
-        const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1564644685912219678/71hpotxn9KvQE0Zci5TkJoVcXGgJa_xhw8XptVwmA58NYDrelcNInUB_39XauWmsXhnN';
-        const DISCORD_CLIENT_ID = '1564650682991120497'; // Client ID Discord Anda
-        async function sendDiscordNotification(message) {
-            if (!DISCORD_WEBHOOK_URL) return;
+        // 1. Webhook khusus untuk Log Login / Auth (Channel khusus Auth)
+        const DISCORD_WEBHOOK_AUTH = 'https://discord.com/api/webhooks/1564693546764734504/B7-i_t9keiZuOPG7HIJpWHA55mK5VeQvKxGGJW2WrT_XNWe0SGZWKJearSTsQOUB2wnz';
+        
+        // 2. Webhook khusus untuk Log Batch Kopi Baru (Channel khusus Batch)
+        const DISCORD_WEBHOOK_BATCH = 'https://discord.com/api/webhooks/1564644685912219678/71hpotxn9KvQE0Zci5TkJoVcXGgJa_xhw8XptVwmA58NYDrelcNInUB_39XauWmsXhnN';
+
+        const DISCORD_CLIENT_ID = '1564650682991120497'; 
+        
+        // Konfigurasi Server Discord & Role Super Admin
+        const TARGET_GUILD_ID = '1564644279681286195'; // Ganti dengan Server ID Discord Anda
+        const ROLE_ADMIN_ID = '1564682206830665889'; // Ganti dengan Role ID Super Admin Anda
+
+        async function sendAuthNotification(message) {
+            if (!DISCORD_WEBHOOK_AUTH) return;
             try {
-                await fetch(DISCORD_WEBHOOK_URL, {
+                await fetch(DISCORD_WEBHOOK_AUTH, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         content: message,
-                        username: "KopiTrace Notifier",
+                        username: "KopiTrace Auth Bot",
                         avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png"
                     })
                 });
             } catch (err) {
-                console.error("Discord webhook error:", err);
+                console.error("Auth webhook error:", err);
             }
         }
 
-        // Fungsi Login Discord OAuth2
+        async function sendBatchNotification(message) {
+            if (!DISCORD_WEBHOOK_BATCH) return;
+            try {
+                await fetch(DISCORD_WEBHOOK_BATCH, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        content: message,
+                        username: "KopiTrace Batch Bot",
+                        avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png"
+                    })
+                });
+            } catch (err) {
+                console.error("Batch webhook error:", err);
+            }
+        }
+
+        // Fungsi Login Discord OAuth2 dengan Scope Guilds
         function loginWithDiscord() {
             if (!DISCORD_CLIENT_ID) {
-                alert('Mohon atur DISCORD_CLIENT_ID terlebih dahulu di dalam kode script.');
+                alert('Client ID Discord belum diatur.');
                 return;
             }
             const redirectUri = window.location.origin + window.location.pathname;
-            const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=identify`;
+            const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=identify%20guilds%20guilds.members.read`;
             window.location.href = discordAuthUrl;
         }
+
         let defaultCoffeeData = [
             {
                 zona: "UTR",
@@ -1023,7 +1051,7 @@
             updateAuthUI();
             switchView('dashboard');
             
-            sendDiscordNotification(`👤 **PENDAFTARAN AKUN PETANI BARU**\n• Nama: **${name}**\n• Username: \`${u}\``);
+            sendAuthNotification(`👤 **PENDAFTARAN AKUN PETANI BARU**\n• Nama: **${name}**\n• Username: \`${u}\``);
             alert('Akun petani berhasil dibuat & otomatis sinkron ke GitHub & Discord!');
         }
 
@@ -1226,7 +1254,7 @@
             updateStats();
 
             const codeStr = `${newItem.zona}/${newItem.metode}/${newItem.tahun}/${newItem.batch}`;
-            sendDiscordNotification(`🌱 **BATCH KOPI BARU TERDAFTAR!**\n• Kode: \`${codeStr}\`\n• Petani: **${newItem.petani}**\n• Varietas: ${newItem.varietas} (${newItem.mdpl})\n• Metode: ${newItem.metode}`);
+            sendBatchNotification(`🌱 **BATCH KOPI BARU TERDAFTAR!**\n• Kode: \`${codeStr}\`\n• Petani: **${newItem.petani}**\n• Varietas: ${newItem.varietas} (${newItem.mdpl})\n• Metode: ${newItem.metode}`);
         }
 
         function deleteTreeData(index) {
@@ -1296,20 +1324,42 @@
                         headers: { 'Authorization': `Bearer ${accessToken}` }
                     });
                     const user = await res.json();
+                    
+                    let userRole = 'farmer';
+
+                    // Validasi Keanggotaan Server & Role Super Admin
+                    if (TARGET_GUILD_ID && !TARGET_GUILD_ID.includes('GANTI')) {
+                        const memberRes = await fetch(`https://discord.com/api/users/@me/guilds/${TARGET_GUILD_ID}/member`, {
+                            headers: { 'Authorization': `Bearer ${accessToken}` }
+                        });
+                        
+                        if (!memberRes.ok) {
+                            alert('Akses Ditolak! Anda harus bergabung ke Server Discord resmi kami terlebih dahulu.');
+                            window.history.replaceState({}, document.title, window.location.pathname);
+                            return;
+                        }
+
+                        const memberData = await memberRes.json();
+                        if (ROLE_ADMIN_ID && !ROLE_ADMIN_ID.includes('GANTI') && memberData.roles && memberData.roles.includes(ROLE_ADMIN_ID)) {
+                            userRole = 'dev';
+                        }
+                    }
+
                     if (user && user.id) {
                         currentUser = {
                             name: user.username,
                             user: user.id,
-                            role: 'farmer'
+                            role: userRole
                         };
                         saveToStorage();
                         updateAuthUI();
                         switchView('dashboard');
                         window.history.replaceState({}, document.title, window.location.pathname);
-                        sendDiscordNotification(`🟢 **LOGIN DISCORD OAUTH2**\n• User: **${user.username}** berhasil masuk ke dashboard sistem.`);
+                        sendAuthNotification(`🟢 **LOGIN DISCORD OAUTH2**\n• User: **${user.username}** berhasil masuk.\n• Role Sistem: \`${userRole}\``);
                     }
                 } catch (err) {
                     console.error("Gagal verifikasi token Discord:", err);
+                    alert('Gagal memverifikasi akun Discord Anda.');
                 }
             }
 
