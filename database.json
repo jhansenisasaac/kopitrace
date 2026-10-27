@@ -1,56 +1,75 @@
 {
   "coffeeData": [
     {
-      "zona": "SLT",
-      "metode": "NAT",
+      "zona": "UTR",
+      "metode": "WASH",
       "tahun": "2026",
       "batch": "001",
       "petani": "Bpk. Hendra",
       "varietas": "Arabica Gayo",
       "mdpl": "1450 mdpl",
-      "lat": -1,
-      "lng": -5,
-      "destName": "guadang rancakalong",
-      "destLat": 0,
-      "destLng": 0,
-      "sertifikasi": "organik",
-      "cupping": "contoh",
-      "fotoUrl": "",
-      "distribusi": [],
-      "createdBy": "dev"
+      "lat": -6.9175,
+      "lng": 107.6191,
+      "destName": "Gudang Ekspor Tanjung Priok, Jakarta",
+      "destLat": -6.1015,
+      "destLng": 106.8845,
+      "sertifikasi": "SNI Organik & USDA Organic Certified",
+      "cupping": "Jasmine, Lemongrass, Clean Cup",
+      "fotoUrl": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
+      "distribusi": [
+        { "tanggal": "2026-06-01", "aktivitas": "Panen Selektif Ceri Kopi Matang" },
+        { "tanggal": "2026-06-03", "aktivitas": "Pencucian & Fermentasi Basah" }
+      ],
+      "createdBy": "farmer"
     },
     {
-      "zona": "SLT",
-      "metode": "WNE",
+      "zona": "SMD",
+      "metode": "NAT",
       "tahun": "2026",
       "batch": "002",
-      "petani": "Bpk. Hendra (Petani)",
-      "varietas": "Arabica",
-      "mdpl": "600 mdpl",
-      "lat": -2,
-      "lng": 2,
-      "destName": "guadang rancakalong",
-      "destLat": 0,
-      "destLng": 0,
-      "sertifikasi": "kimia",
-      "cupping": "citrus",
-      "fotoUrl": "",
-      "distribusi": [],
+      "petani": "Kelompok Tani Tampomas",
+      "varietas": "Typica & Lini S",
+      "mdpl": "1300 mdpl",
+      "lat": -6.8342,
+      "lng": 107.9351,
+      "destName": "Roastery Kopi Lokal Sumedang",
+      "destLat": -6.8500,
+      "destLng": 107.9167,
+      "sertifikasi": "Fair Trade Local Standard",
+      "cupping": "Dark Chocolate, Brown Sugar, Ripe Fruit",
+      "fotoUrl": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80",
+      "distribusi": [
+        { "tanggal": "2026-07-10", "aktivitas": "Panen Raya Kopi Arabika Tampomas" },
+        { "tanggal": "2026-07-12", "aktivitas": "Natural Process Sun-Drying" }
+      ],
+      "createdBy": "farmer"
+    },
+    {
+      "zona": "JWG",
+      "metode": "HON",
+      "tahun": "2026",
+      "batch": "003",
+      "petani": "Ibu Siti Aminah",
+      "varietas": "Sigarar Utang",
+      "mdpl": "1500 mdpl",
+      "lat": -7.2504,
+      "lng": 107.8741,
+      "destName": "Distribution Hub Bandung Selatan",
+      "destLat": -6.9214,
+      "destLng": 107.6105,
+      "sertifikasi": "Rainforest Alliance Certified",
+      "cupping": "Caramel, Orange Blossom, Balanced Acidity",
+      "fotoUrl": "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=600&q=80",
+      "distribusi": [
+        { "tanggal": "2026-08-01", "aktivitas": "Pemetikan Buah Merah Sempurna" },
+        { "tanggal": "2026-08-04", "aktivitas": "Honey Processing (Yellow Honey)" }
+      ],
       "createdBy": "farmer"
     }
   ],
   "registeredUsers": [
-    {
-      "name": "Developer Super Admin",
-      "user": "dev",
-      "pass": "m0r94n",
-      "role": "dev"
-    },
-    {
-      "name": "Bpk. Hendra (Petani)",
-      "user": "farmer",
-      "pass": "farmer2026",
-      "role": "farmer"
-    }
+    { "name": "Developer Super Admin", "user": "dev", "pass": "m0r94n", "role": "dev" },
+    { "name": "Bpk. Hendra (Petani)", "user": "farmer", "pass": "farmer2026", "role": "farmer" },
+    { "name": "Kelompok Tani Tampomas", "user": "tampomas", "pass": "sumedang2026", "role": "farmer" }
   ]
 }
