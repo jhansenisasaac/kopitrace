@@ -18,6 +18,25 @@
       "fotoUrl": "",
       "distribusi": [],
       "createdBy": "dev"
+    },
+    {
+      "zona": "SLT",
+      "metode": "WNE",
+      "tahun": "2026",
+      "batch": "002",
+      "petani": "Bpk. Hendra (Petani)",
+      "varietas": "Arabica",
+      "mdpl": "600 mdpl",
+      "lat": -2,
+      "lng": 2,
+      "destName": "guadang rancakalong",
+      "destLat": 0,
+      "destLng": 0,
+      "sertifikasi": "kimia",
+      "cupping": "citrus",
+      "fotoUrl": "",
+      "distribusi": [],
+      "createdBy": "farmer"
     }
   ],
   "registeredUsers": [
