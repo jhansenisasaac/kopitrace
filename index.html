@@ -1,56 +1,28 @@
 <!DOCTYPE html>
 <html lang="id">
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KopiTrace - Pemetaan & Traceability Kopi</title>
-    <meta name="theme-color" content="#78350f">
-    
-    <!-- Favicon (Ikon di Tab Browser) -->
-    <link rel="icon" type="image/png" href="./logo.png">
-
-    <!-- PWA Manifest & iOS Apple Touch Icon -->
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="./logo.png">
-
-    <!-- Script & Style lainnya -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KopiTrace - Pemetaan & Traceability Kopi</title>
     <meta name="theme-color" content="#78350f">
     
-    <!-- PWA Manifest & iOS Support -->
-    <link rel="icon" href="./logo.png" type="image/png">
+    <!-- Favicon & PWA Apple Touch Icon -->
+    <link rel="icon" type="image/png" href="./logo.png">
     <link rel="apple-touch-icon" href="./logo.png">
     <link rel="manifest" href="manifest.json">
+    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="KopiTrace">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3299/3299943.png">
 
-    <!-- CSS & Script lainnya -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KopiTrace - Pemetaan & Traceability Kopi</title>
-    <meta name="theme-color" content="#78350f">
-    <link rel="icon" href="./logo.png" type="image/png">
-<link rel="apple-touch-icon" href="./logo.png">
+    <!-- Stylesheets & Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    
     <style>
         #map { height: 400px; border-radius: 0.75rem; z-index: 1; }
         #trace-map { height: 260px; border-radius: 0.75rem; z-index: 1; }
@@ -342,7 +314,7 @@
                 <button onclick="closeGitHubConfigModal()" class="text-stone-400 hover:text-stone-700 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="space-y-3 text-xs sm:text-sm">
-                <p class="text-stone-500">Repository diset ke <code>jhansenisaac/kopitrace</code> (branch <code>main</code>). Masukkan Personal Access Token (PAT) Anda.</p>
+                <p class="text-stone-500">Repository diset ke <code>jhansenisasaac/kopitrace</code> (branch <code>main</code>). Masukkan Personal Access Token (PAT) Anda.</p>
                 <div>
                     <label class="block font-semibold text-stone-700 mb-1">GitHub PAT Token</label>
                     <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-700 focus:outline-none font-mono text-xs">
@@ -572,7 +544,7 @@
         let currentUser = JSON.parse(localStorage.getItem('kopiTraceActiveUser')) || null;
         let currentView = 'public-home';
         let mapInstance = null, markersLayer = null, traceMapInstance = null, githubFileSha = null;
-        let deferredPrompt;
+        let deferredPrompt = null;
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -591,6 +563,8 @@
                     }
                     deferredPrompt = null;
                 });
+            } else {
+                alert('Pemasangan aplikasi PWA belum tersedia atau sudah terinstal di perangkat ini.');
             }
         }
 
