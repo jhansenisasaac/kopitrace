@@ -17,8 +17,14 @@
       "cupping": "Jasmine, Lemongrass, Clean Cup",
       "fotoUrl": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
       "distribusi": [
-        { "tanggal": "2026-06-01", "aktivitas": "Panen Selektif Ceri Kopi Matang" },
-        { "tanggal": "2026-06-03", "aktivitas": "Pencucian & Fermentasi Basah" }
+        {
+          "tanggal": "2026-06-01",
+          "aktivitas": "Panen Selektif Ceri Kopi Matang"
+        },
+        {
+          "tanggal": "2026-06-03",
+          "aktivitas": "Pencucian & Fermentasi Basah"
+        }
       ],
       "createdBy": "farmer"
     },
@@ -33,14 +39,20 @@
       "lat": -6.8342,
       "lng": 107.9351,
       "destName": "Roastery Kopi Lokal Sumedang",
-      "destLat": -6.8500,
+      "destLat": -6.85,
       "destLng": 107.9167,
       "sertifikasi": "Fair Trade Local Standard",
       "cupping": "Dark Chocolate, Brown Sugar, Ripe Fruit",
       "fotoUrl": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80",
       "distribusi": [
-        { "tanggal": "2026-07-10", "aktivitas": "Panen Raya Kopi Arabika Tampomas" },
-        { "tanggal": "2026-07-12", "aktivitas": "Natural Process Sun-Drying" }
+        {
+          "tanggal": "2026-07-10",
+          "aktivitas": "Panen Raya Kopi Arabika Tampomas"
+        },
+        {
+          "tanggal": "2026-07-12",
+          "aktivitas": "Natural Process Sun-Drying"
+        }
       ],
       "createdBy": "farmer"
     },
@@ -61,15 +73,55 @@
       "cupping": "Caramel, Orange Blossom, Balanced Acidity",
       "fotoUrl": "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=600&q=80",
       "distribusi": [
-        { "tanggal": "2026-08-01", "aktivitas": "Pemetikan Buah Merah Sempurna" },
-        { "tanggal": "2026-08-04", "aktivitas": "Honey Processing (Yellow Honey)" }
+        {
+          "tanggal": "2026-08-01",
+          "aktivitas": "Pemetikan Buah Merah Sempurna"
+        },
+        {
+          "tanggal": "2026-08-04",
+          "aktivitas": "Honey Processing (Yellow Honey)"
+        }
       ],
+      "createdBy": "farmer"
+    },
+    {
+      "zona": "GRT",
+      "metode": "HON",
+      "tahun": "2026",
+      "batch": "005",
+      "petani": "Bpk. Hendra (Petani)",
+      "varietas": "Arabica",
+      "mdpl": "1450 mdpl",
+      "lat": 1,
+      "lng": -1,
+      "destName": "guadang rancakalong",
+      "destLat": 0,
+      "destLng": 0,
+      "sertifikasi": "organik",
+      "cupping": "citrus",
+      "fotoUrl": "",
+      "distribusi": [],
       "createdBy": "farmer"
     }
   ],
   "registeredUsers": [
-    { "name": "Developer Super Admin", "user": "dev", "pass": "m0r94n", "role": "dev" },
-    { "name": "Bpk. Hendra (Petani)", "user": "farmer", "pass": "farmer2026", "role": "farmer" },
-    { "name": "Kelompok Tani Tampomas", "user": "tampomas", "pass": "sumedang2026", "role": "farmer" }
+    {
+      "name": "Developer Super Admin",
+      "user": "dev",
+      "pass": "m0r94n",
+      "role": "dev"
+    },
+    {
+      "name": "Bpk. Hendra (Petani)",
+      "user": "farmer",
+      "pass": "farmer2026",
+      "role": "farmer"
+    },
+    {
+      "name": "Kelompok Tani Tampomas",
+      "user": "tampomas",
+      "pass": "sumedang2026",
+      "role": "farmer"
+    }
   ]
 }
