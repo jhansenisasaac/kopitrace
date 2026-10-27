@@ -1,0 +1,17 @@
+{
+  "name": "KopiTrace - Pemetaan & Traceability Kopi",
+  "short_name": "KopiTrace",
+  "start_url": "/kopitrace/",
+  "scope": "/kopitrace/",
+  "display": "standalone",
+  "background_color": "#1c1917",
+  "theme_color": "#78350f",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3299/3299943.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
