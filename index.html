@@ -44,20 +44,19 @@
                     </div>
                 </div>
 
-                <!-- Desktop Nav -->
+                <!-- Desktop Nav & Sejajar Tombol Instal -->
                 <div class="hidden md:flex items-center space-x-6 text-sm font-medium">
                     <button onclick="switchView('public-home')" class="hover:text-amber-400 transition py-2">Beranda</button>
                     <button onclick="switchView('public-map')" class="hover:text-amber-400 transition py-2">Peta Sebaran</button>
                     <button onclick="switchView('public-scanner')" class="hover:text-amber-400 transition py-2">Lacak / Scan</button>
+                    <button onclick="installAppPrompt()" id="install-btn" class="hidden text-amber-400 hover:text-amber-300 transition py-2 items-center space-x-1.5 font-semibold">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Instal</span>
+                    </button>
                 </div>
 
-                <!-- Right Actions & Mobile Hamburger -->
+                <!-- Right Actions (Auth & Mobile Hamburger) -->
                 <div class="flex items-center space-x-2 sm:space-x-3">
-                    <button onclick="installAppPrompt()" id="install-btn" class="hidden bg-stone-800 hover:bg-stone-700 text-amber-400 border border-amber-600/40 text-xs px-2.5 py-1.5 rounded-lg font-semibold transition items-center space-x-1">
-                        <i class="fa-solid fa-download"></i>
-                        <span class="hidden sm:inline">Instal</span>
-                    </button>
-
                     <div id="nav-auth-container" class="hidden items-center space-x-2 bg-stone-800/90 px-2.5 py-1.5 rounded-xl border border-stone-700 text-xs">
                         <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
                         <span id="auth-role-label" class="font-semibold capitalize text-stone-200 hidden sm:inline">Role: -</span>
@@ -73,11 +72,15 @@
             </div>
         </div>
 
-        <!-- Mobile Dropdown Menu -->
+        <!-- Mobile Dropdown Menu (Termasuk Tombol Instal untuk Android) -->
         <div id="mobile-menu" class="hidden md:hidden bg-stone-900 border-t border-stone-800 px-4 pt-2 pb-4 space-y-2 text-sm font-medium">
             <button onclick="switchView('public-home'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Beranda</button>
             <button onclick="switchView('public-map'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Peta Sebaran</button>
             <button onclick="switchView('public-scanner'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Lacak / Scan Kode</button>
+            <button onclick="installAppPrompt(); toggleMobileMenu();" id="mobile-install-btn" class="hidden w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition text-amber-400 font-semibold items-center space-x-2">
+                <i class="fa-solid fa-download mr-1"></i>
+                <span>Instal Aplikasi</span>
+            </button>
         </div>
     </nav>
 
@@ -550,7 +553,9 @@
             e.preventDefault();
             deferredPrompt = e;
             const btn = document.getElementById('install-btn');
+            const mobileBtn = document.getElementById('mobile-install-btn');
             if (btn) btn.classList.remove('hidden');
+            if (mobileBtn) mobileBtn.classList.remove('hidden');
         });
 
         function installAppPrompt() {
@@ -559,7 +564,9 @@
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
                         const btn = document.getElementById('install-btn');
+                        const mobileBtn = document.getElementById('mobile-install-btn');
                         if (btn) btn.classList.add('hidden');
+                        if (mobileBtn) mobileBtn.classList.add('hidden');
                     }
                     deferredPrompt = null;
                 });
