@@ -410,6 +410,8 @@
 
         const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1564644685912219678/71hpotxn9KvQE0Zci5TkJoVcXGgJa_xhw8XptVwmA58NYDrelcNInUB_39XauWmsXhnN';
         const DISCORD_CLIENT_ID = '1564650682991120497'; // Client ID Discord Anda
+        const TARGET_GUILD_ID = '1564644279681286195'; // Ganti dengan ID Server Discord Anda
+        const ROLE_ADMIN_ID = '1564682206830665889';    // Ganti dengan ID Role Super Admin yang disalin
 
         async function sendDiscordNotification(message) {
             if (!DISCORD_WEBHOOK_URL) return;
@@ -438,6 +440,23 @@
             const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=identify`;
             window.location.href = discordAuthUrl;
         }
+        // Cek keanggotaan server dan role
+if (TARGET_GUILD_ID && !TARGET_GUILD_ID.includes('MASUKKAN')) {
+    const memberRes = await fetch(`https://discord.com/api/users/@me/guilds/${TARGET_GUILD_ID}/member`, {
+        headers: { 'Authorization': `Bearer ${accessToken}` }
+    });
+    
+    if (!memberRes.ok) {
+        alert('Akses Ditolak! Anda harus bergabung ke Server Discord resmi.');
+        return;
+    }
+
+    const memberData = await memberRes.json();
+    // Jika user memiliki Role Super Admin, berikan role sistem 'dev'
+    if (ROLE_ADMIN_ID && memberData.roles && memberData.roles.includes(ROLE_ADMIN_ID)) {
+        userRole = 'dev';
+    }
+}
 
         let defaultCoffeeData = [
             {
