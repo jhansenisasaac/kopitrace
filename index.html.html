@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KopiTrace - Pemetaan & Traceability Kopi</title>
+    <meta name="theme-color" content="#78350f">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        #map { height: 450px; border-radius: 0.75rem; z-index: 1; }
+        #trace-map { height: 280px; border-radius: 0.75rem; z-index: 1; }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans min-h-screen flex flex-col">
+    <!-- NAVIGATION BAR -->
+    <nav class="bg-stone-900 text-stone-100 shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="handleSecretLogoClick()" title="KopiTrace">
+                    <div class="bg-amber-700 p-2 rounded-lg text-white shadow">
+                        <i class="fa-solid fa-seedling text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="font-bold text-lg tracking-wide">KopiTrace</span>
+                        <div class="text-[10px] text-stone-400 tracking-wider uppercase font-mono">Traceability</div>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                    <button onclick="switchView('public-home')" class="hover:text-amber-400 transition">Beranda</button>
+                    <button onclick="switchView('public-map')" class="hover:text-amber-400 transition">Peta Sebaran</button>
+                    <button onclick="switchView('public-scanner')" class="hover:text-amber-400 transition">Lacak / Scan Kode</button>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <button onclick="installAppPrompt()" id="install-btn" class="hidden bg-stone-800 hover:bg-stone-700 text-amber-400 border border-amber-600/40 text-xs px-3 py-1.5 rounded-lg font-semibold transition flex items-center space-x-1.5">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Instal Aplikasi</span>
+                    </button>
+
+                    <div id="nav-auth-container" class="hidden flex items-center space-x-3 bg-stone-800/90 px-3 py-1.5 rounded-xl border border-stone-700 text-xs">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                            <span id="auth-role-label" class="font-semibold capitalize text-stone-200">Role: -</span>
+                        </div>
+                        <div class="h-3 w-[1px] bg-stone-700"></div>
+                        <button onclick="openDashboard()" class="text-amber-400 hover:underline font-bold">Dashboard</button>
+                        <button onclick="handleLogout()" class="bg-red-600/80 hover:bg-red-600 text-white px-2 py-1 rounded-lg transition font-medium">Keluar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- 1. PUBLIC HOME -->
+        <section id="view-public-home" class="space-y-8">
+            <div class="bg-gradient-to-r from-stone-900 via-stone-800 to-amber-950 text-white rounded-2xl p-8 shadow-xl flex flex-col md:flex-row justify-between items-center relative overflow-hidden">
+                <div class="space-y-4 max-w-xl mb-6 md:mb-0 z-10">
+                    <span class="bg-amber-700/80 text-amber-200 text-xs px-3 py-1 rounded-full uppercase tracking-wider font-semibold">Sistem Transparansi Kopi Indonesia</span>
+                    <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">Lacak Asal-Usul Kopi Dari Pohon Hingga Cangkir</h1>
+                    <p class="text-stone-300 text-sm md:text-base leading-relaxed">
+                        Pindai QR Code untuk mengetahui zona kebun, metode pengolahan, sertifikasi organik, rute logistik, galeri foto, hingga catatan cupping secara transparan.
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <button onclick="switchView('public-scanner')" class="bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold px-5 py-2.5 rounded-xl transition flex items-center space-x-2 shadow">
+                            <i class="fa-solid fa-qrcode"></i>
+                            <span>Lacak / Scan Kode</span>
+                        </button>
+                        <button onclick="switchView('public-map')" class="bg-stone-700/80 hover:bg-stone-700 text-white px-5 py-2.5 rounded-xl transition flex items-center space-x-2 border border-stone-600">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                            <span>Lihat Peta Kebun</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="w-full md:w-auto bg-stone-950/70 p-6 rounded-xl backdrop-blur border border-stone-800 text-center space-y-4 min-w-[260px] z-10 shadow-inner">
+                    <div class="text-xs uppercase tracking-widest text-amber-400 font-semibold">Statistik Kebun Terdaftar</div>
+                    <div class="grid grid-cols-2 gap-4 text-center">
+                        <div class="bg-stone-900/90 p-3 rounded-lg border border-stone-800">
+                            <div id="stat-total-trees" class="text-2xl font-black text-white">0</div>
+                            <div class="text-xs text-stone-400">Total Batch/Pohon</div>
+                        </div>
+                        <div class="bg-stone-900/90 p-3 rounded-lg border border-stone-800">
+                            <div id="stat-total-zones" class="text-2xl font-black text-amber-300">0</div>
+                            <div class="text-xs text-stone-400">Zona Wilayah</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-bold text-stone-900 flex items-center space-x-2">
+                        <i class="fa-solid fa-seedling text-amber-700"></i>
+                        <span>Daftar Batch Kopi Terbaru</span>
+                    </h2>
+                    <button onclick="switchView('public-scanner')" class="text-amber-700 hover:underline text-sm font-semibold">Cari & Lacak Lainnya &rarr;</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="public-card-list"></div>
+            </div>
+        </section>
+
+        <!-- 2. PUBLIC MAP -->
+        <section id="view-public-map" class="space-y-6 hidden">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-stone-900">Peta Sebaran Pohon Kopi</h2>
+                    <p class="text-sm text-stone-600">Klik marker pada peta untuk melihat detail lokasi dan informasi batch kopi.</p>
+                </div>
+                <button onclick="switchView('public-home')" class="bg-stone-200 hover:bg-stone-300 px-4 py-2 rounded-lg text-sm font-medium">Kembali</button>
+            </div>
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-stone-200">
+                <div id="map"></div>
+            </div>
+        </section>
+
+        <!-- 3. PUBLIC SCANNER & TRACEABILITY -->
+        <section id="view-public-scanner" class="space-y-6 hidden max-w-3xl mx-auto">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 space-y-6">
+                <div class="text-center space-y-2">
+                    <h2 class="text-2xl font-bold text-stone-900">Pencarian & Pelacakan Kopi</h2>
+                    <p class="text-sm text-stone-600">Masukkan kode unik (Contoh: <code class="bg-stone-100 text-amber-700 px-2 py-0.5 rounded font-mono">UTR/WASH/2026/001</code>) atau pilih dari contoh cepat.</p>
+                </div>
+
+                <div class="flex gap-2">
+                    <input type="text" id="search-code-input" placeholder="Ketik kode unik (Cth: UTR/WASH/2026/001)..." class="flex-grow px-4 py-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-amber-700 focus:outline-none uppercase font-mono text-sm">
+                    <button onclick="handlePublicSearch()" class="bg-amber-700 hover:bg-amber-800 text-white px-6 py-3 rounded-xl font-semibold transition flex items-center space-x-2">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span>Lacak</span>
+                    </button>
+                </div>
+
+                <div>
+                    <span class="text-xs text-stone-500 font-semibold uppercase tracking-wider">Contoh Kode Cepat:</span>
+                    <div id="sample-code-badges" class="flex flex-wrap gap-2 mt-2"></div>
+                </div>
+
+                <div id="traceability-result" class="hidden border-t border-stone-200 pt-6 space-y-6"></div>
+            </div>
+        </section>
+
+        <!-- 4. DASHBOARD -->
+        <section id="view-dashboard" class="space-y-6 hidden">
+            <div id="dashboard-banner" class="bg-amber-50 border border-amber-200 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-center shadow-sm gap-4">
+                <div class="space-y-1">
+                    <div id="dash-title" class="text-amber-900 font-extrabold text-lg flex items-center space-x-2">
+                        <i class="fa-solid fa-id-badge"></i>
+                        <span>Panel Dashboard Pengelola</span>
+                    </div>
+                    <p id="dash-subtitle" class="text-xs text-amber-900/70">Kelola data batch, sertifikasi, rute logistik, dan sinkronisasi GitHub.</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="openGitHubConfigModal()" class="bg-stone-800 hover:bg-stone-900 text-amber-400 px-4 py-2 rounded-xl text-sm font-semibold shadow flex items-center space-x-2">
+                        <i class="fa-brands fa-github"></i>
+                        <span>Atur Token Admin</span>
+                    </button>
+                    <button onclick="openAddTreeModal()" class="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow flex items-center space-x-2">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Tambah Batch Baru</span>
+                    </button>
+                    <button id="dev-export-btn" onclick="exportDataJSON()" class="hidden bg-stone-700 hover:bg-stone-800 text-white px-4 py-2 rounded-xl text-sm font-semibold flex items-center space-x-2">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Export DB</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
+                <div class="px-6 py-4 border-b border-stone-200 flex justify-between items-center">
+                    <h3 class="font-bold text-stone-900">Daftar Batch Kopi Terkelola</h3>
+                    <div class="flex items-center space-x-3">
+                        <span id="github-sync-status" class="text-xs bg-stone-100 text-stone-600 px-2.5 py-1 rounded-full font-medium">Auto-Sync: Aktif</span>
+                        <span id="dash-total-count" class="text-xs bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full font-bold">0 Data</span>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-stone-100 text-stone-700 uppercase text-xs tracking-wider border-b border-stone-200">
+                                <th class="p-4">Kode Unik</th>
+                                <th class="p-4">Zona</th>
+                                <th class="p-4">Metode</th>
+                                <th class="p-4">Petani / Pengelola</th>
+                                <th class="p-4">Varietas</th>
+                                <th class="p-4 text-center">Aksi (URL QR)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboard-table-body" class="divide-y divide-stone-200"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-stone-900 text-stone-400 py-6 mt-12 border-t border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs space-y-2">
+            <p>&copy; 2026 KopiTrace. Sistem Pemetaan & Traceability Berbasis GitHub API & PWA.</p>
+            <p class="text-stone-500">Penyimpanan tersinkronisasi secara real-time ke repository GitHub & Discord.</p>
+        </div>
+    </footer>
+
+    <!-- AUTH MODAL -->
+    <div id="auth-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-stone-100 pb-3">
+                <h3 class="font-bold text-lg text-stone-900 flex items-center space-x-2">
+                    <i class="fa-solid fa-lock text-amber-700"></i>
+                    <span id="auth-modal-title">Akses Pengelola Sistem</span>
+                </h3>
+                <button onclick="closeAuthModal()" class="text-stone-400 hover:text-stone-700"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <!-- TOMBOL LOGIN DISCORD OAUTH2 -->
+            <div class="pt-2">
+                <button onclick="loginWithDiscord()" class="w-full bg-[#5865F2] hover:bg-[#4752C4] text-white font-semibold py-2.5 rounded-lg transition shadow flex items-center justify-center space-x-2 text-sm">
+                    <i class="fa-brands fa-discord text-lg"></i>
+                    <span>Login dengan Akun Discord</span>
+                </button>
+            </div>
+
+            <div class="relative flex py-2 items-center">
+                <div class="flex-grow border-t border-stone-200"></div>
+                <span class="flex-shrink mx-4 text-xs text-stone-400 uppercase font-mono">Atau Manual</span>
+                <div class="flex-grow border-t border-stone-200"></div>
+            </div>
+
+            <div class="flex bg-stone-100 p-1 rounded-xl text-xs font-semibold">
+                <button id="tab-btn-login" onclick="switchAuthTab('login')" class="flex-1 py-2 rounded-lg bg-white text-stone-900 shadow-sm transition">Masuk</button>
+                <button id="tab-btn-register" onclick="switchAuthTab('register')" class="flex-1 py-2 rounded-lg text-stone-600 transition">Buat Akun Baru</button>
+            </div>
+
+            <div id="form-login-pane" class="space-y-3 pt-2 text-sm">
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Username</label>
+                    <input type="text" id="login-user" placeholder="Cth: farmer atau dev" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-700 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Password</label>
+                    <input type="password" id="login-pass" placeholder="••••••••" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-700 focus:outline-none">
+                </div>
+                <div id="login-error" class="text-xs text-red-600 hidden font-medium">Username atau password salah!</div>
+                <button onclick="handleLogin()" class="w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold py-2.5 rounded-lg transition shadow">Masuk ke Sistem</button>
+            </div>
+
+            <div id="form-register-pane" class="space-y-3 pt-2 text-sm hidden">
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Nama Lengkap / Kelompok Tani</label>
+                    <input type="text" id="reg-name" placeholder="Cth: Kelompok Tani Gayo Maju" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Username Baru</label>
+                    <input type="text" id="reg-user" placeholder="Cth: tani_gayo" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Password</label>
+                    <input type="password" id="reg-pass" placeholder="Buat password aman" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none">
+                </div>
+                <div id="reg-error" class="text-xs text-red-600 hidden font-medium">Mohon isi semua kolom dengan benar!</div>
+                <button onclick="handleRegister()" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-2.5 rounded-lg transition shadow">Daftar Akun Petani</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GITHUB TOKEN CONFIG MODAL -->
+    <div id="github-config-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-stone-100 pb-3">
+                <h3 class="font-bold text-lg text-stone-900 flex items-center space-x-2">
+                    <i class="fa-brands fa-github text-stone-900"></i>
+                    <span>Token Otorisasi Admin (Write)</span>
+                </h3>
+                <button onclick="closeGitHubConfigModal()" class="text-stone-400 hover:text-stone-700"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-sm">
+                <p class="text-xs text-stone-500">Repository diset otomatis ke <code>jhansenisaac/kopitrace</code> (branch <code>master</code>). Masukkan Token PAT Anda sekali di perangkat admin agar dapat menyimpan perubahan data.</p>
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">GitHub Personal Access Token (PAT)</label>
+                    <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-700 focus:outline-none font-mono text-xs">
+                </div>
+                <div class="flex space-x-2 pt-2">
+                    <button onclick="saveAdminToken()" class="flex-1 bg-stone-900 hover:bg-stone-800 text-white font-semibold py-2.5 rounded-lg transition shadow text-xs">Simpan Token Admin</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TREE / BATCH MODAL -->
+    <div id="tree-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-stone-100 pb-3">
+                <h3 id="modal-tree-title" class="font-bold text-lg text-stone-900">Tambah Data Batch Kopi</h3>
+                <button onclick="closeTreeModal()" class="text-stone-400 hover:text-stone-700"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="tree-form" onsubmit="saveTreeData(event)" class="space-y-4 text-sm">
+                <input type="hidden" id="edit-index" value="-1">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">Zona / Wilayah (3 Huruf)</label>
+                        <input type="text" id="form-zona" placeholder="UTR" required class="w-full px-3 py-2 border border-stone-300 rounded-lg uppercase font-mono">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">Metode Pengolahan</label>
+                        <select id="form-metode" class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                            <option value="WASH">WASH (Washed)</option>
+                            <option value="NAT">NAT (Natural)</option>
+                            <option value="HON">HON (Honey)</option> 
+                            <option value="WNE">WNE (Wine)</option>
+                            <option value="EXP">EXP (Experimental)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">Tahun</label>
+                        <input type="number" id="form-tahun" value="2026" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">No. Batch</label>
+                        <input type="text" id="form-batch" placeholder="001" required class="w-full px-3 py-2 border border-stone-300 rounded-lg font-mono">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">Nama Petani / Pengelola</label>
+                    <input type="text" id="form-petani" placeholder="Bpk. Budi Santoso" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">Varietas Kopi</label>
+                        <input type="text" id="form-varietas" placeholder="Arabica Gayo" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">Ketinggian (MDPL)</label>
+                        <input type="text" id="form-mdpl" placeholder="1450 mdpl" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                    </div>
+                </div>
+
+                <div class="bg-stone-50 p-3 rounded-xl border border-stone-200 space-y-2">
+                    <label class="block font-semibold text-stone-700 text-xs uppercase tracking-wide">Titik GPS Kebun Asal</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="number" step="any" id="form-lat" placeholder="Latitude" required class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs">
+                        <input type="number" step="any" id="form-lng" placeholder="Longitude" required class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs">
+                    </div>
+                </div>
+
+                <div class="bg-stone-50 p-3 rounded-xl border border-stone-200 space-y-2">
+                    <label class="block font-semibold text-stone-700 text-xs uppercase tracking-wide">Titik Tujuan / Gudang Logistik</label>
+                    <input type="text" id="form-dest-name" placeholder="Nama Gudang Tujuan" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs">
+                    <div class="grid grid-cols-2 gap-2 pt-1">
+                        <input type="number" step="any" id="form-dest-lat" placeholder="Dest Latitude" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs">
+                        <input type="number" step="any" id="form-dest-lng" placeholder="Dest Longitude" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">Sertifikasi Organik & Standar Mutu</label>
+                    <input type="text" id="form-sertifikasi" placeholder="Cth: SNI Organik, USDA Organic" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">Catatan Cupping / Profil Rasa</label>
+                    <input type="text" id="form-cupping" placeholder="Floral, Brown Sugar, Citrus" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                </div>
+                
+                <div class="space-y-2 bg-stone-50 p-3 rounded-xl border border-stone-200">
+                    <label class="block font-semibold text-stone-700">Upload Foto Kebun / Proses (dari HP/PC)</label>
+                    <input type="file" id="form-file-foto" accept="image/*" onchange="handleImageUpload(event)" class="w-full text-xs text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-700 file:text-white hover:file:bg-amber-800 cursor-pointer">
+                    <input type="hidden" id="form-foto">
+                    <div id="preview-container" class="hidden pt-2">
+                        <img id="photo-preview" src="" alt="Preview" class="h-24 w-auto rounded-lg border border-stone-300 object-cover">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">Riwayat / Timeline Distribusi (Format: Tanggal | Aktivitas)</label>
+                    <textarea id="form-distribusi" rows="3" placeholder="2026-06-01 | Panen Ceri Merah&#10;2026-06-05 | Pengolahan" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs font-mono"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closeTreeModal()" class="bg-stone-200 hover:bg-stone-300 px-4 py-2 rounded-lg font-medium">Batal</button>
+                    <button type="submit" class="bg-amber-700 hover:bg-amber-800 text-white px-6 py-2 rounded-lg font-semibold shadow">Simpan Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- QR MODAL -->
+    <div id="qr-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center space-y-4">
+            <h3 class="font-bold text-lg text-stone-900">Label QR Code URL Asli</h3>
+            <div id="qrcode-render" class="flex justify-center items-center bg-stone-50 p-4 rounded-xl border border-stone-200 min-h-[192px]"></div>
+            <div id="qr-code-text" class="font-mono text-xs text-amber-900 break-all bg-amber-50 p-2 rounded border border-amber-200"></div>
+            <p class="text-xs text-stone-500">Scan QR ini dengan kamera HP untuk langsung membuka halaman pelacakan di browser.</p>
+            <button onclick="closeQrModal()" class="w-full bg-stone-800 hover:bg-stone-900 text-white py-2 rounded-lg text-sm font-semibold">Tutup</button>
+        </div>
+    </div>
+
+    <!-- SCRIPT LOGIC (GITHUB, DISCORD WEBHOOK & DISCORD OAUTH2) -->
+    <script>
+        const GITHUB_CONFIG = {
+            owner: 'jhansenisaac',
+            repo: 'kopitrace',
+            path: 'data/database.json',
+            branch: 'master'
+        };
+
+        const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1564644685912219678/71hpotxn9KvQE0Zci5TkJoVcXGgJa_xhw8XptVwmA58NYDrelcNInUB_39XauWmsXhnN';
+        const DISCORD_CLIENT_ID = '1564650682991120497'; // Client ID Discord Anda
+
+        async function sendDiscordNotification(message) {
+            if (!DISCORD_WEBHOOK_URL) return;
+            try {
+                await fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        content: message,
+                        username: "KopiTrace Notifier",
+                        avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png"
+                    })
+                });
+            } catch (err) {
+                console.error("Discord webhook error:", err);
+            }
+        }
+
+        // Fungsi Login Discord OAuth2
+        function loginWithDiscord() {
+            if (!DISCORD_CLIENT_ID) {
+                alert('Mohon atur DISCORD_CLIENT_ID terlebih dahulu di dalam kode script.');
+                return;
+            }
+            const redirectUri = window.location.origin + window.location.pathname;
+            const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=identify`;
+            window.location.href = discordAuthUrl;
+        }
+
+        let defaultCoffeeData = [
+            {
+                zona: "UTR",
+                metode: "WASH",
+                tahun: "2026",
+                batch: "001",
+                petani: "Bpk. Hendra",
+                varietas: "Arabica Gayo",
+                mdpl: "1450 mdpl",
+                lat: -6.9175,
+                lng: 107.6191,
+                destName: "Gudang Ekspor Tanjung Priok, Jakarta",
+                destLat: -6.1015,
+                destLng: 106.8845,
+                sertifikasi: "SNI Organik & USDA Organic Certified",
+                cupping: "Jasmine, Lemongrass, Clean Cup",
+                fotoUrl: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
+                distribusi: [
+                    { tanggal: "2026-06-01", aktivitas: "Panen Selektif Ceri Kopi Matang" },
+                    { tanggal: "2026-06-03", aktivitas: "Pencucian & Fermentasi Basah" }
+                ],
+                createdBy: "farmer"
+            }
+        ];
+
+        let coffeeData = JSON.parse(localStorage.getItem('kopiTraceData')) || defaultCoffeeData;
+        let registeredUsers = JSON.parse(localStorage.getItem('kopiTraceUsers')) || [
+            { name: 'Developer Super Admin', user: 'dev', pass: 'm0r94n', role: 'dev' },
+            { name: 'Bpk. Hendra (Petani)', user: 'farmer', pass: 'farmer2026', role: 'farmer' }
+        ];
+
+        let currentUser = JSON.parse(localStorage.getItem('kopiTraceActiveUser')) || null;
+        let currentView = 'public-home';
+        let mapInstance = null;
+        let markersLayer = null;
+        let traceMapInstance = null;
+        let githubFileSha = null;
+
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const btn = document.getElementById('install-btn');
+            if (btn) btn.classList.remove('hidden');
+        });
+
+        function installAppPrompt() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        const btn = document.getElementById('install-btn');
+                        if (btn) btn.classList.add('hidden');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        }
+
+        async function fetchRealTimeData() {
+            const statusEl = document.getElementById('github-sync-status');
+            const rawUrl = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.branch}/${GITHUB_CONFIG.path}?t=${new Date().getTime()}`;
+            
+            try {
+                if (statusEl) statusEl.innerText = 'Auto-Sync: Menyinkronkan...';
+                const res = await fetch(rawUrl);
+                if (!res.ok) {
+                    if (res.status === 404 && localStorage.getItem('kopiTraceAdminToken')) {
+                        await saveToGitHub();
+                    }
+                    throw new Error('Gagal mengambil data publik (404)');
+                }
+                const data = await res.json();
+
+                if (data.coffeeData) coffeeData = data.coffeeData;
+                if (data.registeredUsers) registeredUsers = data.registeredUsers;
+
+                localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
+                localStorage.setItem('kopiTraceUsers', JSON.stringify(registeredUsers));
+
+                if (statusEl) statusEl.innerText = 'Auto-Sync: Real-Time Aktif';
+            } catch (e) {
+                console.warn("Menggunakan data lokal/bawaan:", e);
+                const local = localStorage.getItem('kopiTraceData');
+                if (local) {
+                    coffeeData = JSON.parse(local);
+                } else {
+                    coffeeData = defaultCoffeeData;
+                }
+                if (statusEl) statusEl.innerText = 'Auto-Sync: Mode Lokal';
+            }
+
+            if (currentView === 'public-home') {
+                renderPublicCards();
+                updateStats();
+            } else if (currentView === 'public-map') {
+                initMap();
+            } else if (currentView === 'dashboard') {
+                renderDashboardTable();
+            }
+        }
+
+        async function saveToGitHub() {
+            const token = localStorage.getItem('kopiTraceAdminToken');
+            const statusEl = document.getElementById('github-sync-status');
+            if (!token) {
+                alert('Token Admin belum diatur di perangkat ini! Silakan klik "Atur Token Admin" di dashboard.');
+                return false;
+            }
+
+            const apiUrl = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`;
+            try {
+                const getRes = await fetch(apiUrl, {
+                    headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' }
+                });
+                if (getRes.ok) {
+                    const fileInfo = await getRes.json();
+                    githubFileSha = fileInfo.sha;
+                }
+
+                const fileContent = JSON.stringify({ coffeeData, registeredUsers }, null, 2);
+                const base64Content = btoa(unescape(encodeURIComponent(fileContent)));
+
+                const payload = {
+                    message: "Real-time update database via KopiTrace App",
+                    content: base64Content,
+                    sha: githubFileSha || undefined,
+                    branch: GITHUB_CONFIG.branch
+                };
+
+                if (statusEl) statusEl.innerText = 'Menyimpan ke GitHub...';
+                const putRes = await fetch(apiUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!putRes.ok) {
+                    const err = await putRes.json();
+                    throw new Error(err.message || 'Gagal menyimpan');
+                }
+
+                const putData = await putRes.json();
+                githubFileSha = putData.content.sha;
+                if (statusEl) statusEl.innerText = 'Auto-Sync: Real-Time Aktif';
+                return true;
+            } catch (e) {
+                console.error("Save error:", e);
+                alert('Gagal menyimpan ke GitHub: ' + e.message);
+                return false;
+            }
+        }
+
+        function openGitHubConfigModal() {
+            document.getElementById('gh-token').value = localStorage.getItem('kopiTraceAdminToken') || '';
+            document.getElementById('github-config-modal').classList.remove('hidden');
+        }
+
+        function closeGitHubConfigModal() {
+            document.getElementById('github-config-modal').classList.add('hidden');
+        }
+
+        function saveAdminToken() {
+            const token = document.getElementById('gh-token').value.trim();
+            if (!token) {
+                alert('Mohon masukkan token PAT Anda!');
+                return;
+            }
+            localStorage.setItem('kopiTraceAdminToken', token);
+            closeGitHubConfigModal();
+            alert('Token Admin berhasil disimpan! Menyinkronkan ke GitHub...');
+            fetchRealTimeData();
+        }
+
+        function saveToStorage() {
+            try {
+                localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
+                localStorage.setItem('kopiTraceUsers', JSON.stringify(registeredUsers));
+                if (currentUser) {
+                    localStorage.setItem('kopiTraceActiveUser', JSON.stringify(currentUser));
+                } else {
+                    localStorage.removeItem('kopiTraceActiveUser');
+                }
+                
+                if (localStorage.getItem('kopiTraceAdminToken')) {
+                    saveToGitHub();
+                }
+            } catch (e) {
+                console.error("Storage save failed", e);
+            }
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64String = e.target.result;
+                    document.getElementById('form-foto').value = base64String;
+                    const preview = document.getElementById('photo-preview');
+                    const container = document.getElementById('preview-container');
+                    if (preview && container) {
+                        preview.src = base64String;
+                        container.classList.remove('hidden');
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function switchView(viewName) {
+            currentView = viewName;
+            ['public-home', 'public-map', 'public-scanner', 'dashboard'].forEach(v => {
+                const el = document.getElementById('view-' + v);
+                if (el) el.classList.add('hidden');
+            });
+
+            const target = document.getElementById('view-' + viewName);
+            if (target) target.classList.remove('hidden');
+
+            if (viewName === 'public-home') {
+                renderPublicCards();
+                updateStats();
+            } else if (viewName === 'public-map') {
+                setTimeout(initMap, 150);
+            } else if (viewName === 'public-scanner') {
+                renderSampleBadges();
+            } else if (viewName === 'dashboard') {
+                if (!currentUser) {
+                    openAuthModal();
+                    return;
+                }
+                renderDashboardTable();
+            }
+        }
+
+        function openDashboard() {
+            switchView('dashboard');
+        }
+
+        function updateStats() {
+            const totalTrees = document.getElementById('stat-total-trees');
+            const totalZones = document.getElementById('stat-total-zones');
+            if (totalTrees) totalTrees.innerText = coffeeData.length;
+            const uniqueZones = [...new Set(coffeeData.map(item => item.zona))];
+            if (totalZones) totalZones.innerText = uniqueZones.length;
+        }
+
+        function renderPublicCards() {
+            const container = document.getElementById('public-card-list');
+            if (!container) return;
+            container.innerHTML = '';
+            coffeeData.slice(0, 3).forEach(item => {
+                const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
+                const photo = item.fotoUrl || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80';
+                container.innerHTML += `
+                    <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden space-y-3 hover:shadow-md transition">
+                        <div class="h-40 overflow-hidden bg-stone-200 relative">
+                            <img src="${photo}" alt="Kebun Kopi" class="w-full h-full object-cover">
+                            <span class="absolute top-3 left-3 font-mono bg-stone-900/80 backdrop-blur text-amber-300 text-xs px-2.5 py-1 rounded-md font-bold">${code}</span>
+                            <span class="absolute top-3 right-3 bg-emerald-700 text-white text-xs px-2.5 py-1 rounded-md font-bold">${item.metode}</span>
+                        </div>
+                        <div class="p-5 pt-0 space-y-3">
+                            <div>
+                                <h4 class="font-bold text-stone-900 text-lg">${item.varietas}</h4>
+                                <p class="text-xs text-stone-500">Petani: ${item.petani}</p>
+                            </div>
+                            <div class="text-xs text-stone-600 pt-2 border-t border-stone-100 flex justify-between items-center">
+                                <span><i class="fa-solid fa-certificate text-emerald-600 mr-1"></i>${item.sertifikasi ? item.sertifikasi.split('&')[0] : 'Standar Mutu'}</span>
+                                <button onclick="selectAndTrace('${code}')" class="text-amber-700 font-bold hover:underline">Lacak &rarr;</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderSampleBadges() {
+            const container = document.getElementById('sample-code-badges');
+            if (!container) return;
+            container.innerHTML = '';
+            coffeeData.forEach(item => {
+                const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
+                container.innerHTML += `
+                    <button onclick="fillAndTrace('${code}')" class="bg-stone-100 hover:bg-amber-100 text-stone-800 hover:text-amber-900 text-xs font-mono px-3 py-1.5 rounded-lg border border-stone-200 transition">
+                        ${code}
+                    </button>
+                `;
+            });
+        }
+
+        function fillAndTrace(code) {
+            const input = document.getElementById('search-code-input');
+            if (input) input.value = code;
+            handlePublicSearch();
+        }
+
+        function selectAndTrace(code) {
+            switchView('public-scanner');
+            fillAndTrace(code);
+        }
+
+        function handlePublicSearch() {
+            const input = document.getElementById('search-code-input');
+            const resultBox = document.getElementById('traceability-result');
+            if (!input || !resultBox) return;
+
+            const query = input.value.trim().toUpperCase();
+            if (!query) {
+                resultBox.classList.add('hidden');
+                return;
+            }
+
+            const found = coffeeData.find(item => `${item.zona}/${item.metode}/${item.tahun}/${item.batch}` === query);
+
+            resultBox.classList.remove('hidden');
+            if (!found) {
+                resultBox.innerHTML = `
+                    <div class="text-center py-6 space-y-2">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-600 text-3xl"></i>
+                        <h4 class="font-bold text-stone-900">Data Tidak Ditemukan</h4>
+                        <p class="text-xs text-stone-500">Kode <code class="font-mono text-amber-700">${query}</code> belum terdaftar di database.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const photo = found.fotoUrl || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80';
+            
+            let timelineHtml = '';
+            if (found.distribusi && found.distribusi.length > 0) {
+                found.distribusi.forEach((step) => {
+                    timelineHtml += `
+                        <div class="relative pl-6 pb-4 border-l-2 border-amber-300 last:border-l-0 last:pb-0">
+                            <div class="absolute -left-[7px] top-0 w-3 h-3 rounded-full bg-amber-700 ring-4 ring-amber-100"></div>
+                            <div class="text-xs font-mono font-bold text-amber-800">${step.tanggal}</div>
+                            <div class="text-sm text-stone-800 font-medium">${step.aktivitas}</div>
+                        </div>
+                    `;
+                });
+            } else {
+                timelineHtml = `<div class="text-xs text-stone-500 italic">Belum ada catatan riwayat distribusi.</div>`;
+            }
+
+            resultBox.innerHTML = `
+                <div class="bg-amber-50/50 border border-amber-200 p-6 rounded-2xl space-y-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-amber-200/60 pb-4">
+                        <div>
+                            <span class="text-xs text-amber-800 font-semibold uppercase tracking-wider">Hasil Pelacakan Asal-Usul Kopi</span>
+                            <h3 class="text-xl font-black font-mono text-stone-900 mt-0.5">${query}</h3>
+                        </div>
+                        <span class="bg-amber-700 text-white px-3 py-1 rounded-full text-xs font-bold">${found.metode} Process</span>
+                    </div>
+
+                    <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl flex items-center space-x-3">
+                        <div class="bg-emerald-700 text-white p-2.5 rounded-lg shadow">
+                            <i class="fa-solid fa-certificate text-lg"></i>
+                        </div>
+                        <div>
+                            <div class="text-[11px] uppercase tracking-wider font-bold text-emerald-800">Sertifikasi Organik & Standar Mutu</div>
+                            <div class="text-sm font-extrabold text-stone-900">${found.sertifikasi || 'Standar Pertanian Berkelanjutan'}</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="md:col-span-1 rounded-xl overflow-hidden border border-stone-200 shadow-sm bg-white">
+                            <img src="${photo}" alt="Foto Kebun" class="w-full h-48 object-cover">
+                            <div class="p-3 text-center text-xs font-semibold text-stone-600">Dokumentasi Kebun / Proses</div>
+                        </div>
+                        <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                            <div class="bg-white p-4 rounded-xl border border-stone-200 space-y-1">
+                                <span class="text-xs text-stone-400 font-medium uppercase">Petani / Pengelola</span>
+                                <div class="font-bold text-stone-900">${found.petani}</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-stone-200 space-y-1">
+                                <span class="text-xs text-stone-400 font-medium uppercase">Varietas Tanaman</span>
+                                <div class="font-bold text-stone-900">${found.varietas}</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-stone-200 space-y-1">
+                                <span class="text-xs text-stone-400 font-medium uppercase">Ketinggian Tanam</span>
+                                <div class="font-bold text-stone-900">${found.mdpl}</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-stone-200 space-y-1">
+                                <span class="text-xs text-stone-400 font-medium uppercase">Koordinat Kebun Asal</span>
+                                <div class="font-mono font-bold text-stone-900 text-xs">${found.lat}, ${found.lng}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-stone-200 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-stone-900 font-extrabold uppercase tracking-wider flex items-center space-x-2">
+                                <i class="fa-solid fa-route text-amber-700"></i>
+                                <span>Peta Rute Distribusi Logistik</span>
+                            </span>
+                            <span class="text-xs text-stone-500 font-medium">Tujuan: ${found.destName || 'Gudang Pusat'}</span>
+                        </div>
+                        <div id="trace-map"></div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-xl border border-stone-200 space-y-1">
+                        <span class="text-xs text-amber-700 font-bold uppercase">Catatan Cupping / Profil Rasa</span>
+                        <div class="text-stone-800 font-medium italic">"${found.cupping}"</div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-stone-200 space-y-3">
+                        <span class="text-xs text-stone-900 font-extrabold uppercase tracking-wider flex items-center space-x-2">
+                            <i class="fa-solid fa-timeline text-amber-700"></i>
+                            <span>Timeline Riwayat & Distribusi Pascapanen</span>
+                        </span>
+                        <div class="pt-3 space-y-4">
+                            ${timelineHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                if (traceMapInstance) {
+                    traceMapInstance.remove();
+                }
+                const farmLat = found.lat || -6.9175;
+                const farmLng = found.lng || 107.6191;
+                const destLat = found.destLat || -6.1015;
+                const destLng = found.destLng || 106.8845;
+
+                traceMapInstance = L.map('trace-map').setView([farmLat, farmLng], 8);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; OpenStreetMap'
+                }).addTo(traceMapInstance);
+
+                L.marker([farmLat, farmLng]).addTo(traceMapInstance)
+                    .bindPopup(`<b>Kebun Asal:</b> ${found.petani} (${found.zona})`).openPopup();
+
+                L.marker([destLat, destLng]).addTo(traceMapInstance)
+                    .bindPopup(`<b>Tujuan Logistik:</b> ${found.destName || 'Gudang Tujuan'}`);
+
+                const routeLine = [[farmLat, farmLng], [destLat, destLng]];
+                L.polyline(routeLine, { color: '#b45309', weight: 4, dashArray: '6, 6' }).addTo(traceMapInstance);
+                traceMapInstance.fitBounds(routeLine, { padding: [50, 50] });
+            }, 200);
+        }
+
+        function initMap() {
+            const mapEl = document.getElementById('map');
+            if (!mapEl) return;
+
+            if (!mapInstance) {
+                mapInstance = L.map('map').setView([-6.9175, 107.6191], 11);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(mapInstance);
+            } else {
+                mapInstance.invalidateSize();
+            }
+
+            if (markersLayer) {
+                mapInstance.removeLayer(markersLayer);
+            }
+
+            markersLayer = L.layerGroup();
+            coffeeData.forEach(item => {
+                const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
+                const marker = L.marker([item.lat, item.lng]).bindPopup(`
+                    <div class="space-y-1 text-xs">
+                        <b class="font-mono text-amber-800 text-sm">${code}</b><br>
+                        <b>Petani:</b> ${item.petani}<br>
+                        <b>Varietas:</b> ${item.varietas} (${item.mdpl})<br>
+                        <button onclick="selectAndTrace('${code}')" class="mt-2 bg-amber-700 text-white px-2.5 py-1 rounded font-semibold w-full">Lacak Detail</button>
+                    </div>
+                `);
+                markersLayer.addLayer(marker);
+            });
+            markersLayer.addTo(mapInstance);
+        }
+
+        let secretClickCount = 0;
+        let secretTimer = null;
+
+        function handleSecretLogoClick() {
+            secretClickCount++;
+            clearTimeout(secretTimer);
+            secretTimer = setTimeout(() => { secretClickCount = 0; }, 1500);
+
+            if (secretClickCount >= 5) {
+                secretClickCount = 0;
+                openAuthModal();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && e.key.toUpperCase() === 'A') {
+                e.preventDefault();
+                openAuthModal();
+            }
+        });
+
+        function openAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function switchAuthTab(tab) {
+            const loginPane = document.getElementById('form-login-pane');
+            const regPane = document.getElementById('form-register-pane');
+            const loginBtn = document.getElementById('tab-btn-login');
+            const regBtn = document.getElementById('tab-btn-register');
+            const title = document.getElementById('auth-modal-title');
+            if (!loginPane || !regPane || !loginBtn || !regBtn || !title) return;
+
+            if (tab === 'login') {
+                loginPane.classList.remove('hidden');
+                regPane.classList.add('hidden');
+                loginBtn.className = 'flex-1 py-2 rounded-lg bg-white text-stone-900 shadow-sm transition';
+                regBtn.className = 'flex-1 py-2 rounded-lg text-stone-600 transition';
+                title.innerText = 'Akses Pengelola Sistem';
+            } else {
+                loginPane.classList.add('hidden');
+                regPane.classList.remove('hidden');
+                regBtn.className = 'flex-1 py-2 rounded-lg bg-white text-stone-900 shadow-sm transition';
+                loginBtn.className = 'flex-1 py-2 rounded-lg text-stone-600 transition';
+                title.innerText = 'Pendaftaran Akun Petani Baru';
+            }
+        }
+
+        function handleLogin() {
+            const uInput = document.getElementById('login-user');
+            const pInput = document.getElementById('login-pass');
+            const err = document.getElementById('login-error');
+            if (!uInput || !pInput) return;
+
+            const u = uInput.value.trim();
+            const p = pInput.value.trim();
+
+            const foundUser = registeredUsers.find(item => item.user === u && item.pass === p);
+            if (foundUser) {
+                currentUser = foundUser;
+                saveToStorage();
+                closeAuthModal();
+                updateAuthUI();
+                switchView('dashboard');
+            } else {
+                if (err) err.classList.remove('hidden');
+            }
+        }
+
+        function handleRegister() {
+            const nInput = document.getElementById('reg-name');
+            const uInput = document.getElementById('reg-user');
+            const pInput = document.getElementById('reg-pass');
+            const err = document.getElementById('reg-error');
+            if (!nInput || !uInput || !pInput) return;
+
+            const name = nInput.value.trim();
+            const u = uInput.value.trim();
+            const p = pInput.value.trim();
+
+            if (!name || !u || !p) {
+                if (err) err.classList.remove('hidden');
+                return;
+            }
+
+            if (registeredUsers.some(item => item.user === u)) {
+                alert('Username sudah digunakan! Pilih username lain.');
+                return;
+            }
+
+            const newUser = { name, user: u, pass: p, role: 'farmer' };
+            registeredUsers.push(newUser);
+            currentUser = newUser;
+            saveToStorage();
+            closeAuthModal();
+            updateAuthUI();
+            switchView('dashboard');
+            
+            sendDiscordNotification(`👤 **PENDAFTARAN AKUN PETANI BARU**\n• Nama: **${name}**\n• Username: \`${u}\``);
+            alert('Akun petani berhasil dibuat & otomatis sinkron ke GitHub & Discord!');
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            saveToStorage();
+            updateAuthUI();
+            switchView('public-home');
+        }
+
+        function updateAuthUI() {
+            const navAuth = document.getElementById('nav-auth-container');
+            const roleLabel = document.getElementById('auth-role-label');
+            const devExportBtn = document.getElementById('dev-export-btn');
+
+            if (currentUser) {
+                if (navAuth) navAuth.classList.remove('hidden');
+                if (roleLabel) roleLabel.innerText = `${currentUser.name} (${currentUser.role})`;
+                if (devExportBtn) {
+                    if (currentUser.role === 'dev') {
+                        devExportBtn.classList.remove('hidden');
+                    } else {
+                        devExportBtn.classList.add('hidden');
+                    }
+                }
+            } else {
+                if (navAuth) navAuth.classList.add('hidden');
+            }
+        }
+
+        function renderDashboardTable() {
+            const tbody = document.getElementById('dashboard-table-body');
+            const totalCount = document.getElementById('dash-total-count');
+            if (!tbody) return;
+
+            let displayData = coffeeData;
+            if (currentUser && currentUser.role === 'farmer') {
+                displayData = coffeeData.filter(item => item.createdBy === currentUser.user);
+            }
+
+            if (totalCount) totalCount.innerText = displayData.length + ' Data';
+            tbody.innerHTML = '';
+
+            displayData.forEach((item) => {
+                const actualIndex = coffeeData.findIndex(c => c === item);
+                const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
+                
+                tbody.innerHTML += `
+                    <tr class="hover:bg-stone-50 transition">
+                        <td class="p-4 font-mono font-bold text-amber-800">${code}</td>
+                        <td class="p-4">${item.zona}</td>
+                        <td class="p-4"><span class="bg-stone-100 text-stone-800 px-2 py-0.5 rounded text-xs font-semibold">${item.metode}</span></td>
+                        <td class="p-4">${item.petani}</td>
+                        <td class="p-4">${item.varietas}</td>
+                        <td class="p-4 text-center space-x-2">
+                            <button onclick="openQrModal('${code}')" class="text-stone-600 hover:text-stone-900 p-1.5" title="Lihat URL QR"><i class="fa-solid fa-qrcode"></i></button>
+                            <button onclick="openEditTreeModal(${actualIndex})" class="text-amber-700 hover:text-amber-900 p-1.5" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteTreeData(${actualIndex})" class="text-red-600 hover:text-red-800 p-1.5" title="Hapus"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function openAddTreeModal() {
+            const title = document.getElementById('modal-tree-title');
+            const editIdx = document.getElementById('edit-index');
+            const form = document.getElementById('tree-form');
+            const modal = document.getElementById('tree-modal');
+            const previewContainer = document.getElementById('preview-container');
+            if (!title || !editIdx || !form || !modal) return;
+
+            title.innerText = 'Tambah Data Batch Kopi Baru';
+            editIdx.value = -1;
+            form.reset();
+            document.getElementById('form-foto').value = '';
+            if (previewContainer) previewContainer.classList.add('hidden');
+
+            if (currentUser && currentUser.role === 'farmer') {
+                const petaniInput = document.getElementById('form-petani');
+                if (petaniInput) petaniInput.value = currentUser.name;
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function openEditTreeModal(index) {
+            const item = coffeeData[index];
+            if (!item) return;
+
+            if (currentUser && currentUser.role === 'farmer' && item.createdBy !== currentUser.user) {
+                alert('Akses Ditolak! Anda tidak memiliki izin untuk mengubah data milik petani lain.');
+                return;
+            }
+
+            const title = document.getElementById('modal-tree-title');
+            const editIdx = document.getElementById('edit-index');
+            const modal = document.getElementById('tree-modal');
+            const preview = document.getElementById('photo-preview');
+            const previewContainer = document.getElementById('preview-container');
+            if (!title || !editIdx || !modal) return;
+
+            title.innerText = 'Edit Data Batch Kopi';
+            editIdx.value = index;
+            document.getElementById('form-zona').value = item.zona;
+            document.getElementById('form-metode').value = item.metode;
+            document.getElementById('form-tahun').value = item.tahun;
+            document.getElementById('form-batch').value = item.batch;
+            document.getElementById('form-petani').value = item.petani;
+            document.getElementById('form-varietas').value = item.varietas;
+            document.getElementById('form-mdpl').value = item.mdpl;
+            document.getElementById('form-lat').value = item.lat;
+            document.getElementById('form-lng').value = item.lng;
+            document.getElementById('form-dest-name').value = item.destName || '';
+            document.getElementById('form-dest-lat').value = item.destLat || '';
+            document.getElementById('form-dest-lng').value = item.destLng || '';
+            document.getElementById('form-sertifikasi').value = item.sertifikasi || '';
+            document.getElementById('form-cupping').value = item.cupping;
+            document.getElementById('form-foto').value = item.fotoUrl || '';
+
+            if (item.fotoUrl) {
+                if (preview && previewContainer) {
+                    preview.src = item.fotoUrl;
+                    previewContainer.classList.remove('hidden');
+                }
+            } else {
+                if (previewContainer) previewContainer.classList.add('hidden');
+            }
+
+            let distText = '';
+            if (item.distribusi && Array.isArray(item.distribusi)) {
+                distText = item.distribusi.map(d => `${d.tanggal} | ${d.aktivitas}`).join('\n');
+            }
+            document.getElementById('form-distribusi').value = distText;
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeTreeModal() {
+            const modal = document.getElementById('tree-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function saveTreeData(e) {
+            e.preventDefault();
+            const editIdx = document.getElementById('edit-index');
+            if (!editIdx) return;
+            const index = parseInt(editIdx.value);
+
+            if (index !== -1 && currentUser && currentUser.role === 'farmer' && coffeeData[index].createdBy !== currentUser.user) {
+                alert('Akses Ditolak! Anda tidak memiliki izin untuk menyimpan perubahan pada data milik petani lain.');
+                return;
+            }
+
+            const rawDist = document.getElementById('form-distribusi').value.trim();
+            const distribusiArray = [];
+            if (rawDist) {
+                rawDist.split('\n').forEach(line => {
+                    const parts = line.split('|');
+                    if (parts.length >= 2) {
+                        distribusiArray.push({
+                            tanggal: parts[0].trim(),
+                            aktivitas: parts.slice(1).join('|').trim()
+                        });
+                    }
+                });
+            }
+
+            const existingFoto = index !== -1 ? coffeeData[index].fotoUrl : '';
+            const fotoValue = document.getElementById('form-foto').value.trim() || existingFoto;
+
+            const newItem = {
+                zona: document.getElementById('form-zona').value.toUpperCase(),
+                metode: document.getElementById('form-metode').value,
+                tahun: document.getElementById('form-tahun').value,
+                batch: document.getElementById('form-batch').value,
+                petani: currentUser && currentUser.role === 'farmer' ? currentUser.name : document.getElementById('form-petani').value,
+                varietas: document.getElementById('form-varietas').value,
+                mdpl: document.getElementById('form-mdpl').value,
+                lat: parseFloat(document.getElementById('form-lat').value) || 0,
+                lng: parseFloat(document.getElementById('form-lng').value) || 0,
+                destName: document.getElementById('form-dest-name').value.trim(),
+                destLat: parseFloat(document.getElementById('form-dest-lat').value) || 0,
+                destLng: parseFloat(document.getElementById('form-dest-lng').value) || 0,
+                sertifikasi: document.getElementById('form-sertifikasi').value.trim(),
+                cupping: document.getElementById('form-cupping').value,
+                fotoUrl: fotoValue,
+                distribusi: distribusiArray,
+                createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : coffeeData[index].createdBy
+            };
+
+            if (index === -1) {
+                coffeeData.push(newItem);
+            } else {
+                coffeeData[index] = newItem;
+            }
+
+            saveToStorage();
+            closeTreeModal();
+            renderDashboardTable();
+            updateStats();
+
+            const codeStr = `${newItem.zona}/${newItem.metode}/${newItem.tahun}/${newItem.batch}`;
+            sendDiscordNotification(`🌱 **BATCH KOPI BARU TERDAFTAR!**\n• Kode: \`${codeStr}\`\n• Petani: **${newItem.petani}**\n• Varietas: ${newItem.varietas} (${newItem.mdpl})\n• Metode: ${newItem.metode}`);
+        }
+
+        function deleteTreeData(index) {
+            const item = coffeeData[index];
+            if (!item) return;
+
+            if (currentUser && currentUser.role === 'farmer' && item.createdBy !== currentUser.user) {
+                alert('Akses Ditolak! Anda tidak dapat menghapus data batch milik petani lain.');
+                return;
+            }
+
+            if (confirm('Yakin ingin menghapus data batch pohon ini?')) {
+                coffeeData.splice(index, 1);
+                saveToStorage();
+                renderDashboardTable();
+                updateStats();
+            }
+        }
+
+        function openQrModal(code) {
+            const modal = document.getElementById('qr-modal');
+            const codeText = document.getElementById('qr-code-text');
+            const container = document.getElementById('qrcode-render');
+            if (!modal || !codeText || !container) return;
+
+            const currentUrl = window.location.origin + window.location.pathname;
+            const fullBatchUrl = `${currentUrl}?code=${encodeURIComponent(code)}`;
+
+            modal.classList.add('hidden');
+            codeText.innerText = fullBatchUrl;
+            container.innerHTML = '';
+            try {
+                new QRCode(container, {
+                    text: fullBatchUrl,
+                    width: 160,
+                    height: 160
+                });
+            } catch (err) {
+                console.error("QR Code generation error", err);
+            }
+        }
+
+        function closeQrModal() {
+            const modal = document.getElementById('qr-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function exportDataJSON() {
+            const bundle = { coffeeData, registeredUsers };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(bundle, null, 2));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", "kopitrace_app_backup.json");
+            dlAnchorElem.click();
+        }
+
+        window.onload = async function() {
+            updateAuthUI();
+
+            // Cek token Discord OAuth2 pada URL hash setelah redirect
+            const fragment = new URLSearchParams(window.location.hash.slice(1));
+            const accessToken = fragment.get('access_token');
+
+            if (accessToken) {
+                try {
+                    const res = await fetch('https://discord.com/api/users/@me', {
+                        headers: { 'Authorization': `Bearer ${accessToken}` }
+                    });
+                    const user = await res.json();
+                    if (user && user.id) {
+                        currentUser = {
+                            name: user.username,
+                            user: user.id,
+                            role: 'farmer'
+                        };
+                        saveToStorage();
+                        updateAuthUI();
+                        switchView('dashboard');
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                        sendDiscordNotification(`🟢 **LOGIN DISCORD OAUTH2**\n• User: **${user.username}** berhasil masuk ke dashboard sistem.`);
+                    }
+                } catch (err) {
+                    console.error("Gagal verifikasi token Discord:", err);
+                }
+            }
+
+            await fetchRealTimeData();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const sharedCode = urlParams.get('code');
+
+            if (sharedCode) {
+                switchView('public-scanner');
+                fillAndTrace(sharedCode.toUpperCase());
+            } else {
+                renderPublicCards();
+                updateStats();
+            }
+        };
+    </script>
+</body>
+</html>
