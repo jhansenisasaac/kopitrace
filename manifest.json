@@ -1,4 +1,23 @@
-
+{
+  "name": "KopiTrace - Traceability Kopi",
+  "short_name": "KopiTrace",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#78350f",
+  "theme_color": "#78350f",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
   "background_color": "#ffffff",
   "dir": "ltr",
   "display": "standalone",
@@ -22,7 +41,7 @@
       "is256x256": false,
       "is192x192": false
     }
-  ],
+  {,
   "id": "KopiTrace",
   "lang": "id"
 }
