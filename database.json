@@ -1,34 +1,5 @@
 {
-  "coffeeData": [
-    {
-      "zona": "UTR",
-      "metode": "WASH",
-      "tahun": "2026",
-      "batch": "001",
-      "petani": "Bpk. Hendra",
-      "varietas": "Arabica Gayo",
-      "mdpl": "1450 mdpl",
-      "lat": -6.9175,
-      "lng": 107.6191,
-      "destName": "Gudang Ekspor Tanjung Priok, Jakarta",
-      "destLat": -6.1015,
-      "destLng": 106.8845,
-      "sertifikasi": "SNI Organik & USDA Organic Certified",
-      "cupping": "Jasmine, Lemongrass, Clean Cup",
-      "fotoUrl": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
-      "distribusi": [
-        {
-          "tanggal": "2026-06-01",
-          "aktivitas": "Panen Selektif Ceri Kopi Matang"
-        },
-        {
-          "tanggal": "2026-06-04",
-          "aktivitas": "Proses Pengolahan Basah (Washed Process)"
-        }
-      ],
-      "createdBy": "farmer"
-    }
-  ],
+  "coffeeData": [],
   "registeredUsers": [
     {
       "name": "Developer Super Admin",
