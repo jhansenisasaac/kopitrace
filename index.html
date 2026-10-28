@@ -863,28 +863,29 @@
         }
 
         function initMap() {
-            const mapEl = document.getElementById('map');
-            if (!mapEl) return;
-            if (!mapInstance) {
-                mapInstance = L.map('map').setView([-6.9175, 107.6191], 11);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mapInstance);
-            } else { mapInstance.invalidateSize(); }
+    const mapEl = document.getElementById('map');
+    if (!mapEl) return;
+    if (!mapInstance) {
+        // Berpusat di Kabupaten Sumedang dengan tingkat zoom 11
+        mapInstance = L.map('map').setView([-6.8587, 107.9213], 11);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mapInstance);
+    } else { mapInstance.invalidateSize(); }
 
-            if (markersLayer) mapInstance.removeLayer(markersLayer);
-            markersLayer = L.layerGroup();
-            coffeeData.forEach(item => {
-                const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
-                const marker = L.marker([item.lat, item.lng]).bindPopup(`
-                    <div class="space-y-1 text-xs">
-                        <b class="font-mono text-amber-800 text-sm">${code}</b><br>
-                        <b>Petani:</b> ${item.petani}<br>
-                        <button onclick="selectAndTrace('${code}')" class="mt-2 bg-amber-700 text-white px-2 py-1 rounded font-semibold w-full">Lacak</button>
-                    </div>
-                `);
-                markersLayer.addLayer(marker);
-            });
-            markersLayer.addTo(mapInstance);
-        }
+    if (markersLayer) mapInstance.removeLayer(markersLayer);
+    markersLayer = L.layerGroup();
+    coffeeData.forEach(item => {
+        const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
+        const marker = L.marker([item.lat, item.lng]).bindPopup(`
+            <div class="space-y-1 text-xs">
+                <b class="font-mono text-amber-800 text-sm">${code}</b><br>
+                <b>Petani:</b> ${item.petani}<br>
+                <button onclick="selectAndTrace('${code}')" class="mt-2 bg-amber-700 text-white px-2 py-1 rounded font-semibold w-full">Lacak</button>
+            </div>
+        `);
+        markersLayer.addLayer(marker);
+    });
+    markersLayer.addTo(mapInstance);
+}
 
         let secretClickCount = 0, secretTimer = null;
         function handleSecretLogoClick() {
