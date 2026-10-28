@@ -119,6 +119,49 @@
                 </div>
             </div>
 
+            <!-- ANALISIS KOPI SUMEDANG: HULU SAMPAI HILIR (DAPAT DIEDIT DEV) -->
+            <div class="bg-white p-5 sm:p-7 rounded-2xl shadow-sm border border-stone-200 space-y-4">
+                <div class="flex justify-between items-center border-b border-stone-100 pb-3">
+                    <h2 class="text-lg sm:text-xl font-bold text-stone-900 flex items-center space-x-2">
+                        <i class="fa-solid fa-chart-line text-amber-700"></i>
+                        <span>Analisis Rantai Pasok Kopi Sumedang (Hulu ke Hilir)</span>
+                    </h2>
+                    <button id="edit-supply-btn" onclick="openSupplyEditModal()" class="hidden text-xs bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold px-3 py-1.5 rounded-lg transition cursor-pointer">
+                        <i class="fa-solid fa-pen-to-square mr-1"></i> Edit Analisis (Dev)
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs sm:text-sm">
+                    <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-2">
+                        <div class="font-bold text-amber-800 flex items-center space-x-1.5">
+                            <i class="fa-solid fa-mountain text-base"></i>
+                            <span>1. Sektor Hulu (On-Farm)</span>
+                        </div>
+                        <p id="txt-hulu" class="text-stone-600 leading-relaxed">Budidaya kopi di lereng Gunung Tampomas, Manglayang, dan Cakrabuana pada ketinggian 1000-1600 MDPL. Fokus pada pemeliharaan organik, pemupukan alami, dan petik merah selektif.</p>
+                    </div>
+                    <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-2">
+                        <div class="font-bold text-amber-800 flex items-center space-x-1.5">
+                            <i class="fa-solid fa-water text-base"></i>
+                            <span>2. Pasca-Panen (Processing)</span>
+                        </div>
+                        <p id="txt-pascapanen" class="text-stone-600 leading-relaxed">Pengolahan ceri kopi menggunakan metode terstandar seperti Washed, Natural, Honey, hingga Experimental Winey untuk menghasilkan cita rasa khas beraroma floral dan fruity.</p>
+                    </div>
+                    <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-2">
+                        <div class="font-bold text-amber-800 flex items-center space-x-1.5">
+                            <i class="fa-solid fa-qrcode text-base"></i>
+                            <span>3. Pengemasan & Traceability</span>
+                        </div>
+                        <p id="txt-trace" class="text-stone-600 leading-relaxed">Pemberian identitas batch dengan kode zona 3 huruf (UTR, SLT, TMR, BRT, CML) dan penyematan QR Code transparan guna menjamin keaslian asal produk.</p>
+                    </div>
+                    <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-2">
+                        <div class="font-bold text-amber-800 flex items-center space-x-1.5">
+                            <i class="fa-solid fa-truck-fast text-base"></i>
+                            <span>4. Sektor Hilir (Market & Ekspor)</span>
+                        </div>
+                        <p id="txt-hilir" class="text-stone-600 leading-relaxed">Distribusi ke gudang logistik, gerai specialty coffee, kedai konsep Alaska/Western Bar, serta penetrasi pasar regional dan ekspor global.</p>
+                    </div>
+                </div>
+            </div>
+
             <div class="space-y-4">
                 <div class="flex justify-between items-center px-1">
                     <h2 class="text-lg sm:text-xl font-bold text-stone-900 flex items-center space-x-2">
@@ -243,7 +286,36 @@
         </div>
     </footer>
 
-    <!-- AUTH MODAL (DENGAN DISCORD, WHATSAPP OTP, GMAIL OTP, & DAFTAR AKUN) -->
+    <!-- MODAL EDIT ANALISIS HULU-HILIR (DEV ONLY) -->
+    <div id="supply-edit-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-stone-100 pb-3">
+                <h3 class="font-bold text-base sm:text-lg text-stone-900">Edit Analisis Hulu ke Hilir</h3>
+                <button onclick="closeSupplyEditModal()" class="text-stone-400 hover:text-stone-700 p-1 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs sm:text-sm">
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">1. Sektor Hulu (On-Farm)</label>
+                    <textarea id="input-txt-hulu" rows="3" class="w-full p-2.5 border rounded-lg text-xs"></textarea>
+                </div>
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">2. Pasca-Panen (Processing)</label>
+                    <textarea id="input-txt-pascapanen" rows="3" class="w-full p-2.5 border rounded-lg text-xs"></textarea>
+                </div>
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">3. Pengemasan & Traceability</label>
+                    <textarea id="input-txt-trace" rows="3" class="w-full p-2.5 border rounded-lg text-xs"></textarea>
+                </div>
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">4. Sektor Hilir (Market & Ekspor)</label>
+                    <textarea id="input-txt-hilir" rows="3" class="w-full p-2.5 border rounded-lg text-xs"></textarea>
+                </div>
+                <button onclick="saveSupplyChain()" class="w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold py-2.5 rounded-xl transition shadow text-xs sm:text-sm cursor-pointer">Simpan Perubahan Analisis</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTH MODAL -->
     <div id="auth-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-stone-100 pb-3">
@@ -254,7 +326,6 @@
                 <button onclick="closeAuthModal()" class="text-stone-400 hover:text-stone-700 p-1 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
-            <!-- TAB MENU AUTH: LOGIN, WHATSAPP, EMAIL, DAFTAR -->
             <div class="grid grid-cols-4 bg-stone-100 p-1 rounded-xl text-[11px] font-semibold text-center">
                 <button id="auth-tab-login" onclick="switchAuthMode('login')" class="py-2 rounded-lg bg-white text-stone-900 shadow-sm transition cursor-pointer">Masuk</button>
                 <button id="auth-tab-wa" onclick="switchAuthMode('wa')" class="py-2 rounded-lg text-stone-600 transition cursor-pointer">WhatsApp</button>
@@ -262,7 +333,6 @@
                 <button id="auth-tab-reg" onclick="switchAuthMode('register')" class="py-2 rounded-lg text-stone-600 transition cursor-pointer">Daftar</button>
             </div>
 
-            <!-- 1. PANE: LOGIN USERNAME / PASSWORD -->
             <div id="pane-login" class="space-y-3 pt-1 text-sm">
                 <button onclick="loginWithDiscord()" class="w-full bg-[#5865F2] hover:bg-[#4752C4] text-white font-semibold py-2.5 rounded-xl transition shadow flex items-center justify-center space-x-2 text-xs sm:text-sm cursor-pointer">
                     <i class="fa-brands fa-discord text-lg"></i>
@@ -290,7 +360,6 @@
                 <button onclick="handleLogin()" class="w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold py-2.5 rounded-xl transition shadow text-xs sm:text-sm cursor-pointer">Masuk ke Sistem</button>
             </div>
 
-            <!-- 2. PANE: WHATSAPP OTP -->
             <div id="pane-wa" class="space-y-3 pt-1 text-sm hidden">
                 <p class="text-xs text-stone-500">Masukkan nomor WhatsApp Anda untuk menerima kode OTP verifikasi.</p>
                 <div>
@@ -304,7 +373,6 @@
                 <button id="wa-btn-action" onclick="requestOrVerifyWhatsAppOtp()" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-2.5 rounded-xl transition shadow text-xs sm:text-sm cursor-pointer">Kirim Kode OTP WhatsApp</button>
             </div>
 
-            <!-- 3. PANE: GMAIL OTP -->
             <div id="pane-email" class="space-y-3 pt-1 text-sm hidden">
                 <p class="text-xs text-stone-500">Masukkan alamat Gmail Anda untuk menerima kode verifikasi instan.</p>
                 <div>
@@ -318,7 +386,6 @@
                 <button id="email-btn-action" onclick="requestOrVerifyEmailOtp()" class="w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold py-2.5 rounded-xl transition shadow text-xs sm:text-sm cursor-pointer">Kirim Kode OTP ke Gmail</button>
             </div>
 
-            <!-- 4. PANE: DAFTAR AKUN BARU -->
             <div id="pane-register" class="space-y-3 pt-1 text-sm hidden">
                 <div>
                     <label class="block text-xs font-semibold text-stone-700 mb-1">Nama Lengkap / Kelompok Tani</label>
@@ -415,7 +482,6 @@
                     <input type="text" id="form-varietas" placeholder="Arabica Sumedang" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
                 </div>
 
-                <!-- PILIH KECAMATAN (ZONA 3 HURUF OTOMATIS) -->
                 <div class="bg-amber-50/60 p-3.5 rounded-xl border border-amber-200 space-y-2">
                     <label class="block font-semibold text-stone-900 text-[11px] uppercase tracking-wide flex items-center space-x-1.5">
                         <i class="fa-solid fa-map-pin text-amber-700"></i>
@@ -448,6 +514,12 @@
                         <option value="Ujungjaya">Ujungjaya (Zona UTR - Utara)</option>
                         <option value="Surian">Surian (Zona UTR - Utara)</option>
                     </select>
+                </div>
+
+                <!-- SEJARAH / ASAL USUL KOPI DI BLOK KEBUN -->
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">Sejarah / Asal Usul Kopi Blok Kebun Ini</label>
+                    <textarea id="form-sejarah" rows="3" placeholder="Warisan perkebunan kolonial abad ke-19 di kaki Gunung Tampomas..." class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs"></textarea>
                 </div>
 
                 <div class="bg-stone-50 p-3 rounded-xl border border-stone-200 space-y-2">
@@ -545,6 +617,16 @@
         let generatedWaOtp = '';
         let generatedEmailOtp = '';
 
+        // Analisis Hulu ke Hilir Default (Dapat diedit Dev)
+        let defaultSupplyChain = {
+            hulu: "Budidaya kopi di lereng Gunung Tampomas, Manglayang, dan Cakrabuana pada ketinggian 1000-1600 MDPL. Fokus pada pemeliharaan organik, pemupukan alami, dan petik merah selektif.",
+            pascapanen: "Pengolahan ceri kopi menggunakan metode terstandar seperti Washed, Natural, Honey, hingga Experimental Winey untuk menghasilkan cita rasa khas beraroma floral dan fruity.",
+            trace: "Pemberian identitas batch dengan kode zona 3 huruf (UTR, SLT, TMR, BRT, CML) dan penyematan QR Code transparan guna menjamin keaslian asal produk.",
+            hilir: "Distribusi ke gudang logistik, gerai specialty coffee, kedai konsep Alaska/Western Bar, serta penetrasi pasar regional dan ekspor global."
+        };
+
+        let supplyChainData = JSON.parse(localStorage.getItem('kopiTraceSupply')) || defaultSupplyChain;
+
         function startCameraScanner() {
             const readerEl = document.getElementById('reader');
             const closeBtn = document.getElementById('close-cam-btn');
@@ -637,7 +719,7 @@
 
         let defaultCoffeeData = [
             {
-                zona: "UTR", metode: "WASH", tahun: "2026", batch: "001", petani: "Bpk. Hendra", varietas: "Arabica Sumedang", mdpl: "1450 mdpl", kecamatan: "Sumedang Utara", lat: -6.8529, lng: 107.9205, destName: "Gudang Ekspor Sumedang Pusat", destLat: -6.8687, destLng: 107.9150, sertifikasi: "SNI Organik & USDA Organic Certified", cupping: "Brown Sugar, Citrus, Floral", fotoUrl: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80", distribusi: [{ tanggal: "2026-06-01", aktivitas: "Panen Selektif Ceri Kopi Sumedang" }], createdBy: "farmer"
+                zona: "UTR", metode: "WASH", tahun: "2026", batch: "001", petani: "Bpk. Hendra", varietas: "Arabica Sumedang", mdpl: "1450 mdpl", kecamatan: "Sumedang Utara", lat: -6.8529, lng: 107.9205, destName: "Gudang Ekspor Sumedang Pusat", destLat: -6.8687, destLng: 107.9150, sertifikasi: "SNI Organik & USDA Organic Certified", cupping: "Brown Sugar, Citrus, Floral", sejarah: "Kopi Sumedang di kawasan utara Gunung Tampomas memiliki akar sejarah panjang sejak era perkebunan kolonial abad ke-19, di mana tanah vulkanik subur menghasilkan biji kopi berkualitas tinggi khas Java Preanger.", fotoUrl: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80", distribusi: [{ tanggal: "2026-06-01", aktivitas: "Panen Selektif Ceri Kopi Sumedang" }], createdBy: "farmer"
             }
         ];
 
@@ -667,7 +749,42 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(showInstallButtons, 300);
+            renderSupplyChainUI();
         });
+
+        function renderSupplyChainUI() {
+            document.getElementById('txt-hulu').innerText = supplyChainData.hulu;
+            document.getElementById('txt-pascapanen').innerText = supplyChainData.pascapanen;
+            document.getElementById('txt-trace').innerText = supplyChainData.trace;
+            document.getElementById('txt-hilir').innerText = supplyChainData.hilir;
+        }
+
+        function openSupplyEditModal() {
+            document.getElementById('input-txt-hulu').value = supplyChainData.hulu;
+            document.getElementById('input-txt-pascapanen').value = supplyChainData.pascapanen;
+            document.getElementById('input-txt-trace').value = supplyChainData.trace;
+            document.getElementById('input-txt-hilir').value = supplyChainData.hilir;
+            const modal = document.getElementById('supply-edit-modal');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        }
+
+        function closeSupplyEditModal() {
+            const modal = document.getElementById('supply-edit-modal');
+            modal.classList.add('hidden'); modal.classList.remove('flex');
+        }
+
+        function saveSupplyChain() {
+            supplyChainData = {
+                hulu: document.getElementById('input-txt-hulu').value.trim(),
+                pascapanen: document.getElementById('input-txt-pascapanen').value.trim(),
+                trace: document.getElementById('input-txt-trace').value.trim(),
+                hilir: document.getElementById('input-txt-hilir').value.trim()
+            };
+            localStorage.setItem('kopiTraceSupply', JSON.stringify(supplyChainData));
+            closeSupplyEditModal();
+            renderSupplyChainUI();
+            alert('Analisis Hulu ke Hilir berhasil diperbarui!');
+        }
 
         function installAppPrompt() {
             if (deferredPrompt) {
@@ -697,6 +814,9 @@
             if (!token) {
                 const local = localStorage.getItem('kopiTraceData');
                 coffeeData = local ? JSON.parse(local) : defaultCoffeeData;
+                const localSup = localStorage.getItem('kopiTraceSupply');
+                if(localSup) supplyChainData = JSON.parse(localSup);
+                renderSupplyChainUI();
                 if (statusEl) statusEl.innerText = 'Mode Lokal';
                 if (currentView === 'public-home') { renderPublicCards(); updateStats(); }
                 else if (currentView === 'public-map') { initMap(); }
@@ -712,8 +832,10 @@
                 const data = await res.json();
                 if (data.coffeeData) coffeeData = data.coffeeData;
                 if (data.registeredUsers) registeredUsers = data.registeredUsers;
+                if (data.supplyChainData) { supplyChainData = data.supplyChainData; localStorage.setItem('kopiTraceSupply', JSON.stringify(supplyChainData)); }
                 localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
                 localStorage.setItem('kopiTraceUsers', JSON.stringify(registeredUsers));
+                renderSupplyChainUI();
                 if (statusEl) statusEl.innerText = 'Auto-Sync: Aktif';
             } catch (e) {
                 const local = localStorage.getItem('kopiTraceData');
@@ -736,7 +858,7 @@
                     const fileInfo = await getRes.json(); 
                     githubFileSha = fileInfo.sha; 
                 }
-                const fileContent = JSON.stringify({ coffeeData, registeredUsers }, null, 2);
+                const fileContent = JSON.stringify({ coffeeData, registeredUsers, supplyChainData }, null, 2);
                 const base64Content = btoa(unescape(encodeURIComponent(fileContent)));
                 const putRes = await fetch(apiUrl, {
                     method: 'PUT',
@@ -778,6 +900,7 @@
             try {
                 localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
                 localStorage.setItem('kopiTraceUsers', JSON.stringify(registeredUsers));
+                localStorage.setItem('kopiTraceSupply', JSON.stringify(supplyChainData));
                 if (currentUser) {
                     localStorage.setItem('kopiTraceActiveUser', JSON.stringify(currentUser));
                 } else {
@@ -922,6 +1045,15 @@
                             <h3 class="text-lg sm:text-xl font-black font-mono text-stone-900 mt-0.5">${query}</h3>
                         </div>
                         <span class="bg-amber-700 text-white px-3 py-1 rounded-full text-xs font-bold">${found.metode} Process</span>
+                    </div>
+
+                    <!-- BAGIAN SEJARAH / ASAL USUL KOPI -->
+                    <div class="bg-white p-4 rounded-xl border border-stone-200 space-y-1.5 shadow-sm">
+                        <span class="text-xs text-amber-800 font-extrabold uppercase tracking-wider flex items-center space-x-1.5">
+                            <i class="fa-solid fa-book-open text-amber-700"></i>
+                            <span>Sejarah & Asal Usul Kopi Blok Ini</span>
+                        </span>
+                        <p class="text-xs sm:text-sm text-stone-700 leading-relaxed">${found.sejarah || 'Kopi Sumedang memiliki tradisi budidaya turun-temurun di kawasan dataran tinggi vulkanik, dikenal dengan kekhasan profil rasa yang kuat dan bersih.'}</p>
                     </div>
 
                     <div class="bg-emerald-50 border border-emerald-200 p-3.5 rounded-xl flex items-center space-x-3">
@@ -1164,15 +1296,26 @@
             const navAuth = document.getElementById('nav-auth-container');
             const roleLabel = document.getElementById('auth-role-label');
             const devExportBtn = document.getElementById('dev-export-btn');
+            const editSupplyBtn = document.getElementById('edit-supply-btn');
+
             if (currentUser) {
                 navAuth.classList.remove('hidden');
                 navAuth.classList.add('flex');
                 if (roleLabel) roleLabel.innerText = `${currentUser.name} (${currentUser.role})`;
-                if (devExportBtn) {
-                    if (currentUser.role === 'dev') devExportBtn.classList.remove('hidden');
-                    else devExportBtn.classList.add('hidden');
+                
+                // Jika role adalah dev, tampilkan tombol edit analisis hulu-hilir
+                if (currentUser.role === 'dev') {
+                    if (devExportBtn) devExportBtn.classList.remove('hidden');
+                    if (editSupplyBtn) editSupplyBtn.classList.remove('hidden');
+                } else {
+                    if (devExportBtn) devExportBtn.classList.add('hidden');
+                    if (editSupplyBtn) editSupplyBtn.classList.add('hidden');
                 }
-            } else { navAuth.classList.add('hidden'); navAuth.classList.remove('flex'); }
+            } else { 
+                navAuth.classList.add('hidden'); 
+                navAuth.classList.remove('flex');
+                if (editSupplyBtn) editSupplyBtn.classList.add('hidden');
+            }
         }
 
         function renderDashboardTable() {
@@ -1208,6 +1351,7 @@
             document.getElementById('modal-tree-title').innerText = 'Tambah Data Batch Kopi Baru';
             document.getElementById('edit-index').value = -1;
             document.getElementById('tree-form').reset();
+            document.getElementById('form-sejarah').value = 'Kopi Sumedang di kawasan dataran tinggi vulkanik, memiliki sejarah panjang sebagai bagian dari tradisi agraris Java Preanger yang terkenal di pasar internasional.';
             document.getElementById('form-foto').value = '';
             document.getElementById('preview-container').classList.add('hidden');
             if (currentUser && currentUser.role === 'farmer') document.getElementById('form-petani').value = currentUser.name;
@@ -1228,6 +1372,7 @@
             document.getElementById('form-varietas').value = item.varietas;
             document.getElementById('form-mdpl').value = item.mdpl;
             if (item.kecamatan) { document.getElementById('form-kecamatan').value = item.kecamatan; }
+            document.getElementById('form-sejarah').value = item.sejarah || '';
             document.getElementById('form-dest-name').value = item.destName || '';
             document.getElementById('form-sertifikasi').value = item.sertifikasi || '';
             document.getElementById('form-cupping').value = item.cupping;
@@ -1274,6 +1419,7 @@
                 kecamatan: selectedKecamatan,
                 lat: zoneInfo.lat,
                 lng: zoneInfo.lng,
+                sejarah: document.getElementById('form-sejarah').value.trim(),
                 destName: document.getElementById('form-dest-name').value.trim() || 'Gudang Pusat Sumedang',
                 destLat: -6.8687,
                 destLng: 107.9150,
@@ -1313,7 +1459,7 @@
         }
 
         function exportDataJSON() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ coffeeData, registeredUsers }, null, 2));
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ coffeeData, registeredUsers, supplyChainData }, null, 2));
             const dl = document.createElement('a'); dl.setAttribute("href", dataStr); dl.setAttribute("download", "kopitrace_sumedang_backup.json"); dl.click();
         }
 
