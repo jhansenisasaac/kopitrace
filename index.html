@@ -93,7 +93,7 @@
                     <span class="inline-block bg-amber-700/80 text-amber-200 text-[11px] sm:text-xs px-3 py-1 rounded-full uppercase tracking-wider font-semibold">Sistem Transparansi Kopi Indonesia</span>
                     <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">Lacak Asal-Usul Kopi Dari Pohon Hingga Cangkir</h1>
                     <p class="text-stone-300 text-xs sm:text-base leading-relaxed">
-                        Pindai QR Code untuk mengetahui zona kebun, metode pengolahan, penggunaan pupuk, rute logistik, hingga catatan cupping secara transparan.
+                        Pindai QR Code untuk mengetahui zona kebun, metode pengolahan, sertifikasi organik, rute logistik, hingga catatan cupping secara transparan.
                     </p>
                     <div class="flex flex-wrap gap-2.5 pt-1">
                         <button onclick="switchView('public-scanner')" class="bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold px-4 sm:px-5 py-2.5 rounded-xl transition flex items-center space-x-2 text-xs sm:text-sm shadow">
@@ -549,13 +549,23 @@
         let mapInstance = null, markersLayer = null, traceMapInstance = null, githubFileSha = null;
         let deferredPrompt = null;
 
+        // Tangkap event PWA prompt
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
+            showInstallButtons();
+        });
+
+        function showInstallButtons() {
             const btn = document.getElementById('install-btn');
             const mobileBtn = document.getElementById('mobile-install-btn');
             if (btn) btn.classList.remove('hidden');
             if (mobileBtn) mobileBtn.classList.remove('hidden');
+        }
+
+        // Pastikan tombol instal selalu muncul agar bisa diakses kapan saja
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(showInstallButtons, 300);
         });
 
         function installAppPrompt() {
@@ -571,7 +581,7 @@
                     deferredPrompt = null;
                 });
             } else {
-                alert('Pemasangan aplikasi PWA belum tersedia atau sudah terinstal di perangkat ini.');
+                alert("Cara Instal Aplikasi di HP:\nKetuk ikon titik tiga (⋮) di pojok kanan atas browser Chrome Anda, lalu pilih 'Tambahkan ke Beranda' atau 'Instal Aplikasi'.");
             }
         }
 
@@ -1103,4 +1113,4 @@
         };
     </script>
 </body>
-    </html>
+</html>
