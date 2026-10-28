@@ -178,7 +178,7 @@
             </div>
         </section>
 
-        <!-- 2. FARMER PROFILE PAGE (HALAMAN KHUSUS PROFIL PETANI) -->
+        <!-- 2. FARMER PROFILE PAGE -->
         <section id="view-farmer-profile" class="space-y-6 hidden max-w-5xl mx-auto">
             <div class="flex justify-between items-center flex-wrap gap-3">
                 <div>
@@ -195,7 +195,7 @@
             <div id="farmer-profiles-container" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
         </section>
 
-        <!-- 3. PROCESSOR PROFILE PAGE (HALAMAN KHUSUS PROFIL PROSESOR) -->
+        <!-- 3. PROCESSOR PROFILE PAGE -->
         <section id="view-processor-profile" class="space-y-6 hidden max-w-5xl mx-auto">
             <div class="flex justify-between items-center flex-wrap gap-3">
                 <div>
@@ -483,7 +483,7 @@
         </div>
     </div>
 
-    <!-- AUTH MODAL (LOGIN & REGISTER) -->
+    <!-- AUTH MODAL -->
     <div id="auth-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-stone-100 pb-3">
@@ -759,7 +759,7 @@
 
         let supplyChainData = JSON.parse(localStorage.getItem('kopiTraceSupply')) || defaultSupplyChain;
 
-        // Data Dinamis Petani & Prosesor
+        // Data Dinamis Petani & Prosesor tersinkron ke database.json / localStorage
         let defaultFarmers = [
             { name: "Bpk. Hendra & Kelompok Tani Tampomas Lestari", location: "Kec. Cimalaka & Sumedang Utara (Zona CML & UTR)", mdpl: "1.200 – 1.500 MDPL", varietas: "Arabica Line S, Sigarar Utang, Typica", desc: "Berada di tanah vulkanik subur, meneruskan tradisi leluhur perkebunan kopi Java Preanger dengan pendekatan modern ramah lingkungan serta sistem panen pilih merah (selective picking).", foto: "https://images.unsplash.com/photo-1595974482597-4f82c4e0dd10?auto=format&fit=crop&w=400&q=80" }
         ];
@@ -1097,7 +1097,7 @@
             closeFarmerModal();
             renderFarmerProfilesUI();
             renderDashboardProfilesLists();
-            alert('Profil Petani berhasil disimpan dan disinkronisasi!');
+            alert('Profil Petani berhasil disimpan dan disinkronkan!');
         }
 
         function deleteFarmerProfile(index) {
@@ -1166,7 +1166,7 @@
             closeProcessorModal();
             renderProcessorProfilesUI();
             renderDashboardProfilesLists();
-            alert('Profil Prosesor berhasil disimpan dan disinkronisasi!');
+            alert('Profil Prosesor berhasil disimpan dan disinkronkan!');
         }
 
         function deleteProcessorProfile(index) {
@@ -1261,10 +1261,9 @@
                 if (data.supplyChainData) { supplyChainData = data.supplyChainData; localStorage.setItem('kopiTraceSupply', JSON.stringify(supplyChainData)); }
                 if (data.farmersData) { farmersData = data.farmersData; localStorage.setItem('kopiTraceFarmers', JSON.stringify(farmersData)); }
                 if (data.processorsData) { processorsData = data.processorsData; localStorage.setItem('kopiTraceProcessors', JSON.stringify(processorsData)); }
-                
+
                 localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
                 localStorage.setItem('kopiTraceUsers', JSON.stringify(registeredUsers));
-                
                 renderSupplyChainUI();
                 renderFarmerProfilesUI();
                 renderProcessorProfilesUI();
@@ -1272,13 +1271,6 @@
             } catch (e) {
                 const local = localStorage.getItem('kopiTraceData');
                 coffeeData = local ? JSON.parse(local) : defaultCoffeeData;
-                const localFarmers = localStorage.getItem('kopiTraceFarmers');
-                if(localFarmers) farmersData = JSON.parse(localFarmers);
-                const localProcs = localStorage.getItem('kopiTraceProcessors');
-                if(localProcs) processorsData = JSON.parse(localProcs);
-                
-                renderFarmerProfilesUI();
-                renderProcessorProfilesUI();
                 if (statusEl) statusEl.innerText = 'Auto-Sync: Offline';
             }
 
@@ -1302,7 +1294,7 @@
                 const putRes = await fetch(apiUrl, {
                     method: 'PUT',
                     headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: "Update database with profiles via KopiTrace App", content: base64Content, sha: githubFileSha || undefined, branch: GITHUB_CONFIG.branch })
+                    body: JSON.stringify({ message: "Update database with farmer & processor profiles via KopiTrace App", content: base64Content, sha: githubFileSha || undefined, branch: GITHUB_CONFIG.branch })
                 });
                 if (!putRes.ok) throw new Error('Gagal menyimpan ke GitHub');
                 const putData = await putRes.json();
@@ -1342,7 +1334,6 @@
                 localStorage.setItem('kopiTraceSupply', JSON.stringify(supplyChainData));
                 localStorage.setItem('kopiTraceFarmers', JSON.stringify(farmersData));
                 localStorage.setItem('kopiTraceProcessors', JSON.stringify(processorsData));
-                
                 if (currentUser) {
                     localStorage.setItem('kopiTraceActiveUser', JSON.stringify(currentUser));
                 } else {
