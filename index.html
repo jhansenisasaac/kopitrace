@@ -43,10 +43,12 @@
                 </div>
 
                 <!-- Desktop Nav -->
-                <div class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                <div class="hidden md:flex items-center space-x-3 text-sm font-medium">
                     <button onclick="switchView('public-home')" class="hover:text-amber-400 transition py-2 cursor-pointer">Beranda</button>
                     <button onclick="switchView('public-map')" class="hover:text-amber-400 transition py-2 cursor-pointer">Peta Sumedang</button>
                     <button onclick="switchView('public-scanner')" class="hover:text-amber-400 transition py-2 cursor-pointer">Lacak / Scan</button>
+                    <button onclick="switchView('farmer-profile')" class="hover:text-amber-400 transition py-2 cursor-pointer text-amber-200">Profil Petani</button>
+                    <button onclick="switchView('processor-profile')" class="hover:text-amber-400 transition py-2 cursor-pointer text-amber-200">Profil Prosesor</button>
                     <button onclick="installAppPrompt()" id="install-btn" class="hidden text-amber-400 hover:text-amber-300 transition py-2 items-center space-x-1.5 font-semibold cursor-pointer">
                         <i class="fa-solid fa-download"></i>
                         <span>Instal</span>
@@ -71,10 +73,12 @@
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-stone-900 border-t border-stone-800 px-4 pt-2 pb-4 space-y-2 text-sm font-medium">
+        <div id="mobile-menu" class="hidden md:hidden bg-stone-900 border-t border-stone-800 px-4 pt-3 pb-4 space-y-2 text-sm font-medium">
             <button onclick="switchView('public-home'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Beranda</button>
             <button onclick="switchView('public-map'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Peta Sumedang</button>
             <button onclick="switchView('public-scanner'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Lacak / Scan Kode</button>
+            <button onclick="switchView('farmer-profile'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition text-amber-300">Profil Petani (Hulu)</button>
+            <button onclick="switchView('processor-profile'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition text-amber-300">Profil Prosesor (Pasca-Panen)</button>
             <button onclick="installAppPrompt(); toggleMobileMenu();" id="mobile-install-btn" class="hidden w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition text-amber-400 font-semibold items-center space-x-2">
                 <i class="fa-solid fa-download mr-1"></i>
                 <span>Instal Aplikasi</span>
@@ -98,9 +102,9 @@
                             <i class="fa-solid fa-qrcode"></i>
                             <span>Lacak / Scan Kode</span>
                         </button>
-                        <button onclick="switchView('public-map')" class="bg-stone-700/80 hover:bg-stone-700 text-white px-4 sm:px-5 py-2.5 rounded-xl transition flex items-center space-x-2 border border-stone-600 text-xs sm:text-sm cursor-pointer">
-                            <i class="fa-solid fa-map-location-dot"></i>
-                            <span>Peta Sumedang</span>
+                        <button onclick="switchView('farmer-profile')" class="bg-stone-700/80 hover:bg-stone-700 text-amber-200 px-4 sm:px-5 py-2.5 rounded-xl transition flex items-center space-x-2 border border-stone-600 text-xs sm:text-sm cursor-pointer">
+                            <i class="fa-solid fa-seedling"></i>
+                            <span>Kenali Petani & Prosesor</span>
                         </button>
                     </div>
                 </div>
@@ -119,7 +123,7 @@
                 </div>
             </div>
 
-            <!-- ANALISIS KOPI SUMEDANG: HULU SAMPAI HILIR (DAPAT DIEDIT DEV) -->
+            <!-- ANALISIS KOPI SUMEDANG: HULU SAMPAI HILIR -->
             <div class="bg-white p-5 sm:p-7 rounded-2xl shadow-sm border border-stone-200 space-y-4">
                 <div class="flex justify-between items-center border-b border-stone-100 pb-3">
                     <h2 class="text-lg sm:text-xl font-bold text-stone-900 flex items-center space-x-2">
@@ -131,17 +135,17 @@
                     </button>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs sm:text-sm">
-                    <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-2">
-                        <div class="font-bold text-amber-800 flex items-center space-x-1.5">
-                            <i class="fa-solid fa-mountain text-base"></i>
-                            <span>1. Sektor Hulu (On-Farm)</span>
+                    <div onclick="switchView('farmer-profile')" class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-2 hover:border-amber-500 cursor-pointer transition group">
+                        <div class="font-bold text-amber-800 flex items-center justify-between">
+                            <span class="flex items-center space-x-1.5"><i class="fa-solid fa-mountain text-base"></i><span>1. Sektor Hulu (On-Farm)</span></span>
+                            <i class="fa-solid fa-arrow-right text-stone-400 group-hover:text-amber-700 transition"></i>
                         </div>
                         <p id="txt-hulu" class="text-stone-600 leading-relaxed">Budidaya kopi di lereng Gunung Tampomas, Manglayang, dan Cakrabuana pada ketinggian 1000-1600 MDPL. Fokus pada pemeliharaan organik, pemupukan alami, dan petik merah selektif.</p>
                     </div>
-                    <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-2">
-                        <div class="font-bold text-amber-800 flex items-center space-x-1.5">
-                            <i class="fa-solid fa-water text-base"></i>
-                            <span>2. Pasca-Panen (Processing)</span>
+                    <div onclick="switchView('processor-profile')" class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-2 hover:border-amber-500 cursor-pointer transition group">
+                        <div class="font-bold text-amber-800 flex items-center justify-between">
+                            <span class="flex items-center space-x-1.5"><i class="fa-solid fa-water text-base"></i><span>2. Pasca-Panen (Processing)</span></span>
+                            <i class="fa-solid fa-arrow-right text-stone-400 group-hover:text-amber-700 transition"></i>
                         </div>
                         <p id="txt-pascapanen" class="text-stone-600 leading-relaxed">Pengolahan ceri kopi menggunakan metode terstandar seperti Washed, Natural, Honey, hingga Experimental Winey untuk menghasilkan cita rasa khas beraroma floral dan fruity.</p>
                     </div>
@@ -174,7 +178,41 @@
             </div>
         </section>
 
-        <!-- 2. PUBLIC MAP -->
+        <!-- 2. FARMER PROFILE PAGE (HALAMAN KHUSUS PROFIL PETANI) -->
+        <section id="view-farmer-profile" class="space-y-6 hidden max-w-5xl mx-auto">
+            <div class="flex justify-between items-center flex-wrap gap-3">
+                <div>
+                    <span class="text-xs font-bold text-amber-700 uppercase tracking-widest">Sektor Hulu & Budidaya</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-stone-900">Direktori Profil Petani Sumedang</h2>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="openAddFarmerModal()" class="bg-amber-700 hover:bg-amber-800 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center space-x-1.5 shadow cursor-pointer">
+                        <i class="fa-solid fa-user-plus"></i><span>Tambah Petani Baru</span>
+                    </button>
+                    <button onclick="switchView('public-home')" class="bg-stone-200 hover:bg-stone-300 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium cursor-pointer">Kembali</button>
+                </div>
+            </div>
+            <div id="farmer-profiles-container" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+        </section>
+
+        <!-- 3. PROCESSOR PROFILE PAGE (HALAMAN KHUSUS PROFIL PROSESOR) -->
+        <section id="view-processor-profile" class="space-y-6 hidden max-w-5xl mx-auto">
+            <div class="flex justify-between items-center flex-wrap gap-3">
+                <div>
+                    <span class="text-xs font-bold text-amber-700 uppercase tracking-widest">Sektor Pasca-Panen & Pengolahan</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-stone-900">Direktori Rumah Prosesor Kopi Sumedang</h2>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="openAddProcessorModal()" class="bg-stone-900 hover:bg-stone-800 text-amber-300 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center space-x-1.5 shadow cursor-pointer">
+                        <i class="fa-solid fa-industry"></i><span>Tambah Prosesor Baru</span>
+                    </button>
+                    <button onclick="switchView('public-home')" class="bg-stone-200 hover:bg-stone-300 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium cursor-pointer">Kembali</button>
+                </div>
+            </div>
+            <div id="processor-profiles-container" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+        </section>
+
+        <!-- 4. PUBLIC MAP -->
         <section id="view-public-map" class="space-y-4 sm:space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <div>
@@ -188,7 +226,7 @@
             </div>
         </section>
 
-        <!-- 3. PUBLIC SCANNER & TRACEABILITY -->
+        <!-- 5. PUBLIC SCANNER & TRACEABILITY -->
         <section id="view-public-scanner" class="space-y-5 hidden max-w-3xl mx-auto">
             <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-stone-200 space-y-5">
                 <div class="text-center space-y-1.5">
@@ -224,7 +262,7 @@
             </div>
         </section>
 
-        <!-- 4. DASHBOARD -->
+        <!-- 6. DASHBOARD -->
         <section id="view-dashboard" class="space-y-5 hidden">
             <div id="dashboard-banner" class="bg-amber-50 border border-amber-200 rounded-2xl p-4 sm:p-6 flex flex-col lg:flex-row justify-between items-start lg:items-center shadow-sm gap-4">
                 <div class="space-y-1">
@@ -247,6 +285,29 @@
                         <i class="fa-solid fa-download"></i>
                         <span>Export</span>
                     </button>
+                </div>
+            </div>
+
+            <!-- TABEL DAFTAR AKUN & NOMOR WA (KHUSUS DEV/ADMIN) -->
+            <div id="admin-users-section" class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden hidden">
+                <div class="px-4 sm:px-6 py-4 border-b border-stone-200 flex justify-between items-center bg-stone-50">
+                    <h3 class="font-bold text-stone-900 text-sm sm:text-base flex items-center space-x-2">
+                        <i class="fa-solid fa-address-book text-amber-700"></i>
+                        <span>Daftar Akun & Nomor WhatsApp Terdaftar</span>
+                    </h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs sm:text-sm whitespace-nowrap">
+                        <thead>
+                            <tr class="bg-stone-100 text-stone-700 uppercase text-[11px] tracking-wider border-b border-stone-200">
+                                <th class="p-3 sm:p-4">Nama Pengguna / Kelompok</th>
+                                <th class="p-3 sm:p-4">Username</th>
+                                <th class="p-3 sm:p-4">Nomor WhatsApp (NO WA)</th>
+                                <th class="p-3 sm:p-4">Role / Peran</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-users-table-body" class="divide-y divide-stone-200"></tbody>
+                    </table>
                 </div>
             </div>
 
@@ -315,22 +376,106 @@
         </div>
     </div>
 
-    <!-- AUTH MODAL -->
+    <!-- MODAL TAMBAH / EDIT PETANI -->
+    <div id="farmer-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-stone-100 pb-3">
+                <h3 id="farmer-modal-title" class="font-bold text-base sm:text-lg text-stone-900 flex items-center space-x-2">
+                    <i class="fa-solid fa-user-plus text-amber-700"></i>
+                    <span>Tambah Profil Petani Baru</span>
+                </h3>
+                <button onclick="closeFarmerModal()" class="text-stone-400 hover:text-stone-700 p-1 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="farmer-form" onsubmit="saveFarmerProfile(event)" class="space-y-3.5 text-xs sm:text-sm">
+                <input type="hidden" id="farmer-edit-index" value="-1">
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">Nama Petani / Kelompok Tani</label>
+                    <input type="text" id="form-farmer-name" placeholder="Cth: Kelompok Tani Gunung Manik" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                </div>
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">Wilayah / Kecamatan Kebun</label>
+                    <input type="text" id="form-farmer-location" placeholder="Cth: Kec. Cimalaka & Tampomas" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">Ketinggian (MDPL)</label>
+                        <input type="text" id="form-farmer-mdpl" placeholder="1.200 - 1.500 MDPL" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">Varietas Utama</label>
+                        <input type="text" id="form-farmer-varietas" placeholder="Arabica Line S, Typica" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">Deskripsi & Filosofi Budidaya</label>
+                    <textarea id="form-farmer-desc" rows="3" placeholder="Fokus pada perawatan organik dan petik merah selektif..." required class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs"></textarea>
+                </div>
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">URL Foto Petani</label>
+                    <input type="url" id="form-farmer-foto" placeholder="https://images.unsplash.com/..." class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs font-mono">
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeFarmerModal()" class="bg-stone-200 hover:bg-stone-300 px-4 py-2 rounded-xl text-xs font-medium cursor-pointer">Batal</button>
+                    <button type="submit" class="bg-amber-700 hover:bg-amber-800 text-white px-5 py-2 rounded-xl text-xs font-semibold shadow cursor-pointer">Simpan Petani</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL TAMBAH / EDIT PROSESOR -->
+    <div id="processor-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-stone-100 pb-3">
+                <h3 id="processor-modal-title" class="font-bold text-base sm:text-lg text-stone-900 flex items-center space-x-2">
+                    <i class="fa-solid fa-industry text-amber-700"></i>
+                    <span>Tambah Rumah Prosesor Baru</span>
+                </h3>
+                <button onclick="closeProcessorModal()" class="text-stone-400 hover:text-stone-700 p-1 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="processor-form" onsubmit="saveProcessorProfile(event)" class="space-y-3.5 text-xs sm:text-sm">
+                <input type="hidden" id="processor-edit-index" value="-1">
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">Nama Rumah Pengolahan / Mill</label>
+                    <input type="text" id="form-proc-name" placeholder="Cth: Sumedang Experimental Mill" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                </div>
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">Lokasi / Kecamatan</label>
+                    <input type="text" id="form-proc-location" placeholder="Cth: Kec. Rancakalong" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                </div>
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">Metode Pengolahan Unggulan</label>
+                    <input type="text" id="form-proc-methods" placeholder="Cth: Washed, Natural, Experimental Winey" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                </div>
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">Deskripsi & Proses Fermentasi</label>
+                    <textarea id="form-proc-desc" rows="3" placeholder="Mengontrol fermentasi ketat untuk cita rasa clean cup..." required class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs"></textarea>
+                </div>
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">URL Foto Prosesor</label>
+                    <input type="url" id="form-proc-foto" placeholder="https://images.unsplash.com/..." class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs font-mono">
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeProcessorModal()" class="bg-stone-200 hover:bg-stone-300 px-4 py-2 rounded-xl text-xs font-medium cursor-pointer">Batal</button>
+                    <button type="submit" class="bg-stone-900 hover:bg-stone-800 text-white px-5 py-2 rounded-xl text-xs font-semibold shadow cursor-pointer">Simpan Prosesor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- AUTH MODAL (LOGIN & PENDAFTARAN DENGAN NOMOR WA) -->
     <div id="auth-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-stone-100 pb-3">
                 <h3 class="font-bold text-base sm:text-lg text-stone-900 flex items-center space-x-2">
                     <i class="fa-solid fa-lock text-amber-700"></i>
-                    <span id="auth-modal-title">Akses Pengelola KopiSumedang</span>
+                    <span>Akses Pengelola KopiSumedang</span>
                 </h3>
                 <button onclick="closeAuthModal()" class="text-stone-400 hover:text-stone-700 p-1 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
-            <div class="grid grid-cols-4 bg-stone-100 p-1 rounded-xl text-[11px] font-semibold text-center">
-                <button id="auth-tab-login" onclick="switchAuthMode('login')" class="py-2 rounded-lg bg-white text-stone-900 shadow-sm transition cursor-pointer">Masuk</button>
-                <button id="auth-tab-wa" onclick="switchAuthMode('wa')" class="py-2 rounded-lg text-stone-600 transition cursor-pointer">WhatsApp</button>
-                <button id="auth-tab-email" onclick="switchAuthMode('email')" class="py-2 rounded-lg text-stone-600 transition cursor-pointer">Gmail</button>
-                <button id="auth-tab-reg" onclick="switchAuthMode('register')" class="py-2 rounded-lg text-stone-600 transition cursor-pointer">Daftar</button>
+            <div class="grid grid-cols-2 bg-stone-100 p-1 rounded-xl text-xs font-semibold text-center">
+                <button id="auth-tab-login" onclick="switchAuthMode('login')" class="py-2 rounded-lg bg-white text-stone-900 shadow-sm transition cursor-pointer">Masuk Akun</button>
+                <button id="auth-tab-reg" onclick="switchAuthMode('register')" class="py-2 rounded-lg text-stone-600 transition cursor-pointer">Daftar Akun (NO WA)</button>
             </div>
 
             <div id="pane-login" class="space-y-3 pt-1 text-sm">
@@ -360,33 +505,8 @@
                 <button onclick="handleLogin()" class="w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold py-2.5 rounded-xl transition shadow text-xs sm:text-sm cursor-pointer">Masuk ke Sistem</button>
             </div>
 
-            <div id="pane-wa" class="space-y-3 pt-1 text-sm hidden">
-                <p class="text-xs text-stone-500">Masukkan nomor WhatsApp Anda untuk menerima kode OTP verifikasi.</p>
-                <div>
-                    <label class="block text-xs font-semibold text-stone-700 mb-1">Nomor WhatsApp</label>
-                    <input type="tel" id="wa-phone" placeholder="Cth: 081234567890" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs sm:text-sm font-mono">
-                </div>
-                <div id="wa-otp-section" class="hidden space-y-2">
-                    <label class="block text-xs font-semibold text-stone-700 mb-1">Masukkan Kode OTP (6 Digit)</label>
-                    <input type="text" id="wa-otp-code" placeholder="Cth: 123456" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-center tracking-widest font-mono text-base">
-                </div>
-                <button id="wa-btn-action" onclick="requestOrVerifyWhatsAppOtp()" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-2.5 rounded-xl transition shadow text-xs sm:text-sm cursor-pointer">Kirim Kode OTP WhatsApp</button>
-            </div>
-
-            <div id="pane-email" class="space-y-3 pt-1 text-sm hidden">
-                <p class="text-xs text-stone-500">Masukkan alamat Gmail Anda untuk menerima kode verifikasi instan.</p>
-                <div>
-                    <label class="block text-xs font-semibold text-stone-700 mb-1">Alamat Email / Gmail</label>
-                    <input type="email" id="email-addr" placeholder="Cth: petani@gmail.com" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs sm:text-sm">
-                </div>
-                <div id="email-otp-section" class="hidden space-y-2">
-                    <label class="block text-xs font-semibold text-stone-700 mb-1">Masukkan Kode OTP Gmail</label>
-                    <input type="text" id="email-otp-code" placeholder="Cth: 654321" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-center tracking-widest font-mono text-base">
-                </div>
-                <button id="email-btn-action" onclick="requestOrVerifyEmailOtp()" class="w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold py-2.5 rounded-xl transition shadow text-xs sm:text-sm cursor-pointer">Kirim Kode OTP ke Gmail</button>
-            </div>
-
             <div id="pane-register" class="space-y-3 pt-1 text-sm hidden">
+                <p class="text-xs text-stone-500">Pendaftaran akun baru wajib mencantumkan Nomor WhatsApp (NO WA) yang aktif.</p>
                 <div>
                     <label class="block text-xs font-semibold text-stone-700 mb-1">Nama Lengkap / Kelompok Tani</label>
                     <input type="text" id="reg-name" placeholder="Cth: Kelompok Tani Sumedang" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs sm:text-sm">
@@ -396,8 +516,8 @@
                     <input type="text" id="reg-user" placeholder="Cth: tani_sumedang" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs sm:text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-stone-700 mb-1">Nomor WhatsApp / HP</label>
-                    <input type="tel" id="reg-wa" placeholder="Cth: 081234567890" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs sm:text-sm font-mono">
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Nomor WhatsApp / HP (Wajib)</label>
+                    <input type="tel" id="reg-wa" placeholder="Cth: 081234567890" required class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs sm:text-sm font-mono">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-stone-700 mb-1">Password</label>
@@ -408,7 +528,7 @@
                         </button>
                     </div>
                 </div>
-                <div id="reg-error" class="text-xs text-red-600 hidden font-medium">Mohon isi semua kolom dengan benar!</div>
+                <div id="reg-error" class="text-xs text-red-600 hidden font-medium">Mohon isi semua kolom termasuk Nomor WA dengan benar!</div>
                 <button onclick="handleRegister()" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-2.5 rounded-xl transition shadow text-xs sm:text-sm cursor-pointer">Daftar Akun Baru Sekarang</button>
             </div>
         </div>
@@ -516,7 +636,6 @@
                     </select>
                 </div>
 
-                <!-- SEJARAH / ASAL USUL KOPI DI BLOK KEBUN -->
                 <div>
                     <label class="block font-semibold text-stone-700 mb-1">Sejarah / Asal Usul Kopi Blok Kebun Ini</label>
                     <textarea id="form-sejarah" rows="3" placeholder="Warisan perkebunan kolonial abad ke-19 di kaki Gunung Tampomas..." class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs"></textarea>
@@ -614,10 +733,7 @@
         };
 
         let html5QrCode = null;
-        let generatedWaOtp = '';
-        let generatedEmailOtp = '';
 
-        // Analisis Hulu ke Hilir Default (Dapat diedit Dev)
         let defaultSupplyChain = {
             hulu: "Budidaya kopi di lereng Gunung Tampomas, Manglayang, dan Cakrabuana pada ketinggian 1000-1600 MDPL. Fokus pada pemeliharaan organik, pemupukan alami, dan petik merah selektif.",
             pascapanen: "Pengolahan ceri kopi menggunakan metode terstandar seperti Washed, Natural, Honey, hingga Experimental Winey untuk menghasilkan cita rasa khas beraroma floral dan fruity.",
@@ -626,6 +742,17 @@
         };
 
         let supplyChainData = JSON.parse(localStorage.getItem('kopiTraceSupply')) || defaultSupplyChain;
+
+        // Data Dinamis Petani & Prosesor
+        let defaultFarmers = [
+            { name: "Bpk. Hendra & Kelompok Tani Tampomas Lestari", location: "Kec. Cimalaka & Sumedang Utara (Zona CML & UTR)", mdpl: "1.200 – 1.500 MDPL", varietas: "Arabica Line S, Sigarar Utang, Typica", desc: "Berada di tanah vulkanik subur, meneruskan tradisi leluhur perkebunan kopi Java Preanger dengan pendekatan modern ramah lingkungan serta sistem panen pilih merah (selective picking).", foto: "https://images.unsplash.com/photo-1595974482597-4f82c4e0dd10?auto=format&fit=crop&w=400&q=80" }
+        ];
+        let farmersData = JSON.parse(localStorage.getItem('kopiTraceFarmers')) || defaultFarmers;
+
+        let defaultProcessors = [
+            { name: "Preanger Processing Station (Sumedang Coffee Mill)", location: "Kecamatan Rancakalong (Zona TGR - Tengah)", methods: "Washed, Natural, Experimental Honey & Winey", desc: "Berperan sebagai jembatan penting antara petani dan roastery, digawangi anak muda lokal yang ahli mengontrol fermentasi untuk menciptakan clean cup dan fruity notes terbaik.", foto: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=400&q=80" }
+        ];
+        let processorsData = JSON.parse(localStorage.getItem('kopiTraceProcessors')) || defaultProcessors;
 
         function startCameraScanner() {
             const readerEl = document.getElementById('reader');
@@ -725,7 +852,7 @@
 
         let coffeeData = JSON.parse(localStorage.getItem('kopiTraceData')) || defaultCoffeeData;
         let registeredUsers = JSON.parse(localStorage.getItem('kopiTraceUsers')) || [
-            { name: 'Developer Super Admin', user: 'dev', pass: 'm0r94n', role: 'dev' },
+            { name: 'Developer Super Admin', user: 'dev', pass: 'm0r94n', role: 'dev', wa: '08111111111' },
             { name: 'Bpk. Hendra (Petani)', user: 'farmer', pass: 'farmer2026', role: 'farmer', wa: '081234567890' }
         ];
 
@@ -750,6 +877,8 @@
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(showInstallButtons, 300);
             renderSupplyChainUI();
+            renderFarmerProfilesUI();
+            renderProcessorProfilesUI();
         });
 
         function renderSupplyChainUI() {
@@ -757,6 +886,191 @@
             document.getElementById('txt-pascapanen').innerText = supplyChainData.pascapanen;
             document.getElementById('txt-trace').innerText = supplyChainData.trace;
             document.getElementById('txt-hilir').innerText = supplyChainData.hilir;
+        }
+
+        function renderFarmerProfilesUI() {
+            const container = document.getElementById('farmer-profiles-container');
+            if (!container) return;
+            let html = '';
+            farmersData.forEach((f, idx) => {
+                const isAdmin = currentUser && (currentUser.role === 'dev' || currentUser.role === 'farmer');
+                html += `
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 space-y-3 flex flex-col justify-between">
+                        <div class="space-y-2">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <img src="${f.foto || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80'}" alt="Petani" class="w-14 h-14 rounded-xl object-cover border border-amber-600/40 shadow">
+                                    <div>
+                                        <h4 class="font-bold text-stone-900 text-base">${f.name}</h4>
+                                        <span class="text-[11px] text-amber-800 font-semibold"><i class="fa-solid fa-location-dot mr-1"></i>${f.location}</span>
+                                    </div>
+                                </div>
+                                ${isAdmin ? `
+                                <div class="flex space-x-1">
+                                    <button onclick="openEditFarmerModal(${idx})" class="text-amber-700 hover:text-amber-900 p-1.5 bg-amber-50 rounded-lg cursor-pointer" title="Edit Profil"><i class="fa-solid fa-pen-to-square text-xs"></i></button>
+                                    <button onclick="deleteFarmerProfile(${idx})" class="text-red-600 hover:text-red-800 p-1.5 bg-red-50 rounded-lg cursor-pointer" title="Hapus Profil"><i class="fa-solid fa-trash text-xs"></i></button>
+                                </div>
+                                ` : ''}
+                            </div>
+                            <p class="text-xs text-stone-600 leading-relaxed pt-1">${f.desc}</p>
+                        </div>
+                        <div class="pt-3 border-t border-stone-100 grid grid-cols-2 gap-2 text-[11px] font-medium text-stone-500">
+                            <div><strong class="text-stone-800">MDPL:</strong> ${f.mdpl}</div>
+                            <div><strong class="text-stone-800">Varietas:</strong> ${f.varietas}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderProcessorProfilesUI() {
+            const container = document.getElementById('processor-profiles-container');
+            if (!container) return;
+            let html = '';
+            processorsData.forEach((p, idx) => {
+                const isAdmin = currentUser && (currentUser.role === 'dev' || currentUser.role === 'farmer');
+                html += `
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 space-y-3 flex flex-col justify-between">
+                        <div class="space-y-2">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <img src="${p.foto || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=200&q=80'}" alt="Prosesor" class="w-14 h-14 rounded-xl object-cover border border-amber-600/40 shadow">
+                                    <div>
+                                        <h4 class="font-bold text-stone-900 text-base">${p.name}</h4>
+                                        <span class="text-[11px] text-amber-800 font-semibold"><i class="fa-solid fa-location-dot mr-1"></i>${p.location}</span>
+                                    </div>
+                                </div>
+                                ${isAdmin ? `
+                                <div class="flex space-x-1">
+                                    <button onclick="openEditProcessorModal(${idx})" class="text-amber-700 hover:text-amber-900 p-1.5 bg-amber-50 rounded-lg cursor-pointer" title="Edit Profil"><i class="fa-solid fa-pen-to-square text-xs"></i></button>
+                                    <button onclick="deleteProcessorProfile(${idx})" class="text-red-600 hover:text-red-800 p-1.5 bg-red-50 rounded-lg cursor-pointer" title="Hapus Profil"><i class="fa-solid fa-trash text-xs"></i></button>
+                                </div>
+                                ` : ''}
+                            </div>
+                            <p class="text-xs text-stone-600 leading-relaxed pt-1">${p.desc}</p>
+                        </div>
+                        <div class="pt-3 border-t border-stone-100 text-[11px] text-stone-500">
+                            <strong class="text-stone-800">Metode Unggulan:</strong> <span class="text-amber-900 font-medium">${p.methods}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function openAddFarmerModal() {
+            document.getElementById('farmer-modal-title').innerHTML = `<i class="fa-solid fa-user-plus text-amber-700"></i><span>Tambah Profil Petani Baru</span>`;
+            document.getElementById('farmer-edit-index').value = -1;
+            document.getElementById('farmer-form').reset();
+            const modal = document.getElementById('farmer-modal');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        }
+
+        function openEditFarmerModal(index) {
+            const f = farmersData[index];
+            if (!f) return;
+            document.getElementById('farmer-modal-title').innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-700"></i><span>Edit Profil Petani</span>`;
+            document.getElementById('farmer-edit-index').value = index;
+            document.getElementById('form-farmer-name').value = f.name;
+            document.getElementById('form-farmer-location').value = f.location;
+            document.getElementById('form-farmer-mdpl').value = f.mdpl;
+            document.getElementById('form-farmer-varietas').value = f.varietas;
+            document.getElementById('form-farmer-desc').value = f.desc;
+            document.getElementById('form-farmer-foto').value = f.foto || '';
+            const modal = document.getElementById('farmer-modal');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        }
+
+        function closeFarmerModal() {
+            const modal = document.getElementById('farmer-modal');
+            modal.classList.add('hidden'); modal.classList.remove('flex');
+        }
+
+        function saveFarmerProfile(e) {
+            e.preventDefault();
+            const index = parseInt(document.getElementById('farmer-edit-index').value);
+            const farmerObj = {
+                name: document.getElementById('form-farmer-name').value.trim(),
+                location: document.getElementById('form-farmer-location').value.trim(),
+                mdpl: document.getElementById('form-farmer-mdpl').value.trim(),
+                varietas: document.getElementById('form-farmer-varietas').value.trim(),
+                desc: document.getElementById('form-farmer-desc').value.trim(),
+                foto: document.getElementById('form-farmer-foto').value.trim() || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80'
+            };
+            if (index === -1) {
+                farmersData.push(farmerObj);
+            } else {
+                farmersData[index] = farmerObj;
+            }
+            localStorage.setItem('kopiTraceFarmers', JSON.stringify(farmersData));
+            closeFarmerModal();
+            renderFarmerProfilesUI();
+            alert('Profil Petani berhasil disimpan!');
+        }
+
+        function deleteFarmerProfile(index) {
+            if (confirm('Yakin ingin menghapus profil petani ini?')) {
+                farmersData.splice(index, 1);
+                localStorage.setItem('kopiTraceFarmers', JSON.stringify(farmersData));
+                renderFarmerProfilesUI();
+            }
+        }
+
+        function openAddProcessorModal() {
+            document.getElementById('processor-modal-title').innerHTML = `<i class="fa-solid fa-industry text-amber-700"></i><span>Tambah Rumah Prosesor Baru</span>`;
+            document.getElementById('processor-edit-index').value = -1;
+            document.getElementById('processor-form').reset();
+            const modal = document.getElementById('processor-modal');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        }
+
+        function openEditProcessorModal(index) {
+            const p = processorsData[index];
+            if (!p) return;
+            document.getElementById('processor-modal-title').innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-700"></i><span>Edit Profil Prosesor</span>`;
+            document.getElementById('processor-edit-index').value = index;
+            document.getElementById('form-proc-name').value = p.name;
+            document.getElementById('form-proc-location').value = p.location;
+            document.getElementById('form-proc-methods').value = p.methods;
+            document.getElementById('form-proc-desc').value = p.desc;
+            document.getElementById('form-proc-foto').value = p.foto || '';
+            const modal = document.getElementById('processor-modal');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        }
+
+        function closeProcessorModal() {
+            const modal = document.getElementById('processor-modal');
+            modal.classList.add('hidden'); modal.classList.remove('flex');
+        }
+
+        function saveProcessorProfile(e) {
+            e.preventDefault();
+            const index = parseInt(document.getElementById('processor-edit-index').value);
+            const procObj = {
+                name: document.getElementById('form-proc-name').value.trim(),
+                location: document.getElementById('form-proc-location').value.trim(),
+                methods: document.getElementById('form-proc-methods').value.trim(),
+                desc: document.getElementById('form-proc-desc').value.trim(),
+                foto: document.getElementById('form-proc-foto').value.trim() || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=200&q=80'
+            };
+            if (index === -1) {
+                processorsData.push(procObj);
+            } else {
+                processorsData[index] = procObj;
+            }
+            localStorage.setItem('kopiTraceProcessors', JSON.stringify(processorsData));
+            closeProcessorModal();
+            renderProcessorProfilesUI();
+            alert('Profil Prosesor berhasil disimpan!');
+        }
+
+        function deleteProcessorProfile(index) {
+            if (confirm('Yakin ingin menghapus profil prosesor ini?')) {
+                processorsData.splice(index, 1);
+                localStorage.setItem('kopiTraceProcessors', JSON.stringify(processorsData));
+                renderProcessorProfilesUI();
+            }
         }
 
         function openSupplyEditModal() {
@@ -820,7 +1134,7 @@
                 if (statusEl) statusEl.innerText = 'Mode Lokal';
                 if (currentView === 'public-home') { renderPublicCards(); updateStats(); }
                 else if (currentView === 'public-map') { initMap(); }
-                else if (currentView === 'dashboard') { renderDashboardTable(); }
+                else if (currentView === 'dashboard') { renderDashboardTable(); renderAdminUsersTable(); }
                 return;
             }
 
@@ -845,7 +1159,7 @@
 
             if (currentView === 'public-home') { renderPublicCards(); updateStats(); }
             else if (currentView === 'public-map') { initMap(); }
-            else if (currentView === 'dashboard') { renderDashboardTable(); }
+            else if (currentView === 'dashboard') { renderDashboardTable(); renderAdminUsersTable(); }
         }
 
         async function saveToGitHub() {
@@ -931,17 +1245,20 @@
 
         function switchView(viewName) {
             currentView = viewName;
-            ['public-home', 'public-map', 'public-scanner', 'dashboard'].forEach(v => {
+            ['public-home', 'farmer-profile', 'processor-profile', 'public-map', 'public-scanner', 'dashboard'].forEach(v => {
                 const el = document.getElementById('view-' + v);
                 if (el) el.classList.add('hidden');
             });
             const target = document.getElementById('view-' + viewName);
             if (target) target.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
 
             if (viewName === 'public-home') { renderPublicCards(); updateStats(); }
+            else if (viewName === 'farmer-profile') { renderFarmerProfilesUI(); }
+            else if (viewName === 'processor-profile') { renderProcessorProfilesUI(); }
             else if (viewName === 'public-map') { setTimeout(initMap, 150); }
             else if (viewName === 'public-scanner') { renderSampleBadges(); }
-            else if (viewName === 'dashboard') { if (!currentUser) { openAuthModal(); return; } renderDashboardTable(); }
+            else if (viewName === 'dashboard') { if (!currentUser) { openAuthModal(); return; } renderDashboardTable(); renderAdminUsersTable(); }
         }
 
         function openDashboard() { switchView('dashboard'); }
@@ -1047,7 +1364,6 @@
                         <span class="bg-amber-700 text-white px-3 py-1 rounded-full text-xs font-bold">${found.metode} Process</span>
                     </div>
 
-                    <!-- BAGIAN SEJARAH / ASAL USUL KOPI -->
                     <div class="bg-white p-4 rounded-xl border border-stone-200 space-y-1.5 shadow-sm">
                         <span class="text-xs text-amber-800 font-extrabold uppercase tracking-wider flex items-center space-x-1.5">
                             <i class="fa-solid fa-book-open text-amber-700"></i>
@@ -1176,7 +1492,7 @@
         }
 
         function switchAuthMode(mode) {
-            ['login', 'wa', 'email', 'register'].forEach(m => {
+            ['login', 'register'].forEach(m => {
                 const pane = document.getElementById('pane-' + m);
                 const tab = document.getElementById('auth-tab-' + (m === 'register' ? 'reg' : m));
                 if (pane) pane.classList.add('hidden');
@@ -1185,7 +1501,7 @@
                 }
             });
             const targetPane = document.getElementById('pane-' + mode);
-            const targetTab = document.getElementById('auth-tab-' + (mode === 'register' ? 'reg' : mode));
+            const targetTab = document.getElementById('auth-tab-' + (mode === 'register' ? 'reg' : 'login'));
             if (targetPane) targetPane.classList.remove('hidden');
             if (targetTab) {
                 targetTab.className = 'py-2 rounded-lg bg-white text-stone-900 shadow-sm transition cursor-pointer';
@@ -1200,68 +1516,6 @@
                 currentUser = foundUser;
                 saveToStorage(); closeAuthModal(); updateAuthUI(); switchView('dashboard');
             } else { document.getElementById('login-error').classList.remove('hidden'); }
-        }
-
-        function requestOrVerifyWhatsAppOtp() {
-            const phoneInput = document.getElementById('wa-phone').value.trim();
-            const otpSection = document.getElementById('wa-otp-section');
-            const btnAction = document.getElementById('wa-btn-action');
-            const codeInput = document.getElementById('wa-otp-code');
-
-            if (!phoneInput) { alert('Masukkan nomor WhatsApp Anda!'); return; }
-
-            if (otpSection.classList.contains('hidden')) {
-                generatedWaOtp = Math.floor(100000 + Math.random() * 900000).toString();
-                otpSection.classList.remove('hidden');
-                btnAction.innerText = 'Verifikasi Kode OTP WhatsApp';
-                
-                alert(`[SIMULASI WA GATEWAY]\nKode OTP WhatsApp untuk ${phoneInput} adalah: ${generatedWaOtp}\n\n(Silakan masukkan kode ini pada kolom di bawah).`);
-            } else {
-                const enteredCode = codeInput.value.trim();
-                if (enteredCode === generatedWaOtp) {
-                    let foundUser = registeredUsers.find(u => u.wa === phoneInput);
-                    if (!foundUser) {
-                        foundUser = { name: `Petani WA (${phoneInput})`, user: 'wa_' + phoneInput, role: 'farmer', wa: phoneInput };
-                        registeredUsers.push(foundUser);
-                    }
-                    currentUser = foundUser;
-                    saveToStorage(); closeAuthModal(); updateAuthUI(); switchView('dashboard');
-                    sendAuthNotification(`📱 **LOGIN WHATSAPP OTP**\n• Nomor: **${phoneInput}**`);
-                } else {
-                    alert('Kode OTP WhatsApp salah!');
-                }
-            }
-        }
-
-        function requestOrVerifyEmailOtp() {
-            const emailInput = document.getElementById('email-addr').value.trim();
-            const otpSection = document.getElementById('email-otp-section');
-            const btnAction = document.getElementById('email-btn-action');
-            const codeInput = document.getElementById('email-otp-code');
-
-            if (!emailInput || !emailInput.includes('@')) { alert('Masukkan alamat Gmail yang valid!'); return; }
-
-            if (otpSection.classList.contains('hidden')) {
-                generatedEmailOtp = Math.floor(100000 + Math.random() * 900000).toString();
-                otpSection.classList.remove('hidden');
-                btnAction.innerText = 'Verifikasi Kode OTP Gmail';
-                
-                alert(`[SIMULASI GMAIL SMTP]\nKode OTP verifikasi ke ${emailInput} adalah: ${generatedEmailOtp}\n\n(Silakan masukkan kode ini pada kolom di bawah).`);
-            } else {
-                const enteredCode = codeInput.value.trim();
-                if (enteredCode === generatedEmailOtp) {
-                    let foundUser = registeredUsers.find(u => u.email === emailInput);
-                    if (!foundUser) {
-                        foundUser = { name: `User Gmail (${emailInput.split('@')[0]})`, user: 'mail_' + emailInput.split('@')[0], role: 'farmer', email: emailInput };
-                        registeredUsers.push(foundUser);
-                    }
-                    currentUser = foundUser;
-                    saveToStorage(); closeAuthModal(); updateAuthUI(); switchView('dashboard');
-                    sendAuthNotification(`📧 **LOGIN GMAIL OTP**\n• Email: **${emailInput}**`);
-                } else {
-                    alert('Kode OTP Gmail salah!');
-                }
-            }
         }
 
         function handleRegister() {
@@ -1286,7 +1540,7 @@
             closeAuthModal();
             updateAuthUI();
             switchView('dashboard');
-            sendAuthNotification(`👤 **DAFTAR AKUN BARU**\n• Nama: **${name}**\n• WhatsApp: \`${wa}\``);
+            sendAuthNotification(`👤 **DAFTAR AKUN BARU**\n• Nama: **${name}**\n• No. WA: \`${wa}\``);
             alert('Akun berhasil didaftar dan Anda langsung masuk!');
         }
 
@@ -1303,18 +1557,38 @@
                 navAuth.classList.add('flex');
                 if (roleLabel) roleLabel.innerText = `${currentUser.name} (${currentUser.role})`;
                 
-                // Jika role adalah dev, tampilkan tombol edit analisis hulu-hilir
                 if (currentUser.role === 'dev') {
                     if (devExportBtn) devExportBtn.classList.remove('hidden');
-                    if (editSupplyBtn) editSupplyBtn.classList.remove('hidden');
+                    if (editSupplyBtn) editSupplyBtn.classList.add('hidden'); // hidden unless specified
                 } else {
                     if (devExportBtn) devExportBtn.classList.add('hidden');
-                    if (editSupplyBtn) editSupplyBtn.classList.add('hidden');
                 }
             } else { 
                 navAuth.classList.add('hidden'); 
                 navAuth.classList.remove('flex');
-                if (editSupplyBtn) editSupplyBtn.classList.add('hidden');
+            }
+        }
+
+        function renderAdminUsersTable() {
+            const section = document.getElementById('admin-users-section');
+            const tbody = document.getElementById('admin-users-table-body');
+            if (!section || !tbody) return;
+
+            if (currentUser && currentUser.role === 'dev') {
+                section.classList.remove('hidden');
+                tbody.innerHTML = '';
+                registeredUsers.forEach(u => {
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-stone-50 transition">
+                            <td class="p-3 sm:p-4 font-bold text-stone-900">${u.name}</td>
+                            <td class="p-3 sm:p-4 font-mono text-xs text-stone-600">@${u.user}</td>
+                            <td class="p-3 sm:p-4 font-mono font-semibold text-emerald-800"><i class="fa-brands fa-whatsapp text-emerald-600 mr-1.5"></i>${u.wa || '-'}</td>
+                            <td class="p-3 sm:p-4"><span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded text-[11px] font-bold uppercase">${u.role}</span></td>
+                        </tr>
+                    `;
+                });
+            } else {
+                section.classList.add('hidden');
             }
         }
 
@@ -1479,7 +1753,7 @@
                         if (ROLE_ADMIN_ID && !ROLE_ADMIN_ID.includes('GANTI') && memberData.roles && memberData.roles.includes(ROLE_ADMIN_ID)) userRole = 'dev';
                     }
                     if (user && user.id) {
-                        currentUser = { name: user.username, user: user.id, role: userRole };
+                        currentUser = { name: user.username, user: user.id, role: userRole, wa: '-' };
                         saveToStorage(); updateAuthUI(); switchView('dashboard');
                         window.history.replaceState({}, document.title, window.location.pathname);
                         sendAuthNotification(`🟢 **LOGIN DISCORD**\n• User: **${user.username}** (\`${userRole}\`)`);
