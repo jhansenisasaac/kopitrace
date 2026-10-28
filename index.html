@@ -44,10 +44,10 @@
 
                 <!-- Desktop Nav -->
                 <div class="hidden md:flex items-center space-x-6 text-sm font-medium">
-                    <button onclick="switchView('public-home')" class="hover:text-amber-400 transition py-2">Beranda</button>
-                    <button onclick="switchView('public-map')" class="hover:text-amber-400 transition py-2">Peta Sumedang</button>
-                    <button onclick="switchView('public-scanner')" class="hover:text-amber-400 transition py-2">Lacak / Scan</button>
-                    <button onclick="installAppPrompt()" id="install-btn" class="hidden text-amber-400 hover:text-amber-300 transition py-2 items-center space-x-1.5 font-semibold">
+                    <button onclick="switchView('public-home')" class="hover:text-amber-400 transition py-2 cursor-pointer">Beranda</button>
+                    <button onclick="switchView('public-map')" class="hover:text-amber-400 transition py-2 cursor-pointer">Peta Sumedang</button>
+                    <button onclick="switchView('public-scanner')" class="hover:text-amber-400 transition py-2 cursor-pointer">Lacak / Scan</button>
+                    <button onclick="installAppPrompt()" id="install-btn" class="hidden text-amber-400 hover:text-amber-300 transition py-2 items-center space-x-1.5 font-semibold cursor-pointer">
                         <i class="fa-solid fa-download"></i>
                         <span>Instal</span>
                     </button>
@@ -58,12 +58,12 @@
                     <div id="nav-auth-container" class="hidden items-center space-x-2 bg-stone-800/90 px-2.5 py-1.5 rounded-xl border border-stone-700 text-xs">
                         <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
                         <span id="auth-role-label" class="font-semibold capitalize text-stone-200 hidden sm:inline">Role: -</span>
-                        <button onclick="openDashboard()" class="text-amber-400 hover:underline font-bold">Dashboard</button>
-                        <button onclick="handleLogout()" class="bg-red-600/80 hover:bg-red-600 text-white px-2 py-1 rounded-lg transition font-medium">Keluar</button>
+                        <button onclick="openDashboard()" class="text-amber-400 hover:underline font-bold cursor-pointer">Dashboard</button>
+                        <button onclick="handleLogout()" class="bg-red-600/80 hover:bg-red-600 text-white px-2 py-1 rounded-lg transition font-medium cursor-pointer">Keluar</button>
                     </div>
 
                     <!-- Mobile Menu Button -->
-                    <button onclick="toggleMobileMenu()" class="md:hidden text-stone-300 hover:text-white p-2 rounded-lg bg-stone-800 border border-stone-700">
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-stone-300 hover:text-white p-2 rounded-lg bg-stone-800 border border-stone-700 cursor-pointer">
                         <i id="mobile-menu-icon" class="fa-solid fa-bars text-lg"></i>
                     </button>
                 </div>
@@ -94,11 +94,11 @@
                         Pindai QR Code untuk mengetahui zona kecamatan asal kebun, metode pengolahan, sertifikasi organik, rute logistik, hingga catatan cupping.
                     </p>
                     <div class="flex flex-wrap gap-2.5 pt-1">
-                        <button onclick="switchView('public-scanner')" class="bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold px-4 sm:px-5 py-2.5 rounded-xl transition flex items-center space-x-2 text-xs sm:text-sm shadow">
+                        <button onclick="switchView('public-scanner')" class="bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold px-4 sm:px-5 py-2.5 rounded-xl transition flex items-center space-x-2 text-xs sm:text-sm shadow cursor-pointer">
                             <i class="fa-solid fa-qrcode"></i>
                             <span>Lacak / Scan Kode</span>
                         </button>
-                        <button onclick="switchView('public-map')" class="bg-stone-700/80 hover:bg-stone-700 text-white px-4 sm:px-5 py-2.5 rounded-xl transition flex items-center space-x-2 border border-stone-600 text-xs sm:text-sm">
+                        <button onclick="switchView('public-map')" class="bg-stone-700/80 hover:bg-stone-700 text-white px-4 sm:px-5 py-2.5 rounded-xl transition flex items-center space-x-2 border border-stone-600 text-xs sm:text-sm cursor-pointer">
                             <i class="fa-solid fa-map-location-dot"></i>
                             <span>Peta Sumedang</span>
                         </button>
@@ -125,7 +125,7 @@
                         <i class="fa-solid fa-seedling text-amber-700"></i>
                         <span>Daftar Batch Kopi Terbaru</span>
                     </h2>
-                    <button onclick="switchView('public-scanner')" class="text-amber-700 hover:underline text-xs sm:text-sm font-semibold">Lainnya &rarr;</button>
+                    <button onclick="switchView('public-scanner')" class="text-amber-700 hover:underline text-xs sm:text-sm font-semibold cursor-pointer">Lainnya &rarr;</button>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6" id="public-card-list"></div>
             </div>
@@ -138,7 +138,7 @@
                     <h2 class="text-xl sm:text-2xl font-bold text-stone-900">Peta Sebaran Kopi Kabupaten Sumedang</h2>
                     <p class="text-xs sm:text-sm text-stone-600">Klik marker pada peta untuk melihat detail blok kebun.</p>
                 </div>
-                <button onclick="switchView('public-home')" class="bg-stone-200 hover:bg-stone-300 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium">Kembali</button>
+                <button onclick="switchView('public-home')" class="bg-stone-200 hover:bg-stone-300 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium cursor-pointer">Kembali</button>
             </div>
             <div class="bg-white p-3 sm:p-4 rounded-2xl shadow-sm border border-stone-200">
                 <div id="map"></div>
@@ -154,19 +154,19 @@
                 </div>
 
                 <div class="space-y-3">
-                    <button onclick="startCameraScanner()" class="w-full bg-stone-900 hover:bg-stone-800 text-amber-400 font-semibold py-3 rounded-xl transition flex items-center justify-center space-x-2 text-sm shadow">
+                    <button onclick="startCameraScanner()" class="w-full bg-stone-900 hover:bg-stone-800 text-amber-400 font-semibold py-3 rounded-xl transition flex items-center justify-center space-x-2 text-sm shadow cursor-pointer">
                         <i class="fa-solid fa-camera"></i>
                         <span>Buka Kamera untuk Scan QR</span>
                     </button>
                     <div id="reader" class="hidden w-full rounded-xl overflow-hidden border border-stone-300"></div>
-                    <button id="close-cam-btn" onclick="stopCameraScanner()" class="hidden w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-xl text-xs">
+                    <button id="close-cam-btn" onclick="stopCameraScanner()" class="hidden w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-xl text-xs cursor-pointer">
                         Tutup Kamera
                     </button>
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-2 pt-2">
                     <input type="text" id="search-code-input" placeholder="Cth: UTR/WASH/2026/001" class="flex-grow px-4 py-3 border border-stone-300 rounded-xl focus:ring-2 focus:ring-amber-700 focus:outline-none uppercase font-mono text-xs sm:text-sm">
-                    <button onclick="handlePublicSearch()" class="bg-amber-700 hover:bg-amber-800 text-white px-5 py-3 rounded-xl font-semibold transition flex items-center justify-center space-x-2 text-sm shadow">
+                    <button onclick="handlePublicSearch()" class="bg-amber-700 hover:bg-amber-800 text-white px-5 py-3 rounded-xl font-semibold transition flex items-center justify-center space-x-2 text-sm shadow cursor-pointer">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <span>Lacak</span>
                     </button>
@@ -196,11 +196,11 @@
                         <i class="fa-brands fa-github"></i>
                         <span>Token Admin</span>
                     </button>
-                    <button onclick="openAddTreeModal()" class="flex-1 lg:flex-none bg-amber-700 hover:bg-amber-800 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow flex items-center justify-center space-x-2">
+                    <button onclick="openAddTreeModal()" class="flex-1 lg:flex-none bg-amber-700 hover:bg-amber-800 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow flex items-center justify-center space-x-2 cursor-pointer">
                         <i class="fa-solid fa-plus"></i>
                         <span>Tambah Batch</span>
                     </button>
-                    <button id="dev-export-btn" onclick="exportDataJSON()" class="hidden bg-stone-700 hover:bg-stone-800 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center space-x-2">
+                    <button id="dev-export-btn" onclick="exportDataJSON()" class="hidden bg-stone-700 hover:bg-stone-800 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center space-x-2 cursor-pointer">
                         <i class="fa-solid fa-download"></i>
                         <span>Export</span>
                     </button>
@@ -243,63 +243,106 @@
         </div>
     </footer>
 
-    <!-- AUTH MODAL -->
+    <!-- AUTH MODAL (DENGAN DISCORD, WHATSAPP OTP, GMAIL OTP, & DAFTAR AKUN) -->
     <div id="auth-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-4">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-stone-100 pb-3">
                 <h3 class="font-bold text-base sm:text-lg text-stone-900 flex items-center space-x-2">
                     <i class="fa-solid fa-lock text-amber-700"></i>
-                    <span id="auth-modal-title">Akses Pengelola</span>
+                    <span id="auth-modal-title">Akses Pengelola KopiSumedang</span>
                 </h3>
-                <button onclick="closeAuthModal()" class="text-stone-400 hover:text-stone-700 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="closeAuthModal()" class="text-stone-400 hover:text-stone-700 p-1 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
-            <div class="pt-1">
-                <button onclick="loginWithDiscord()" class="w-full bg-[#5865F2] hover:bg-[#4752C4] text-white font-semibold py-2.5 rounded-xl transition shadow flex items-center justify-center space-x-2 text-xs sm:text-sm">
+            <!-- TAB MENU AUTH: LOGIN, WHATSAPP, EMAIL, DAFTAR -->
+            <div class="grid grid-cols-4 bg-stone-100 p-1 rounded-xl text-[11px] font-semibold text-center">
+                <button id="auth-tab-login" onclick="switchAuthMode('login')" class="py-2 rounded-lg bg-white text-stone-900 shadow-sm transition cursor-pointer">Masuk</button>
+                <button id="auth-tab-wa" onclick="switchAuthMode('wa')" class="py-2 rounded-lg text-stone-600 transition cursor-pointer">WhatsApp</button>
+                <button id="auth-tab-email" onclick="switchAuthMode('email')" class="py-2 rounded-lg text-stone-600 transition cursor-pointer">Gmail</button>
+                <button id="auth-tab-reg" onclick="switchAuthMode('register')" class="py-2 rounded-lg text-stone-600 transition cursor-pointer">Daftar</button>
+            </div>
+
+            <!-- 1. PANE: LOGIN USERNAME / PASSWORD -->
+            <div id="pane-login" class="space-y-3 pt-1 text-sm">
+                <button onclick="loginWithDiscord()" class="w-full bg-[#5865F2] hover:bg-[#4752C4] text-white font-semibold py-2.5 rounded-xl transition shadow flex items-center justify-center space-x-2 text-xs sm:text-sm cursor-pointer">
                     <i class="fa-brands fa-discord text-lg"></i>
                     <span>Login dengan Akun Discord</span>
                 </button>
-            </div>
-
-            <div class="relative flex py-1 items-center">
-                <div class="flex-grow border-t border-stone-200"></div>
-                <span class="flex-shrink mx-3 text-[11px] text-stone-400 uppercase font-mono">Atau Manual</span>
-                <div class="flex-grow border-t border-stone-200"></div>
-            </div>
-
-            <div class="flex bg-stone-100 p-1 rounded-xl text-xs font-semibold">
-                <button id="tab-btn-login" onclick="switchAuthTab('login')" class="flex-1 py-2 rounded-lg bg-white text-stone-900 shadow-sm transition">Masuk</button>
-                <button id="tab-btn-register" onclick="switchAuthTab('register')" class="flex-1 py-2 rounded-lg text-stone-600 transition">Buat Akun</button>
-            </div>
-
-            <div id="form-login-pane" class="space-y-3 pt-1 text-sm">
+                <div class="relative flex py-1 items-center">
+                    <div class="flex-grow border-t border-stone-200"></div>
+                    <span class="flex-shrink mx-3 text-[10px] text-stone-400 uppercase font-mono">Atau Manual</span>
+                    <div class="flex-grow border-t border-stone-200"></div>
+                </div>
                 <div>
                     <label class="block text-xs font-semibold text-stone-700 mb-1">Username</label>
                     <input type="text" id="login-user" placeholder="Cth: farmer atau dev" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-700 focus:outline-none text-xs sm:text-sm">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-stone-700 mb-1">Password</label>
-                    <input type="password" id="login-pass" placeholder="••••••••" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-700 focus:outline-none text-xs sm:text-sm">
+                    <div class="relative">
+                        <input type="password" id="login-pass" placeholder="••••••••" class="w-full px-3 py-2 pr-10 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-700 focus:outline-none text-xs sm:text-sm">
+                        <button type="button" onclick="togglePasswordVisibility('login-pass', this)" class="absolute right-3 top-2.5 text-stone-400 hover:text-stone-700 cursor-pointer">
+                            <i class="fa-solid fa-eye text-xs"></i>
+                        </button>
+                    </div>
                 </div>
                 <div id="login-error" class="text-xs text-red-600 hidden font-medium">Username atau password salah!</div>
-                <button onclick="handleLogin()" class="w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold py-2.5 rounded-xl transition shadow text-xs sm:text-sm">Masuk ke Sistem</button>
+                <button onclick="handleLogin()" class="w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold py-2.5 rounded-xl transition shadow text-xs sm:text-sm cursor-pointer">Masuk ke Sistem</button>
             </div>
 
-            <div id="form-register-pane" class="space-y-3 pt-1 text-sm hidden">
+            <!-- 2. PANE: WHATSAPP OTP -->
+            <div id="pane-wa" class="space-y-3 pt-1 text-sm hidden">
+                <p class="text-xs text-stone-500">Masukkan nomor WhatsApp Anda untuk menerima kode OTP verifikasi.</p>
                 <div>
-                    <label class="block text-xs font-semibold text-stone-700 mb-1">Nama / Kelompok Tani</label>
-                    <input type="text" id="reg-name" placeholder="Cth: Kelompok Tani Sumedang" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none text-xs sm:text-sm">
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Nomor WhatsApp</label>
+                    <input type="tel" id="wa-phone" placeholder="Cth: 081234567890" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs sm:text-sm font-mono">
+                </div>
+                <div id="wa-otp-section" class="hidden space-y-2">
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Masukkan Kode OTP (6 Digit)</label>
+                    <input type="text" id="wa-otp-code" placeholder="Cth: 123456" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-center tracking-widest font-mono text-base">
+                </div>
+                <button id="wa-btn-action" onclick="requestOrVerifyWhatsAppOtp()" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-2.5 rounded-xl transition shadow text-xs sm:text-sm cursor-pointer">Kirim Kode OTP WhatsApp</button>
+            </div>
+
+            <!-- 3. PANE: GMAIL OTP -->
+            <div id="pane-email" class="space-y-3 pt-1 text-sm hidden">
+                <p class="text-xs text-stone-500">Masukkan alamat Gmail Anda untuk menerima kode verifikasi instan.</p>
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Alamat Email / Gmail</label>
+                    <input type="email" id="email-addr" placeholder="Cth: petani@gmail.com" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs sm:text-sm">
+                </div>
+                <div id="email-otp-section" class="hidden space-y-2">
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Masukkan Kode OTP Gmail</label>
+                    <input type="text" id="email-otp-code" placeholder="Cth: 654321" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-center tracking-widest font-mono text-base">
+                </div>
+                <button id="email-btn-action" onclick="requestOrVerifyEmailOtp()" class="w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold py-2.5 rounded-xl transition shadow text-xs sm:text-sm cursor-pointer">Kirim Kode OTP ke Gmail</button>
+            </div>
+
+            <!-- 4. PANE: DAFTAR AKUN BARU -->
+            <div id="pane-register" class="space-y-3 pt-1 text-sm hidden">
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Nama Lengkap / Kelompok Tani</label>
+                    <input type="text" id="reg-name" placeholder="Cth: Kelompok Tani Sumedang" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs sm:text-sm">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-stone-700 mb-1">Username Baru</label>
-                    <input type="text" id="reg-user" placeholder="Cth: tani_sumedang" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none text-xs sm:text-sm">
+                    <input type="text" id="reg-user" placeholder="Cth: tani_sumedang" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs sm:text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-stone-700 mb-1">Nomor WhatsApp / HP</label>
+                    <input type="tel" id="reg-wa" placeholder="Cth: 081234567890" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs sm:text-sm font-mono">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-stone-700 mb-1">Password</label>
-                    <input type="password" id="reg-pass" placeholder="Buat password aman" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none text-xs sm:text-sm">
+                    <div class="relative">
+                        <input type="password" id="reg-pass" placeholder="Buat password aman" class="w-full px-3 py-2 pr-10 border border-stone-300 rounded-lg text-xs sm:text-sm">
+                        <button type="button" onclick="togglePasswordVisibility('reg-pass', this)" class="absolute right-3 top-2.5 text-stone-400 hover:text-stone-700 cursor-pointer">
+                            <i class="fa-solid fa-eye text-xs"></i>
+                        </button>
+                    </div>
                 </div>
-                <div id="reg-error" class="text-xs text-red-600 hidden font-medium">Mohon isi semua kolom!</div>
-                <button onclick="handleRegister()" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-2.5 rounded-xl transition shadow text-xs sm:text-sm">Daftar Akun Petani</button>
+                <div id="reg-error" class="text-xs text-red-600 hidden font-medium">Mohon isi semua kolom dengan benar!</div>
+                <button onclick="handleRegister()" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-2.5 rounded-xl transition shadow text-xs sm:text-sm cursor-pointer">Daftar Akun Baru Sekarang</button>
             </div>
         </div>
     </div>
@@ -330,7 +373,7 @@
         <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-stone-100 pb-3">
                 <h3 id="modal-tree-title" class="font-bold text-base sm:text-lg text-stone-900">Tambah Data Batch Kopi</h3>
-                <button onclick="closeTreeModal()" class="text-stone-400 hover:text-stone-700 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="closeTreeModal()" class="text-stone-400 hover:text-stone-700 p-1 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form id="tree-form" onsubmit="saveTreeData(event)" class="space-y-3.5 text-xs sm:text-sm">
                 <input type="hidden" id="edit-index" value="-1">
@@ -405,7 +448,6 @@
                         <option value="Ujungjaya">Ujungjaya (Zona UTR - Utara)</option>
                         <option value="Surian">Surian (Zona UTR - Utara)</option>
                     </select>
-                    <p class="text-[11px] text-amber-900/70 italic">* Zona 3 huruf pada kode unik (Cth: UTR, SLT, TMR, BRT, CML, TGR) terisi otomatis.</p>
                 </div>
 
                 <div class="bg-stone-50 p-3 rounded-xl border border-stone-200 space-y-2">
@@ -437,8 +479,8 @@
                     <textarea id="form-distribusi" rows="3" placeholder="2026-06-01 | Panen Ceri Merah Sumedang&#10;2026-06-05 | Pengolahan" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs font-mono"></textarea>
                 </div>
                 <div class="flex justify-end space-x-2 pt-2">
-                    <button type="button" onclick="closeTreeModal()" class="bg-stone-200 hover:bg-stone-300 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium">Batal</button>
-                    <button type="submit" class="bg-amber-700 hover:bg-amber-800 text-white px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow">Simpan</button>
+                    <button type="button" onclick="closeTreeModal()" class="bg-stone-200 hover:bg-stone-300 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium cursor-pointer">Batal</button>
+                    <button type="submit" class="bg-amber-700 hover:bg-amber-800 text-white px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow cursor-pointer">Simpan</button>
                 </div>
             </form>
         </div>
@@ -451,7 +493,7 @@
             <div id="qrcode-render" class="flex justify-center items-center bg-stone-50 p-4 rounded-xl border border-stone-200 min-h-[192px]"></div>
             <div id="qr-code-text" class="font-mono text-[11px] text-amber-900 break-all bg-amber-50 p-2 rounded border border-amber-200"></div>
             <p class="text-xs text-stone-500">Scan QR ini dengan kamera HP untuk langsung membuka halaman pelacakan.</p>
-            <button onclick="closeQrModal()" class="w-full bg-stone-800 hover:bg-stone-900 text-white py-2 rounded-xl text-sm font-semibold">Tutup</button>
+            <button onclick="closeQrModal()" class="w-full bg-stone-800 hover:bg-stone-900 text-white py-2 rounded-xl text-sm font-semibold cursor-pointer">Tutup</button>
         </div>
     </div>
 
@@ -471,7 +513,6 @@
         const TARGET_GUILD_ID = '1564644279681286195';
         const ROLE_ADMIN_ID = '1564682206830665889';
 
-        // Mapping Kecamatan Sumedang ke Zona 3 Huruf (Arah Mata Angin / Wilayah)
         const SUMEDANG_ZONES = {
             "Sumedang Utara": { zona: "UTR", lat: -6.8529, lng: 107.9205 },
             "Sumedang Selatan": { zona: "SLT", lat: -6.8687, lng: 107.9150 },
@@ -501,6 +542,8 @@
         };
 
         let html5QrCode = null;
+        let generatedWaOtp = '';
+        let generatedEmailOtp = '';
 
         function startCameraScanner() {
             const readerEl = document.getElementById('reader');
@@ -551,6 +594,18 @@
             }
         }
 
+        function togglePasswordVisibility(fieldId, btnEl) {
+            const field = document.getElementById(fieldId);
+            const icon = btnEl.querySelector('i');
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.className = 'fa-solid fa-eye-slash text-xs';
+            } else {
+                field.type = 'password';
+                icon.className = 'fa-solid fa-eye text-xs';
+            }
+        }
+
         async function sendAuthNotification(message) {
             if (!DISCORD_WEBHOOK_AUTH) return;
             try {
@@ -589,7 +644,7 @@
         let coffeeData = JSON.parse(localStorage.getItem('kopiTraceData')) || defaultCoffeeData;
         let registeredUsers = JSON.parse(localStorage.getItem('kopiTraceUsers')) || [
             { name: 'Developer Super Admin', user: 'dev', pass: 'm0r94n', role: 'dev' },
-            { name: 'Bpk. Hendra (Petani)', user: 'farmer', pass: 'farmer2026', role: 'farmer' }
+            { name: 'Bpk. Hendra (Petani)', user: 'farmer', pass: 'farmer2026', role: 'farmer', wa: '081234567890' }
         ];
 
         let currentUser = JSON.parse(localStorage.getItem('kopiTraceActiveUser')) || null;
@@ -639,11 +694,10 @@
             const statusEl = document.getElementById('github-sync-status');
             const token = localStorage.getItem('kopiTraceAdminToken');
             
-            // Jika tidak ada token, gunakan mode lokal tanpa memanggil GitHub API yang menyebabkan CORS/404 error
             if (!token) {
                 const local = localStorage.getItem('kopiTraceData');
                 coffeeData = local ? JSON.parse(local) : defaultCoffeeData;
-                if (statusEl) statusEl.innerText = 'Mode Lokal (Tanpa Token)';
+                if (statusEl) statusEl.innerText = 'Mode Lokal';
                 if (currentView === 'public-home') { renderPublicCards(); updateStats(); }
                 else if (currentView === 'public-map') { initMap(); }
                 else if (currentView === 'dashboard') { renderDashboardTable(); }
@@ -703,18 +757,12 @@
             const tokenInput = document.getElementById('gh-token');
             if (tokenInput) tokenInput.value = localStorage.getItem('kopiTraceAdminToken') || '';
             const modal = document.getElementById('github-config-modal');
-            if (modal) {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            }
+            if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
         }
 
         function closeGitHubConfigModal() {
             const modal = document.getElementById('github-config-modal');
-            if (modal) {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }
+            if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
         }
 
         async function saveAdminToken() {
@@ -951,7 +999,6 @@
             const mapEl = document.getElementById('map');
             if (!mapEl) return;
             if (!mapInstance) {
-                // Berpusat di Kabupaten Sumedang
                 mapInstance = L.map('map').setView([-6.8587, 107.9213], 11);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mapInstance);
             } else { mapInstance.invalidateSize(); }
@@ -989,35 +1036,27 @@
 
         function openAuthModal() {
             const modal = document.getElementById('auth-modal');
-            if (modal) {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            }
+            if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
         }
         function closeAuthModal() {
             const modal = document.getElementById('auth-modal');
-            if (modal) {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }
+            if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
         }
 
-        function switchAuthTab(tab) {
-            const loginPane = document.getElementById('form-login-pane');
-            const regPane = document.getElementById('form-register-pane');
-            const loginBtn = document.getElementById('tab-btn-login');
-            const regBtn = document.getElementById('tab-btn-register');
-            const title = document.getElementById('auth-modal-title');
-            if (tab === 'login') {
-                loginPane.classList.remove('hidden'); regPane.classList.add('hidden');
-                loginBtn.className = 'flex-1 py-2 rounded-lg bg-white text-stone-900 shadow-sm transition';
-                regBtn.className = 'flex-1 py-2 rounded-lg text-stone-600 transition';
-                title.innerText = 'Akses Pengelola';
-            } else {
-                loginPane.classList.add('hidden'); regPane.classList.remove('hidden');
-                regBtn.className = 'flex-1 py-2 rounded-lg bg-white text-stone-900 shadow-sm transition';
-                loginBtn.className = 'flex-1 py-2 rounded-lg text-stone-600 transition';
-                title.innerText = 'Daftar Akun Petani';
+        function switchAuthMode(mode) {
+            ['login', 'wa', 'email', 'register'].forEach(m => {
+                const pane = document.getElementById('pane-' + m);
+                const tab = document.getElementById('auth-tab-' + (m === 'register' ? 'reg' : m));
+                if (pane) pane.classList.add('hidden');
+                if (tab) {
+                    tab.className = 'py-2 rounded-lg text-stone-600 transition cursor-pointer';
+                }
+            });
+            const targetPane = document.getElementById('pane-' + mode);
+            const targetTab = document.getElementById('auth-tab-' + (mode === 'register' ? 'reg' : mode));
+            if (targetPane) targetPane.classList.remove('hidden');
+            if (targetTab) {
+                targetTab.className = 'py-2 rounded-lg bg-white text-stone-900 shadow-sm transition cursor-pointer';
             }
         }
 
@@ -1031,17 +1070,92 @@
             } else { document.getElementById('login-error').classList.remove('hidden'); }
         }
 
+        function requestOrVerifyWhatsAppOtp() {
+            const phoneInput = document.getElementById('wa-phone').value.trim();
+            const otpSection = document.getElementById('wa-otp-section');
+            const btnAction = document.getElementById('wa-btn-action');
+            const codeInput = document.getElementById('wa-otp-code');
+
+            if (!phoneInput) { alert('Masukkan nomor WhatsApp Anda!'); return; }
+
+            if (otpSection.classList.contains('hidden')) {
+                generatedWaOtp = Math.floor(100000 + Math.random() * 900000).toString();
+                otpSection.classList.remove('hidden');
+                btnAction.innerText = 'Verifikasi Kode OTP WhatsApp';
+                
+                alert(`[SIMULASI WA GATEWAY]\nKode OTP WhatsApp untuk ${phoneInput} adalah: ${generatedWaOtp}\n\n(Silakan masukkan kode ini pada kolom di bawah).`);
+            } else {
+                const enteredCode = codeInput.value.trim();
+                if (enteredCode === generatedWaOtp) {
+                    let foundUser = registeredUsers.find(u => u.wa === phoneInput);
+                    if (!foundUser) {
+                        foundUser = { name: `Petani WA (${phoneInput})`, user: 'wa_' + phoneInput, role: 'farmer', wa: phoneInput };
+                        registeredUsers.push(foundUser);
+                    }
+                    currentUser = foundUser;
+                    saveToStorage(); closeAuthModal(); updateAuthUI(); switchView('dashboard');
+                    sendAuthNotification(`📱 **LOGIN WHATSAPP OTP**\n• Nomor: **${phoneInput}**`);
+                } else {
+                    alert('Kode OTP WhatsApp salah!');
+                }
+            }
+        }
+
+        function requestOrVerifyEmailOtp() {
+            const emailInput = document.getElementById('email-addr').value.trim();
+            const otpSection = document.getElementById('email-otp-section');
+            const btnAction = document.getElementById('email-btn-action');
+            const codeInput = document.getElementById('email-otp-code');
+
+            if (!emailInput || !emailInput.includes('@')) { alert('Masukkan alamat Gmail yang valid!'); return; }
+
+            if (otpSection.classList.contains('hidden')) {
+                generatedEmailOtp = Math.floor(100000 + Math.random() * 900000).toString();
+                otpSection.classList.remove('hidden');
+                btnAction.innerText = 'Verifikasi Kode OTP Gmail';
+                
+                alert(`[SIMULASI GMAIL SMTP]\nKode OTP verifikasi ke ${emailInput} adalah: ${generatedEmailOtp}\n\n(Silakan masukkan kode ini pada kolom di bawah).`);
+            } else {
+                const enteredCode = codeInput.value.trim();
+                if (enteredCode === generatedEmailOtp) {
+                    let foundUser = registeredUsers.find(u => u.email === emailInput);
+                    if (!foundUser) {
+                        foundUser = { name: `User Gmail (${emailInput.split('@')[0]})`, user: 'mail_' + emailInput.split('@')[0], role: 'farmer', email: emailInput };
+                        registeredUsers.push(foundUser);
+                    }
+                    currentUser = foundUser;
+                    saveToStorage(); closeAuthModal(); updateAuthUI(); switchView('dashboard');
+                    sendAuthNotification(`📧 **LOGIN GMAIL OTP**\n• Email: **${emailInput}**`);
+                } else {
+                    alert('Kode OTP Gmail salah!');
+                }
+            }
+        }
+
         function handleRegister() {
             const name = document.getElementById('reg-name').value.trim();
             const u = document.getElementById('reg-user').value.trim();
+            const wa = document.getElementById('reg-wa').value.trim();
             const p = document.getElementById('reg-pass').value.trim();
-            if (!name || !u || !p) { document.getElementById('reg-error').classList.remove('hidden'); return; }
-            if (registeredUsers.some(item => item.user === u)) { alert('Username sudah digunakan!'); return; }
-            const newUser = { name, user: u, pass: p, role: 'farmer' };
-            registeredUsers.push(newUser); currentUser = newUser;
-            saveToStorage(); closeAuthModal(); updateAuthUI(); switchView('dashboard');
-            sendAuthNotification(`👤 **AKUN PETANI BARU**\n• Nama: **${name}**`);
-            alert('Akun berhasil dibuat!');
+            
+            if (!name || !u || !wa || !p) {
+                document.getElementById('reg-error').classList.remove('hidden');
+                return;
+            }
+            if (registeredUsers.some(item => item.user === u)) {
+                alert('Username sudah digunakan!');
+                return;
+            }
+
+            const newUser = { name, user: u, pass: p, wa: wa, role: 'farmer' };
+            registeredUsers.push(newUser);
+            currentUser = newUser;
+            saveToStorage();
+            closeAuthModal();
+            updateAuthUI();
+            switchView('dashboard');
+            sendAuthNotification(`👤 **DAFTAR AKUN BARU**\n• Nama: **${name}**\n• WhatsApp: \`${wa}\``);
+            alert('Akun berhasil didaftar dan Anda langsung masuk!');
         }
 
         function handleLogout() { currentUser = null; saveToStorage(); updateAuthUI(); switchView('public-home'); }
@@ -1098,8 +1212,7 @@
             document.getElementById('preview-container').classList.add('hidden');
             if (currentUser && currentUser.role === 'farmer') document.getElementById('form-petani').value = currentUser.name;
             const modal = document.getElementById('tree-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
         }
 
         function openEditTreeModal(index) {
@@ -1114,9 +1227,7 @@
             document.getElementById('form-petani').value = item.petani;
             document.getElementById('form-varietas').value = item.varietas;
             document.getElementById('form-mdpl').value = item.mdpl;
-            if (item.kecamatan) {
-                document.getElementById('form-kecamatan').value = item.kecamatan;
-            }
+            if (item.kecamatan) { document.getElementById('form-kecamatan').value = item.kecamatan; }
             document.getElementById('form-dest-name').value = item.destName || '';
             document.getElementById('form-sertifikasi').value = item.sertifikasi || '';
             document.getElementById('form-cupping').value = item.cupping;
@@ -1127,14 +1238,12 @@
             } else { document.getElementById('preview-container').classList.add('hidden'); }
             document.getElementById('form-distribusi').value = item.distribusi ? item.distribusi.map(d => `${d.tanggal} | ${d.aktivitas}`).join('\n') : '';
             const modal = document.getElementById('tree-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
         }
 
         function closeTreeModal() {
             const modal = document.getElementById('tree-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            modal.classList.add('hidden'); modal.classList.remove('flex');
         }
 
         function saveTreeData(e) {
@@ -1196,13 +1305,11 @@
             container.innerHTML = '';
             try { new QRCode(container, { text: fullBatchUrl, width: 150, height: 150 }); } catch (err) {}
             const modal = document.getElementById('qr-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
         }
         function closeQrModal() {
             const modal = document.getElementById('qr-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            modal.classList.add('hidden'); modal.classList.remove('flex');
         }
 
         function exportDataJSON() {
