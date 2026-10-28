@@ -581,7 +581,6 @@
                     deferredPrompt = null;
                 });
             } else {
-                // Membuka menu instalasi otomatis bawaan browser Chrome jika prompt belum tertangkap
                 if (navigator.share) {
                     navigator.share({ title: 'KopiTrace', url: window.location.href });
                 } else {
@@ -621,7 +620,10 @@
             const apiUrl = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`;
             try {
                 const getRes = await fetch(apiUrl, { headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' } });
-                if (getRes.ok) { const fileInfo = await getRes.json(); githubFileSha = fileInfo.sha; }
+                if (getRes.ok) { 
+                    const fileInfo = await getRes.json(); 
+                    githubFileSha = fileInfo.sha; 
+                }
                 const fileContent = JSON.stringify({ coffeeData, registeredUsers }, null, 2);
                 const base64Content = btoa(unescape(encodeURIComponent(fileContent)));
                 const putRes = await fetch(apiUrl, {
@@ -629,33 +631,31 @@
                     headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: "Update database via KopiTrace App", content: base64Content, sha: githubFileSha || undefined, branch: GITHUB_CONFIG.branch })
                 });
-                if (!putRes.ok) throw new Error('Gagal menyimpan');
+                if (!putRes.ok) throw new Error('Gagal menyimpan ke GitHub');
                 const putData = await putRes.json();
                 githubFileSha = putData.content.sha;
                 return true;
-            } catch (e) { console.error("Save error:", e); return false; }
-        }
-
-        function openGitHubConfigModal() {
-            document.getElementById('gh-token').value = localStorage.getItem('kopiTraceAdminToken') || '';
-            document.getElementById('github-config-modal').classList.remove('hidden');
-        }
-        function closeGitHubConfigModal() { document.getElementById('github-config-modal').classList.add('hidden'); }
-        function saveAdminToken() {
-            const token = document.getElementById('gh-token').value.trim();
-            if (!token) { alert('Masukkan token PAT Anda!'); return; }
-            localStorage.setItem('kopiTraceAdminToken', token);
-            closeGitHubConfigModal();
-            alert('Token berhasil disimpan!');
-            fetchRealTimeData();
+            } catch (e) { 
+                console.error("GitHub Save Error:", e); 
+                return false; 
+            }
         }
 
         function saveToStorage() {
-            localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
-            localStorage.setItem('kopiTraceUsers', JSON.stringify(registeredUsers));
-            if (currentUser) localStorage.setItem('kopiTraceActiveUser', JSON.stringify(currentUser));
-            else localStorage.removeItem('kopiTraceActiveUser');
-            if (localStorage.getItem('kopiTraceAdminToken')) saveToGitHub();
+            try {
+                localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
+                localStorage.setItem('kopiTraceUsers', JSON.stringify(registeredUsers));
+                if (currentUser) {
+                    localStorage.setItem('kopiTraceActiveUser', JSON.stringify(currentUser));
+                } else {
+                    localStorage.removeItem('kopiTraceActiveUser');
+                }
+                if (localStorage.getItem('kopiTraceAdminToken')) {
+                    saveToGitHub();
+                }
+            } catch (err) {
+                console.error("Storage Error:", err);
+            }
         }
 
         function handleImageUpload(event) {
@@ -932,7 +932,7 @@
             const name = document.getElementById('reg-name').value.trim();
             const u = document.getElementById('reg-user').value.trim();
             const p = document.getElementById('reg-pass').value.trim();
-            if (!name || !u || !p) { document.getElementById('reg-error').classList.remove('hidden'); return; }
+            if (!name || !u || !p) { document.getElementById('reg-error').classList.add('hidden'); return; }
             if (registeredUsers.some(item => item.user === u)) { alert('Username sudah digunakan!'); return; }
             const newUser = { name, user: u, pass: p, role: 'farmer' };
             registeredUsers.push(newUser); currentUser = newUser;
@@ -1118,4 +1118,4 @@
         };
     </script>
 </body>
-</html>
+                </html>
