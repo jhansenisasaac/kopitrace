@@ -1,56 +1,28 @@
 <!DOCTYPE html>
 <html lang="id">
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KopiTrace - Pemetaan & Traceability Kopi</title>
-    <meta name="theme-color" content="#78350f">
-    
-    <!-- Favicon (Ikon di Tab Browser) -->
-    <link rel="icon" type="image/png" href="./logo.png">
-
-    <!-- PWA Manifest & iOS Apple Touch Icon -->
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="./logo.png">
-
-    <!-- Script & Style lainnya -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KopiTrace - Pemetaan & Traceability Kopi</title>
+    <title>KopiTrace - Pemetaan & Traceability Kopi Sumedang</title>
     <meta name="theme-color" content="#78350f">
     
-    <!-- PWA Manifest & iOS Support -->
-    <link rel="icon" href="./logo.png" type="image/png">
+    <!-- Favicon & PWA Apple Touch Icon -->
+    <link rel="icon" type="image/png" href="./logo.png">
     <link rel="apple-touch-icon" href="./logo.png">
     <link rel="manifest" href="manifest.json">
+    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="KopiTrace">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3299/3299943.png">
 
-    <!-- CSS & Script lainnya -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KopiTrace - Pemetaan & Traceability Kopi</title>
-    <meta name="theme-color" content="#78350f">
-    <link rel="icon" href="./logo.png" type="image/png">
-<link rel="apple-touch-icon" href="./logo.png">
+    <!-- Stylesheets & Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    
     <style>
         #map { height: 400px; border-radius: 0.75rem; z-index: 1; }
         #trace-map { height: 260px; border-radius: 0.75rem; z-index: 1; }
@@ -62,28 +34,27 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <!-- Logo -->
-                <!-- Logo -->
-                <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="handleSecretLogoClick()" title="KopiTrace">
-                    <img src="./logo.png" alt="Logo KopiTrace" class="w-10 h-10 rounded-xl object-cover shadow border border-amber-700/50">
+                <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="handleSecretLogoClick()" title="KopiTrace Sumedang">
+                    <img src="./logo.png" alt="Logo KopiTrace" class="w-10 h-10 rounded-xl object-cover shadow border border-amber-700/50" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=100&q=80';">
                     <div>
                         <span class="font-bold text-base sm:text-lg tracking-wide">KopiTrace</span>
-                         <div class="text-[9px] text-stone-400 tracking-wider uppercase font-mono">Traceability</div>
+                        <div class="text-[9px] text-stone-400 tracking-wider uppercase font-mono">Sumedang Traceability</div>
                     </div>
                 </div>
+
                 <!-- Desktop Nav -->
                 <div class="hidden md:flex items-center space-x-6 text-sm font-medium">
                     <button onclick="switchView('public-home')" class="hover:text-amber-400 transition py-2">Beranda</button>
-                    <button onclick="switchView('public-map')" class="hover:text-amber-400 transition py-2">Peta Sebaran</button>
+                    <button onclick="switchView('public-map')" class="hover:text-amber-400 transition py-2">Peta Sumedang</button>
                     <button onclick="switchView('public-scanner')" class="hover:text-amber-400 transition py-2">Lacak / Scan</button>
+                    <button onclick="installAppPrompt()" id="install-btn" class="hidden text-amber-400 hover:text-amber-300 transition py-2 items-center space-x-1.5 font-semibold">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Instal</span>
+                    </button>
                 </div>
 
-                <!-- Right Actions & Mobile Hamburger -->
+                <!-- Right Actions -->
                 <div class="flex items-center space-x-2 sm:space-x-3">
-                    <button onclick="installAppPrompt()" id="install-btn" class="hidden bg-stone-800 hover:bg-stone-700 text-amber-400 border border-amber-600/40 text-xs px-2.5 py-1.5 rounded-lg font-semibold transition items-center space-x-1">
-                        <i class="fa-solid fa-download"></i>
-                        <span class="hidden sm:inline">Instal</span>
-                    </button>
-
                     <div id="nav-auth-container" class="hidden items-center space-x-2 bg-stone-800/90 px-2.5 py-1.5 rounded-xl border border-stone-700 text-xs">
                         <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
                         <span id="auth-role-label" class="font-semibold capitalize text-stone-200 hidden sm:inline">Role: -</span>
@@ -91,7 +62,7 @@
                         <button onclick="handleLogout()" class="bg-red-600/80 hover:bg-red-600 text-white px-2 py-1 rounded-lg transition font-medium">Keluar</button>
                     </div>
 
-                    <!-- Mobile Menu Toggle Button -->
+                    <!-- Mobile Menu Button -->
                     <button onclick="toggleMobileMenu()" class="md:hidden text-stone-300 hover:text-white p-2 rounded-lg bg-stone-800 border border-stone-700">
                         <i id="mobile-menu-icon" class="fa-solid fa-bars text-lg"></i>
                     </button>
@@ -99,11 +70,15 @@
             </div>
         </div>
 
-        <!-- Mobile Dropdown Menu -->
+        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-stone-900 border-t border-stone-800 px-4 pt-2 pb-4 space-y-2 text-sm font-medium">
             <button onclick="switchView('public-home'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Beranda</button>
-            <button onclick="switchView('public-map'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Peta Sebaran</button>
+            <button onclick="switchView('public-map'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Peta Sumedang</button>
             <button onclick="switchView('public-scanner'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Lacak / Scan Kode</button>
+            <button onclick="installAppPrompt(); toggleMobileMenu();" id="mobile-install-btn" class="hidden w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition text-amber-400 font-semibold items-center space-x-2">
+                <i class="fa-solid fa-download mr-1"></i>
+                <span>Instal Aplikasi</span>
+            </button>
         </div>
     </nav>
 
@@ -114,9 +89,9 @@
             <div class="bg-gradient-to-br from-stone-900 via-stone-800 to-amber-950 text-white rounded-2xl p-5 sm:p-8 shadow-xl flex flex-col md:flex-row justify-between items-center relative overflow-hidden gap-6">
                 <div class="space-y-3 sm:space-y-4 max-w-xl z-10">
                     <span class="inline-block bg-amber-700/80 text-amber-200 text-[11px] sm:text-xs px-3 py-1 rounded-full uppercase tracking-wider font-semibold">Sistem Transparansi Kopi Sumedang</span>
-                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">Lacak Informasi Kopi Sumedang Dan Gudang</h1>
+                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">Lacak Kopi Sumedang & Sebaran Blok Perkebunan</h1>
                     <p class="text-stone-300 text-xs sm:text-base leading-relaxed">
-                        Pindai QR Code untuk mengetahui zona kebun, metode pengolahan, sertifikasi organik, rute logistik, hingga catatan cupping secara transparan.
+                        Pindai QR Code untuk mengetahui zona kecamatan asal kebun, metode pengolahan, sertifikasi organik, rute logistik, hingga catatan cupping.
                     </p>
                     <div class="flex flex-wrap gap-2.5 pt-1">
                         <button onclick="switchView('public-scanner')" class="bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold px-4 sm:px-5 py-2.5 rounded-xl transition flex items-center space-x-2 text-xs sm:text-sm shadow">
@@ -125,12 +100,12 @@
                         </button>
                         <button onclick="switchView('public-map')" class="bg-stone-700/80 hover:bg-stone-700 text-white px-4 sm:px-5 py-2.5 rounded-xl transition flex items-center space-x-2 border border-stone-600 text-xs sm:text-sm">
                             <i class="fa-solid fa-map-location-dot"></i>
-                            <span>Lihat Peta Kebun</span>
+                            <span>Peta Sumedang</span>
                         </button>
                     </div>
                 </div>
                 <div class="w-full md:w-auto bg-stone-950/70 p-4 sm:p-6 rounded-xl backdrop-blur border border-stone-800 text-center space-y-3 min-w-[240px] z-10 shadow-inner">
-                    <div class="text-[11px] uppercase tracking-widest text-amber-400 font-semibold">Statistik Kebun Terdaftar</div>
+                    <div class="text-[11px] uppercase tracking-widest text-amber-400 font-semibold">Statistik Kebun Sumedang</div>
                     <div class="grid grid-cols-2 gap-3 text-center">
                         <div class="bg-stone-900/90 p-3 rounded-lg border border-stone-800">
                             <div id="stat-total-trees" class="text-xl sm:text-2xl font-black text-white">0</div>
@@ -160,8 +135,8 @@
         <section id="view-public-map" class="space-y-4 sm:space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <div>
-                    <h2 class="text-xl sm:text-2xl font-bold text-stone-900">Peta Sebaran Pohon Kopi</h2>
-                    <p class="text-xs sm:text-sm text-stone-600">Klik marker pada peta untuk melihat detail lokasi.</p>
+                    <h2 class="text-xl sm:text-2xl font-bold text-stone-900">Peta Sebaran Kopi Kabupaten Sumedang</h2>
+                    <p class="text-xs sm:text-sm text-stone-600">Klik marker pada peta untuk melihat detail blok kebun.</p>
                 </div>
                 <button onclick="switchView('public-home')" class="bg-stone-200 hover:bg-stone-300 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium">Kembali</button>
             </div>
@@ -178,7 +153,6 @@
                     <p class="text-xs sm:text-sm text-stone-600">Gunakan kamera HP untuk scan QR atau masukkan kode unik secara manual.</p>
                 </div>
 
-                <!-- Tombol Kamera Scanner -->
                 <div class="space-y-3">
                     <button onclick="startCameraScanner()" class="w-full bg-stone-900 hover:bg-stone-800 text-amber-400 font-semibold py-3 rounded-xl transition flex items-center justify-center space-x-2 text-sm shadow">
                         <i class="fa-solid fa-camera"></i>
@@ -213,9 +187,9 @@
                 <div class="space-y-1">
                     <div id="dash-title" class="text-amber-900 font-extrabold text-base sm:text-lg flex items-center space-x-2">
                         <i class="fa-solid fa-id-badge"></i>
-                        <span>Panel Dashboard Pengelola</span>
+                        <span>Panel Dashboard Pengelola Kopi Sumedang</span>
                     </div>
-                    <p id="dash-subtitle" class="text-xs text-amber-900/70">Kelola data batch, sertifikasi, rute logistik, dan sinkronisasi GitHub.</p>
+                    <p id="dash-subtitle" class="text-xs text-amber-900/70">Kelola data batch, pilih kecamatan kebun (zona otomatis), sertifikasi, dan sinkronisasi.</p>
                 </div>
                 <div class="flex flex-wrap gap-2 w-full lg:w-auto">
                     <button onclick="openGitHubConfigModal()" class="flex-1 lg:flex-none bg-stone-800 hover:bg-stone-900 text-amber-400 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow flex items-center justify-center space-x-2">
@@ -246,9 +220,10 @@
                         <thead>
                             <tr class="bg-stone-100 text-stone-700 uppercase text-[11px] tracking-wider border-b border-stone-200">
                                 <th class="p-3 sm:p-4">Kode Unik</th>
-                                <th class="p-3 sm:p-4">Zona</th>
+                                <th class="p-3 sm:p-4">Zona (3 Huruf)</th>
+                                <th class="p-3 sm:p-4">Kecamatan</th>
                                 <th class="p-3 sm:p-4">Metode</th>
-                                <th class="p-3 sm:p-4">Petani / Pengelola</th>
+                                <th class="p-3 sm:p-4">Petani</th>
                                 <th class="p-3 sm:p-4">Varietas</th>
                                 <th class="p-3 sm:p-4 text-center">Aksi</th>
                             </tr>
@@ -263,7 +238,7 @@
     <!-- FOOTER -->
     <footer class="bg-stone-900 text-stone-400 py-6 mt-12 border-t border-stone-800">
         <div class="max-w-7xl mx-auto px-4 text-center text-xs space-y-1">
-            <p>&copy; 2026 KopiTrace. Sistem Pemetaan & Traceability Berbasis PWA.</p>
+            <p>&copy; 2026 KopiTrace. Sistem Pemetaan & Traceability Kopi Sumedang.</p>
             <p class="text-stone-500">Tersinkronisasi real-time ke GitHub & Discord.</p>
         </div>
     </footer>
@@ -313,11 +288,11 @@
             <div id="form-register-pane" class="space-y-3 pt-1 text-sm hidden">
                 <div>
                     <label class="block text-xs font-semibold text-stone-700 mb-1">Nama / Kelompok Tani</label>
-                    <input type="text" id="reg-name" placeholder="Cth: Kelompok Tani Gayo" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none text-xs sm:text-sm">
+                    <input type="text" id="reg-name" placeholder="Cth: Kelompok Tani Sumedang" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none text-xs sm:text-sm">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-stone-700 mb-1">Username Baru</label>
-                    <input type="text" id="reg-user" placeholder="Cth: tani_gayo" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none text-xs sm:text-sm">
+                    <input type="text" id="reg-user" placeholder="Cth: tani_sumedang" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none text-xs sm:text-sm">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-stone-700 mb-1">Password</label>
@@ -340,7 +315,7 @@
                 <button onclick="closeGitHubConfigModal()" class="text-stone-400 hover:text-stone-700 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="space-y-3 text-xs sm:text-sm">
-                <p class="text-stone-500">Repository diset ke <code>jhansenisaac/kopitrace</code> (branch <code>main</code>). Masukkan Personal Access Token (PAT) Anda.</p>
+                <p class="text-stone-500">Repository diset ke <code>jhansenisasaac/kopitrace</code> (branch <code>main</code>). Masukkan Personal Access Token (PAT) Anda.</p>
                 <div>
                     <label class="block font-semibold text-stone-700 mb-1">GitHub PAT Token</label>
                     <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-700 focus:outline-none font-mono text-xs">
@@ -361,11 +336,7 @@
                 <input type="hidden" id="edit-index" value="-1">
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block font-semibold text-stone-700 mb-1">Zona (3 Huruf)</label>
-                        <input type="text" id="form-zona" placeholder="UTR" required class="w-full px-3 py-2 border border-stone-300 rounded-lg uppercase font-mono">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-stone-700 mb-1">Metode</label>
+                        <label class="block font-semibold text-stone-700 mb-1">Metode Pengolahan</label>
                         <select id="form-metode" class="w-full px-3 py-2 border border-stone-300 rounded-lg">
                             <option value="WASH">WASH (Washed)</option>
                             <option value="NAT">NAT (Natural)</option>
@@ -374,25 +345,16 @@
                             <option value="EXP">EXP (Experimental)</option>
                         </select>
                     </div>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block font-semibold text-stone-700 mb-1">Tahun</label>
+                        <label class="block font-semibold text-stone-700 mb-1">Tahun Panen</label>
                         <input type="number" id="form-tahun" value="2026" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
                     </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block font-semibold text-stone-700 mb-1">No. Batch</label>
                         <input type="text" id="form-batch" placeholder="001" required class="w-full px-3 py-2 border border-stone-300 rounded-lg font-mono">
-                    </div>
-                </div>
-                <div>
-                    <label class="block font-semibold text-stone-700 mb-1">Nama Petani / Pengelola</label>
-                    <input type="text" id="form-petani" placeholder="Bpk. Hendra" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block font-semibold text-stone-700 mb-1">Varietas</label>
-                        <input type="text" id="form-varietas" placeholder="Arabica Gayo" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
                     </div>
                     <div>
                         <label class="block font-semibold text-stone-700 mb-1">Ketinggian (MDPL)</label>
@@ -400,31 +362,65 @@
                     </div>
                 </div>
 
-                <div class="bg-stone-50 p-3 rounded-xl border border-stone-200 space-y-2">
-                    <label class="block font-semibold text-stone-700 text-[11px] uppercase tracking-wide">Titik GPS Kebun Asal</label>
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="number" step="any" id="form-lat" placeholder="Latitude" required class="w-full px-2.5 py-2 border border-stone-300 rounded-lg text-xs">
-                        <input type="number" step="any" id="form-lng" placeholder="Longitude" required class="w-full px-2.5 py-2 border border-stone-300 rounded-lg text-xs">
-                    </div>
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">Nama Petani / Pengelola</label>
+                    <input type="text" id="form-petani" placeholder="Bpk. Hendra" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">Varietas Kopi</label>
+                    <input type="text" id="form-varietas" placeholder="Arabica Sumedang" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                </div>
+
+                <!-- PILIH KECAMATAN (ZONA 3 HURUF OTOMATIS) -->
+                <div class="bg-amber-50/60 p-3.5 rounded-xl border border-amber-200 space-y-2">
+                    <label class="block font-semibold text-stone-900 text-[11px] uppercase tracking-wide flex items-center space-x-1.5">
+                        <i class="fa-solid fa-map-pin text-amber-700"></i>
+                        <span>Pilih Kecamatan Asal Kebun (Sumedang)</span>
+                    </label>
+                    <select id="form-kecamatan" class="w-full px-3 py-2.5 border border-amber-300 rounded-xl bg-white font-medium text-xs sm:text-sm focus:ring-2 focus:ring-amber-700 focus:outline-none">
+                        <option value="Sumedang Utara">Sumedang Utara (Zona UTR - Utara)</option>
+                        <option value="Sumedang Selatan">Sumedang Selatan (Zona SLT - Selatan)</option>
+                        <option value="Cimalaka">Cimalaka (Zona CML - Cimalaka / Tampomas)</option>
+                        <option value="Tanjungsari">Tanjungsari (Zona BRT - Barat)</option>
+                        <option value="Jatinangor">Jatinangor (Zona BRT - Barat)</option>
+                        <option value="Rancakalong">Rancakalong (Zona TGR - Tengah)</option>
+                        <option value="Pamulihan">Pamulihan (Zona BRT - Barat)</option>
+                        <option value="Sukasari">Sukasari (Zona BRT - Barat)</option>
+                        <option value="Cisarua">Cisarua (Zona TGR - Tengah)</option>
+                        <option value="Tanjungkerta">Tanjungkerta (Zona UTR - Utara)</option>
+                        <option value="Tanjungmedar">Tanjungmedar (Zona UTR - Utara)</option>
+                        <option value="Buahdua">Buahdua (Zona TMR - Timur)</option>
+                        <option value="Conggeang">Conggeang (Zona UTR - Utara)</option>
+                        <option value="Paseh">Paseh (Zona UTR - Utara)</option>
+                        <option value="Darmaraja">Darmaraja (Zona TMR - Timur / Waduk Jatigede)</option>
+                        <option value="Jatigede">Jatigede (Zona TMR - Timur)</option>
+                        <option value="Jatinunggal">Jatinunggal (Zona TMR - Timur)</option>
+                        <option value="Wado">Wado (Zona TMR - Timur / Perbatasan Garut)</option>
+                        <option value="Cibugel">Cibugel (Zona SLT - Selatan)</option>
+                        <option value="Cisitu">Cisitu (Zona SLT - Selatan / Cakrabuana)</option>
+                        <option value="Ganeas">Ganeas (Zona SLT - Selatan)</option>
+                        <option value="Situraja">Situraja (Zona TMR - Timur)</option>
+                        <option value="Tomo">Tomo (Zona UTR - Utara)</option>
+                        <option value="Ujungjaya">Ujungjaya (Zona UTR - Utara)</option>
+                        <option value="Surian">Surian (Zona UTR - Utara)</option>
+                    </select>
+                    <p class="text-[11px] text-amber-900/70 italic">* Zona 3 huruf pada kode unik (Cth: UTR, SLT, TMR, BRT) akan terisi otomatis sesuai pilihan kecamatan di atas.</p>
                 </div>
 
                 <div class="bg-stone-50 p-3 rounded-xl border border-stone-200 space-y-2">
                     <label class="block font-semibold text-stone-700 text-[11px] uppercase tracking-wide">Titik Tujuan / Gudang Logistik</label>
-                    <input type="text" id="form-dest-name" placeholder="Nama Gudang Tujuan" class="w-full px-2.5 py-2 border border-stone-300 rounded-lg text-xs">
-                    <div class="grid grid-cols-2 gap-2 pt-1">
-                        <input type="number" step="any" id="form-dest-lat" placeholder="Dest Latitude" class="w-full px-2.5 py-2 border border-stone-300 rounded-lg text-xs">
-                        <input type="number" step="any" id="form-dest-lng" placeholder="Dest Longitude" class="w-full px-2.5 py-2 border border-stone-300 rounded-lg text-xs">
-                    </div>
+                    <input type="text" id="form-dest-name" placeholder="Nama Gudang Tujuan (Cth: Gudang Ekspor Sumedang)" class="w-full px-2.5 py-2 border border-stone-300 rounded-lg text-xs">
                 </div>
 
                 <div>
                     <label class="block font-semibold text-stone-700 mb-1">Sertifikasi Organik & Mutu</label>
-                    <input type="text" id="form-sertifikasi" placeholder="Cth: SNI Organik, USDA Organic" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                    <input type="text" id="form-sertifikasi" placeholder="Cth: SNI Organik, Fair Trade" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
                 </div>
 
                 <div>
                     <label class="block font-semibold text-stone-700 mb-1">Catatan Cupping / Profil Rasa</label>
-                    <input type="text" id="form-cupping" placeholder="Floral, Brown Sugar, Citrus" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                    <input type="text" id="form-cupping" placeholder="Brown Sugar, Citrus, Floral" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
                 </div>
                 
                 <div class="space-y-2 bg-stone-50 p-3 rounded-xl border border-stone-200">
@@ -438,7 +434,7 @@
 
                 <div>
                     <label class="block font-semibold text-stone-700 mb-1">Timeline Distribusi (Format: Tanggal | Aktivitas)</label>
-                    <textarea id="form-distribusi" rows="3" placeholder="2026-06-01 | Panen Ceri Merah&#10;2026-06-05 | Pengolahan" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs font-mono"></textarea>
+                    <textarea id="form-distribusi" rows="3" placeholder="2026-06-01 | Panen Ceri Merah Sumedang&#10;2026-06-05 | Pengolahan" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs font-mono"></textarea>
                 </div>
                 <div class="flex justify-end space-x-2 pt-2">
                     <button type="button" onclick="closeTreeModal()" class="bg-stone-200 hover:bg-stone-300 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium">Batal</button>
@@ -474,6 +470,35 @@
         
         const TARGET_GUILD_ID = '1564644279681286195';
         const ROLE_ADMIN_ID = '1564682206830665889';
+
+        // Mapping Kecamatan Sumedang ke Zona 3 Huruf (Arah Mata Angin / Wilayah) & Koordinat Peta
+        const SUMEDANG_ZONES = {
+            "Sumedang Utara": { zona: "UTR", lat: -6.8529, lng: 107.9205 },
+            "Sumedang Selatan": { zona: "SLT", lat: -6.8687, lng: 107.9150 },
+            "Cimalaka": { zona: "CML", lat: -6.8285, lng: 107.9042 },
+            "Tanjungsari": { zona: "BRT", lat: -6.9142, lng: 107.7779 },
+            "Jatinangor": { zona: "BRT", lat: -6.9328, lng: 107.7712 },
+            "Rancakalong": { zona: "TGR", lat: -6.8398, lng: 107.8489 },
+            "Pamulihan": { zona: "BRT", lat: -6.8904, lng: 107.8285 },
+            "Sukasari": { zona: "BRT", lat: -6.8797, lng: 107.7946 },
+            "Cisarua": { zona: "TGR", lat: -6.8312, lng: 107.8812 },
+            "Tanjungkerta": { zona: "UTR", lat: -6.7865, lng: 107.9012 },
+            "Tanjungmedar": { zona: "UTR", lat: -6.7324, lng: 107.9056 },
+            "Buahdua": { zona: "TMR", lat: -6.7423, lng: 107.9812 },
+            "Conggeang": { zona: "UTR", lat: -6.7912, lng: 107.9945 },
+            "Paseh": { zona: "UTR", lat: -6.8012, lng: 107.9456 },
+            "Darmaraja": { zona: "TMR", lat: -6.9012, lng: 108.0345 },
+            "Jatigede": { zona: "TMR", lat: -6.8412, lng: 108.0912 },
+            "Jatinunggal": { zona: "TMR", lat: -6.9345, lng: 108.1012 },
+            "Wado": { zona: "TMR", lat: -6.9712, lng: 108.0712 },
+            "Cibugel": { zona: "SLT", lat: -7.0212, lng: 108.0212 },
+            "Cisitu": { zona: "SLT", lat: -6.8812, lng: 107.9812 },
+            "Ganeas": { zona: "SLT", lat: -6.8912, lng: 107.9412 },
+            "Situraja": { zona: "TMR", lat: -6.8512, lng: 108.0112 },
+            "Tomo": { zona: "UTR", lat: -6.7112, lng: 108.1212 },
+            "Ujungjaya": { zona: "UTR", lat: -6.7012, lng: 108.0412 },
+            "Surian": { zona: "UTR", lat: -6.7012, lng: 107.9112 }
+        };
 
         let html5QrCode = null;
 
@@ -557,7 +582,7 @@
 
         let defaultCoffeeData = [
             {
-                zona: "UTR", metode: "WASH", tahun: "2026", batch: "001", petani: "Bpk. Hendra", varietas: "Arabica Gayo", mdpl: "1450 mdpl", lat: -6.9175, lng: 107.6191, destName: "Gudang Ekspor Tanjung Priok, Jakarta", destLat: -6.1015, destLng: 106.8845, sertifikasi: "SNI Organik & USDA Organic Certified", cupping: "Jasmine, Lemongrass, Clean Cup", fotoUrl: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80", distribusi: [{ tanggal: "2026-06-01", aktivitas: "Panen Selektif Ceri Kopi Matang" }], createdBy: "farmer"
+                zona: "UTR", metode: "WASH", tahun: "2026", batch: "001", petani: "Bpk. Hendra", varietas: "Arabica Sumedang", mdpl: "1450 mdpl", kecamatan: "Sumedang Utara", lat: -6.8529, lng: 107.9205, destName: "Gudang Ekspor Sumedang Pusat", destLat: -6.8687, destLng: 107.9150, sertifikasi: "SNI Organik & USDA Organic Certified", cupping: "Brown Sugar, Citrus, Floral", fotoUrl: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80", distribusi: [{ tanggal: "2026-06-01", aktivitas: "Panen Selektif Ceri Kopi Sumedang" }], createdBy: "farmer"
             }
         ];
 
@@ -570,13 +595,23 @@
         let currentUser = JSON.parse(localStorage.getItem('kopiTraceActiveUser')) || null;
         let currentView = 'public-home';
         let mapInstance = null, markersLayer = null, traceMapInstance = null, githubFileSha = null;
-        let deferredPrompt;
+        let deferredPrompt = null;
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
+            showInstallButtons();
+        });
+
+        function showInstallButtons() {
             const btn = document.getElementById('install-btn');
+            const mobileBtn = document.getElementById('mobile-install-btn');
             if (btn) btn.classList.remove('hidden');
+            if (mobileBtn) mobileBtn.classList.remove('hidden');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(showInstallButtons, 300);
         });
 
         function installAppPrompt() {
@@ -585,10 +620,18 @@
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
                         const btn = document.getElementById('install-btn');
+                        const mobileBtn = document.getElementById('mobile-install-btn');
                         if (btn) btn.classList.add('hidden');
+                        if (mobileBtn) mobileBtn.classList.add('hidden');
                     }
                     deferredPrompt = null;
                 });
+            } else {
+                if (navigator.share) {
+                    navigator.share({ title: 'KopiTrace Sumedang', url: window.location.href });
+                } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
             }
         }
 
@@ -623,41 +666,42 @@
             const apiUrl = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`;
             try {
                 const getRes = await fetch(apiUrl, { headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' } });
-                if (getRes.ok) { const fileInfo = await getRes.json(); githubFileSha = fileInfo.sha; }
+                if (getRes.ok) { 
+                    const fileInfo = await getRes.json(); 
+                    githubFileSha = fileInfo.sha; 
+                }
                 const fileContent = JSON.stringify({ coffeeData, registeredUsers }, null, 2);
                 const base64Content = btoa(unescape(encodeURIComponent(fileContent)));
                 const putRes = await fetch(apiUrl, {
                     method: 'PUT',
                     headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: "Update database via KopiTrace App", content: base64Content, sha: githubFileSha || undefined, branch: GITHUB_CONFIG.branch })
+                    body: JSON.stringify({ message: "Update database via KopiTrace Sumedang App", content: base64Content, sha: githubFileSha || undefined, branch: GITHUB_CONFIG.branch })
                 });
-                if (!putRes.ok) throw new Error('Gagal menyimpan');
+                if (!putRes.ok) throw new Error('Gagal menyimpan ke GitHub');
                 const putData = await putRes.json();
                 githubFileSha = putData.content.sha;
                 return true;
-            } catch (e) { console.error("Save error:", e); return false; }
-        }
-
-        function openGitHubConfigModal() {
-            document.getElementById('gh-token').value = localStorage.getItem('kopiTraceAdminToken') || '';
-            document.getElementById('github-config-modal').classList.remove('hidden');
-        }
-        function closeGitHubConfigModal() { document.getElementById('github-config-modal').classList.add('hidden'); }
-        function saveAdminToken() {
-            const token = document.getElementById('gh-token').value.trim();
-            if (!token) { alert('Masukkan token PAT Anda!'); return; }
-            localStorage.setItem('kopiTraceAdminToken', token);
-            closeGitHubConfigModal();
-            alert('Token berhasil disimpan!');
-            fetchRealTimeData();
+            } catch (e) { 
+                console.error("GitHub Save Error:", e); 
+                return false; 
+            }
         }
 
         function saveToStorage() {
-            localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
-            localStorage.setItem('kopiTraceUsers', JSON.stringify(registeredUsers));
-            if (currentUser) localStorage.setItem('kopiTraceActiveUser', JSON.stringify(currentUser));
-            else localStorage.removeItem('kopiTraceActiveUser');
-            if (localStorage.getItem('kopiTraceAdminToken')) saveToGitHub();
+            try {
+                localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
+                localStorage.setItem('kopiTraceUsers', JSON.stringify(registeredUsers));
+                if (currentUser) {
+                    localStorage.setItem('kopiTraceActiveUser', JSON.stringify(currentUser));
+                } else {
+                    localStorage.removeItem('kopiTraceActiveUser');
+                }
+                if (localStorage.getItem('kopiTraceAdminToken')) {
+                    saveToGitHub();
+                }
+            } catch (err) {
+                console.error("Storage Error:", err);
+            }
         }
 
         function handleImageUpload(event) {
@@ -707,6 +751,7 @@
             coffeeData.slice(0, 3).forEach(item => {
                 const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
                 const photo = item.fotoUrl || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80';
+                const kecamatanStr = item.kecamatan ? `Kec. ${item.kecamatan}` : `Zona ${item.zona}`;
                 container.innerHTML += `
                     <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden space-y-3 hover:shadow-md transition">
                         <div class="h-36 sm:h-40 overflow-hidden bg-stone-200 relative">
@@ -717,7 +762,7 @@
                         <div class="p-4 pt-0 space-y-2.5">
                             <div>
                                 <h4 class="font-bold text-stone-900 text-base sm:text-lg">${item.varietas}</h4>
-                                <p class="text-xs text-stone-500">Petani: ${item.petani}</p>
+                                <p class="text-xs text-stone-500">Petani: ${item.petani} | <span class="text-amber-800 font-semibold">${kecamatanStr}</span></p>
                             </div>
                             <div class="text-xs text-stone-600 pt-2 border-t border-stone-100 flex justify-between items-center">
                                 <span><i class="fa-solid fa-certificate text-emerald-600 mr-1"></i>${item.sertifikasi ? item.sertifikasi.split('&')[0] : 'Standar Mutu'}</span>
@@ -773,6 +818,7 @@
             }
 
             const photo = found.fotoUrl || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80';
+            const kecamatanLabel = found.kecamatan ? `Kecamatan ${found.kecamatan} (Zona ${found.zona})` : `Zona ${found.zona}`;
             let timelineHtml = found.distribusi && found.distribusi.length > 0 ? found.distribusi.map(step => `
                 <div class="relative pl-6 pb-4 border-l-2 border-amber-300 last:border-l-0 last:pb-0">
                     <div class="absolute -left-[7px] top-0 w-3 h-3 rounded-full bg-amber-700 ring-4 ring-amber-100"></div>
@@ -785,7 +831,7 @@
                 <div class="bg-amber-50/50 border border-amber-200 p-4 sm:p-6 rounded-2xl space-y-5">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-amber-200/60 pb-3">
                         <div>
-                            <span class="text-[11px] text-amber-800 font-semibold uppercase tracking-wider">Hasil Pelacakan Kopi</span>
+                            <span class="text-[11px] text-amber-800 font-semibold uppercase tracking-wider">Hasil Pelacakan Kopi Sumedang</span>
                             <h3 class="text-lg sm:text-xl font-black font-mono text-stone-900 mt-0.5">${query}</h3>
                         </div>
                         <span class="bg-amber-700 text-white px-3 py-1 rounded-full text-xs font-bold">${found.metode} Process</span>
@@ -807,7 +853,7 @@
                         </div>
                         <div class="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm">
                             <div class="bg-white p-3.5 rounded-xl border border-stone-200 space-y-1">
-                                <span class="text-[10px] text-stone-400 font-medium uppercase">Petani</span>
+                                <span class="text-[10px] text-stone-400 font-medium uppercase">Petani / Pengelola</span>
                                 <div class="font-bold text-stone-900">${found.petani}</div>
                             </div>
                             <div class="bg-white p-3.5 rounded-xl border border-stone-200 space-y-1">
@@ -819,16 +865,16 @@
                                 <div class="font-bold text-stone-900">${found.mdpl}</div>
                             </div>
                             <div class="bg-white p-3.5 rounded-xl border border-stone-200 space-y-1">
-                                <span class="text-[10px] text-stone-400 font-medium uppercase">GPS Asal</span>
-                                <div class="font-mono font-bold text-stone-900 text-[11px]">${found.lat}, ${found.lng}</div>
+                                <span class="text-[10px] text-stone-400 font-medium uppercase">Blok Asal Kebun</span>
+                                <div class="font-bold text-amber-900 text-xs">${kecamatanLabel}</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="bg-white p-4 rounded-xl border border-stone-200 space-y-2">
                         <div class="flex justify-between items-center text-xs font-bold text-stone-900">
-                            <span><i class="fa-solid fa-route text-amber-700 mr-1.5"></i>Peta Rute Logistik</span>
-                            <span class="text-[11px] text-stone-500 font-normal">Tujuan: ${found.destName || 'Gudang Pusat'}</span>
+                            <span><i class="fa-solid fa-route text-amber-700 mr-1.5"></i>Peta Rute Logistik Sumedang</span>
+                            <span class="text-[11px] text-stone-500 font-normal">Tujuan: ${found.destName || 'Gudang Pusat Sumedang'}</span>
                         </div>
                         <div id="trace-map"></div>
                     </div>
@@ -850,11 +896,11 @@
 
             setTimeout(() => {
                 if (traceMapInstance) traceMapInstance.remove();
-                const farmLat = found.lat || -6.9175, farmLng = found.lng || 107.6191;
-                const destLat = found.destLat || -6.1015, destLng = found.destLng || 106.8845;
-                traceMapInstance = L.map('trace-map').setView([farmLat, farmLng], 8);
+                const farmLat = found.lat || -6.8587, farmLng = found.lng || 107.9213;
+                const destLat = found.destLat || -6.8687, destLng = found.destLng || 107.9150;
+                traceMapInstance = L.map('trace-map').setView([farmLat, farmLng], 10);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(traceMapInstance);
-                L.marker([farmLat, farmLng]).addTo(traceMapInstance).bindPopup(`<b>Kebun:</b> ${found.petani}`).openPopup();
+                L.marker([farmLat, farmLng]).addTo(traceMapInstance).bindPopup(`<b>Kebun:</b> ${found.petani}<br><b>Kec. ${found.kecamatan || 'Sumedang'} (${found.zona})</b>`).openPopup();
                 L.marker([destLat, destLng]).addTo(traceMapInstance).bindPopup(`<b>Tujuan:</b> ${found.destName || 'Gudang'}`);
                 const routeLine = [[farmLat, farmLng], [destLat, destLng]];
                 L.polyline(routeLine, { color: '#b45309', weight: 4, dashArray: '6, 6' }).addTo(traceMapInstance);
@@ -863,29 +909,32 @@
         }
 
         function initMap() {
-    const mapEl = document.getElementById('map');
-    if (!mapEl) return;
-    if (!mapInstance) {
-        // Berpusat di Kabupaten Sumedang dengan tingkat zoom 11
-        mapInstance = L.map('map').setView([-6.8587, 107.9213], 11);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mapInstance);
-    } else { mapInstance.invalidateSize(); }
+            const mapEl = document.getElementById('map');
+            if (!mapEl) return;
+            if (!mapInstance) {
+                // Berpusat di Kabupaten Sumedang
+                mapInstance = L.map('map').setView([-6.8587, 107.9213], 11);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mapInstance);
+            } else { mapInstance.invalidateSize(); }
 
-    if (markersLayer) mapInstance.removeLayer(markersLayer);
-    markersLayer = L.layerGroup();
-    coffeeData.forEach(item => {
-        const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
-        const marker = L.marker([item.lat, item.lng]).bindPopup(`
-            <div class="space-y-1 text-xs">
-                <b class="font-mono text-amber-800 text-sm">${code}</b><br>
-                <b>Petani:</b> ${item.petani}<br>
-                <button onclick="selectAndTrace('${code}')" class="mt-2 bg-amber-700 text-white px-2 py-1 rounded font-semibold w-full">Lacak</button>
-            </div>
-        `);
-        markersLayer.addLayer(marker);
-    });
-    markersLayer.addTo(mapInstance);
-}
+            if (markersLayer) mapInstance.removeLayer(markersLayer);
+            markersLayer = L.layerGroup();
+            coffeeData.forEach(item => {
+                const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
+                const lat = item.lat || -6.8587;
+                const lng = item.lng || 107.9213;
+                const marker = L.marker([lat, lng]).bindPopup(`
+                    <div class="space-y-1 text-xs">
+                        <b class="font-mono text-amber-800 text-sm">${code}</b><br>
+                        <b>Petani:</b> ${item.petani}<br>
+                        <b>Kec. ${item.kecamatan || 'Sumedang'}</b><br>
+                        <button onclick="selectAndTrace('${code}')" class="mt-2 bg-amber-700 text-white px-2 py-1 rounded font-semibold w-full">Lacak</button>
+                    </div>
+                `);
+                markersLayer.addLayer(marker);
+            });
+            markersLayer.addTo(mapInstance);
+        }
 
         let secretClickCount = 0, secretTimer = null;
         function handleSecretLogoClick() {
@@ -935,7 +984,7 @@
             const name = document.getElementById('reg-name').value.trim();
             const u = document.getElementById('reg-user').value.trim();
             const p = document.getElementById('reg-pass').value.trim();
-            if (!name || !u || !p) { document.getElementById('reg-error').classList.remove('hidden'); return; }
+            if (!name || !u || !p) { document.getElementById('reg-error').classList.add('hidden'); return; }
             if (registeredUsers.some(item => item.user === u)) { alert('Username sudah digunakan!'); return; }
             const newUser = { name, user: u, pass: p, role: 'farmer' };
             registeredUsers.push(newUser); currentUser = newUser;
@@ -971,10 +1020,12 @@
             displayData.forEach((item) => {
                 const actualIndex = coffeeData.findIndex(c => c === item);
                 const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
+                const kecName = item.kecamatan ? `Kec. ${item.kecamatan}` : '-';
                 tbody.innerHTML += `
                     <tr class="hover:bg-stone-50 transition">
                         <td class="p-3 sm:p-4 font-mono font-bold text-amber-800">${code}</td>
-                        <td class="p-3 sm:p-4">${item.zona}</td>
+                        <td class="p-3 sm:p-4"><span class="bg-amber-100 text-amber-900 font-mono px-2 py-0.5 rounded text-xs font-extrabold">${item.zona}</span></td>
+                        <td class="p-3 sm:p-4 font-medium text-stone-800">${kecName}</td>
                         <td class="p-3 sm:p-4"><span class="bg-stone-100 text-stone-800 px-2 py-0.5 rounded text-[11px] font-semibold">${item.metode}</span></td>
                         <td class="p-3 sm:p-4">${item.petani}</td>
                         <td class="p-3 sm:p-4">${item.varietas}</td>
@@ -1004,18 +1055,16 @@
             if (currentUser && currentUser.role === 'farmer' && item.createdBy !== currentUser.user) { alert('Akses Ditolak!'); return; }
             document.getElementById('modal-tree-title').innerText = 'Edit Data Batch Kopi';
             document.getElementById('edit-index').value = index;
-            document.getElementById('form-zona').value = item.zona;
             document.getElementById('form-metode').value = item.metode;
             document.getElementById('form-tahun').value = item.tahun;
             document.getElementById('form-batch').value = item.batch;
             document.getElementById('form-petani').value = item.petani;
             document.getElementById('form-varietas').value = item.varietas;
             document.getElementById('form-mdpl').value = item.mdpl;
-            document.getElementById('form-lat').value = item.lat;
-            document.getElementById('form-lng').value = item.lng;
+            if (item.kecamatan) {
+                document.getElementById('form-kecamatan').value = item.kecamatan;
+            }
             document.getElementById('form-dest-name').value = item.destName || '';
-            document.getElementById('form-dest-lat').value = item.destLat || '';
-            document.getElementById('form-dest-lng').value = item.destLng || '';
             document.getElementById('form-sertifikasi').value = item.sertifikasi || '';
             document.getElementById('form-cupping').value = item.cupping;
             document.getElementById('form-foto').value = item.fotoUrl || '';
@@ -1042,29 +1091,35 @@
             }
             const existingFoto = index !== -1 ? coffeeData[index].fotoUrl : '';
             const fotoValue = document.getElementById('form-foto').value.trim() || existingFoto;
+            
+            const selectedKecamatan = document.getElementById('form-kecamatan').value;
+            const zoneInfo = SUMEDANG_ZONES[selectedKecamatan] || { zona: "UTR", lat: -6.8529, lng: 107.9205 };
+
             const newItem = {
-                zona: document.getElementById('form-zona').value.toUpperCase(),
+                zona: zoneInfo.zona,
                 metode: document.getElementById('form-metode').value,
                 tahun: document.getElementById('form-tahun').value,
                 batch: document.getElementById('form-batch').value,
                 petani: currentUser && currentUser.role === 'farmer' ? currentUser.name : document.getElementById('form-petani').value,
                 varietas: document.getElementById('form-varietas').value,
                 mdpl: document.getElementById('form-mdpl').value,
-                lat: parseFloat(document.getElementById('form-lat').value) || 0,
-                lng: parseFloat(document.getElementById('form-lng').value) || 0,
-                destName: document.getElementById('form-dest-name').value.trim(),
-                destLat: parseFloat(document.getElementById('form-dest-lat').value) || 0,
-                destLng: parseFloat(document.getElementById('form-dest-lng').value) || 0,
+                kecamatan: selectedKecamatan,
+                lat: zoneInfo.lat,
+                lng: zoneInfo.lng,
+                destName: document.getElementById('form-dest-name').value.trim() || 'Gudang Pusat Sumedang',
+                destLat: -6.8687,
+                destLng: 107.9150,
                 sertifikasi: document.getElementById('form-sertifikasi').value.trim(),
                 cupping: document.getElementById('form-cupping').value,
                 fotoUrl: fotoValue,
                 distribusi: distribusiArray,
                 createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : coffeeData[index].createdBy
             };
+
             if (index === -1) coffeeData.push(newItem); else coffeeData[index] = newItem;
             saveToStorage(); closeTreeModal(); renderDashboardTable(); updateStats();
             const codeStr = `${newItem.zona}/${newItem.metode}/${newItem.tahun}/${newItem.batch}`;
-            sendBatchNotification(`🌱 **BATCH BARU**\n• Kode: \`${codeStr}\`\n• Petani: **${newItem.petani}**`);
+            sendBatchNotification(`🌱 **BATCH BARU SUMEDANG**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${selectedKecamatan}** (Zona: \`${zoneInfo.zona}\`)\n• Petani: **${newItem.petani}**`);
         }
 
         function deleteTreeData(index) {
@@ -1087,7 +1142,7 @@
 
         function exportDataJSON() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ coffeeData, registeredUsers }, null, 2));
-            const dl = document.createElement('a'); dl.setAttribute("href", dataStr); dl.setAttribute("download", "kopitrace_backup.json"); dl.click();
+            const dl = document.createElement('a'); dl.setAttribute("href", dataStr); dl.setAttribute("download", "kopitrace_sumedang_backup.json"); dl.click();
         }
 
         window.onload = async function() {
