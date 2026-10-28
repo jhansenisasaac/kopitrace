@@ -19,6 +19,27 @@
       "fotoUrl": "",
       "distribusi": [],
       "createdBy": "823842225611866183"
+    },
+    {
+      "zona": "TMR",
+      "metode": "HON",
+      "tahun": "2026",
+      "batch": "003",
+      "petani": "hernansyah",
+      "varietas": "robusta",
+      "mdpl": "600 mdpl",
+      "kecamatan": "Buahdua",
+      "lat": -6.7423,
+      "lng": 107.9812,
+      "sejarah": "Kopi Sumedang di kawasan dataran tinggi vulkanik, memiliki sejarah panjang sebagai bagian dari tradisi agraris Java Preanger yang terkenal di pasar internasional.",
+      "destName": "guadang rancakalong",
+      "destLat": -6.8687,
+      "destLng": 107.915,
+      "sertifikasi": "organik",
+      "cupping": "contoh",
+      "fotoUrl": "",
+      "distribusi": [],
+      "createdBy": "823842225611866183"
     }
   ],
   "registeredUsers": [
@@ -34,5 +55,11 @@
       "pass": "farmer2026",
       "role": "farmer"
     }
-  ]
+  ],
+  "supplyChainData": {
+    "hulu": "Budidaya kopi di lereng Gunung Tampomas, Manglayang, dan Cakrabuana pada ketinggian 1000-1600 MDPL. Fokus pada pemeliharaan organik, pemupukan alami, dan petik merah selektif.",
+    "pascapanen": "Pengolahan ceri kopi menggunakan metode terstandar seperti Washed, Natural, Honey, hingga Experimental Winey untuk menghasilkan cita rasa khas beraroma floral dan fruity.",
+    "trace": "Pemberian identitas batch dengan kode zona 3 huruf (UTR, SLT, TMR, BRT, CML) dan penyematan QR Code transparan guna menjamin keaslian asal produk.",
+    "hilir": "Distribusi ke gudang logistik, gerai specialty coffee, kedai konsep Alaska/Western Bar, serta penetrasi pasar regional dan ekspor global."
+  }
 }
