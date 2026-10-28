@@ -1,33 +1,3 @@
-{
-  "coffeeData": [
-    {
-      "zona": "UTR",
-      "metode": "WASH",
-      "tahun": "2026",
-      "batch": "001",
-      "petani": "Bpk. Hendra",
-      "varietas": "Arabica Gayo",
-      "mdpl": "1450 mdpl",
-      "lat": -6.9175,
-      "lng": 107.6191,
-      "destName": "Gudang Ekspor Tanjung Priok, Jakarta",
-      "destLat": -6.1015,
-      "destLng": 106.8845,
-      "sertifikasi": "SNI Organik & USDA Organic Certified",
-      "cupping": "Jasmine, Lemongrass, Clean Cup",
-      "fotoUrl": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
-      "distribusi": [
-        {
-          "tanggal": "2026-06-01",
-          "aktivitas": "Panen Selektif Ceri Kopi Matang"
-        },
-        {
-          "tanggal": "2026-06-03",
-          "aktivitas": "Pencucian & Fermentasi Basah"
-        }
-      ],
-      "createdBy": "farmer"
-    },
     {
       "zona": "SMD",
       "metode": "NAT",
@@ -56,72 +26,6 @@
       ],
       "createdBy": "farmer"
     },
-    {
-      "zona": "JWG",
-      "metode": "HON",
-      "tahun": "2026",
-      "batch": "003",
-      "petani": "Ibu Siti Aminah",
-      "varietas": "Sigarar Utang",
-      "mdpl": "1500 mdpl",
-      "lat": -7.2504,
-      "lng": 107.8741,
-      "destName": "Distribution Hub Bandung Selatan",
-      "destLat": -6.9214,
-      "destLng": 107.6105,
-      "sertifikasi": "Rainforest Alliance Certified",
-      "cupping": "Caramel, Orange Blossom, Balanced Acidity",
-      "fotoUrl": "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=600&q=80",
-      "distribusi": [
-        {
-          "tanggal": "2026-08-01",
-          "aktivitas": "Pemetikan Buah Merah Sempurna"
-        },
-        {
-          "tanggal": "2026-08-04",
-          "aktivitas": "Honey Processing (Yellow Honey)"
-        }
-      ],
-      "createdBy": "farmer"
-    },
-    {
-      "zona": "GRT",
-      "metode": "HON",
-      "tahun": "2025",
-      "batch": "005",
-      "petani": "Bpk. Hendra (Petani)",
-      "varietas": "Arabica",
-      "mdpl": "1450 mdpl",
-      "lat": -6.7688284,
-      "lng": 107.8867333,
-      "destName": "guadang rancakalong",
-      "destLat": 0,
-      "destLng": 0,
-      "sertifikasi": "organik",
-      "cupping": "citrus",
-      "fotoUrl": "",
-      "distribusi": [],
-      "createdBy": "farmer"
-    },
-    {
-      "zona": "CRM",
-      "metode": "NAT",
-      "tahun": "2026",
-      "batch": "004",
-      "petani": "bpk. budi sitisna",
-      "varietas": "Arabika G.ciremay",
-      "mdpl": "3.078 mdpl",
-      "lat": -6.891667,
-      "lng": 108.4,
-      "destName": "guadang rancakalong",
-      "destLat": 0,
-      "destLng": 0,
-      "sertifikasi": "organik",
-      "cupping": "contoh",
-      "fotoUrl": "",
-      "distribusi": [],
-      "createdBy": "dev"
-    }
   ],
   "registeredUsers": [
     {
