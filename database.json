@@ -1,5 +1,26 @@
 {
-  "coffeeData": [],
+  "coffeeData": [
+    {
+      "zona": "UTR",
+      "metode": "HON",
+      "tahun": "2026",
+      "batch": "005",
+      "petani": "Bpk. Hendra (Petani)",
+      "varietas": "robusta sumedang",
+      "mdpl": "1450 mdpl",
+      "kecamatan": "Tanjungkerta",
+      "lat": -6.7865,
+      "lng": 107.9012,
+      "destName": "gudang sumedang",
+      "destLat": -6.8687,
+      "destLng": 107.915,
+      "sertifikasi": "organik",
+      "cupping": "citrus",
+      "fotoUrl": "",
+      "distribusi": [],
+      "createdBy": "823842225611866183"
+    }
+  ],
   "registeredUsers": [
     {
       "name": "Developer Super Admin",
