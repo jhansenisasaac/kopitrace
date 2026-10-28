@@ -1,31 +1,34 @@
+{
+  "coffeeData": [
     {
-      "zona": "SMD",
-      "metode": "NAT",
+      "zona": "UTR",
+      "metode": "WASH",
       "tahun": "2026",
-      "batch": "002",
-      "petani": "Kelompok Tani Tampomas",
-      "varietas": "Typica & Lini S",
-      "mdpl": "1300 mdpl",
-      "lat": -6.8342,
-      "lng": 107.9351,
-      "destName": "Roastery Kopi Lokal Sumedang",
-      "destLat": -6.85,
-      "destLng": 107.9167,
-      "sertifikasi": "Fair Trade Local Standard",
-      "cupping": "Dark Chocolate, Brown Sugar, Ripe Fruit",
-      "fotoUrl": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80",
+      "batch": "001",
+      "petani": "Bpk. Hendra",
+      "varietas": "Arabica Gayo",
+      "mdpl": "1450 mdpl",
+      "lat": -6.9175,
+      "lng": 107.6191,
+      "destName": "Gudang Ekspor Tanjung Priok, Jakarta",
+      "destLat": -6.1015,
+      "destLng": 106.8845,
+      "sertifikasi": "SNI Organik & USDA Organic Certified",
+      "cupping": "Jasmine, Lemongrass, Clean Cup",
+      "fotoUrl": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
       "distribusi": [
         {
-          "tanggal": "2026-07-10",
-          "aktivitas": "Panen Raya Kopi Arabika Tampomas"
+          "tanggal": "2026-06-01",
+          "aktivitas": "Panen Selektif Ceri Kopi Matang"
         },
         {
-          "tanggal": "2026-07-12",
-          "aktivitas": "Natural Process Sun-Drying"
+          "tanggal": "2026-06-04",
+          "aktivitas": "Proses Pengolahan Basah (Washed Process)"
         }
       ],
       "createdBy": "farmer"
-    },  
+    }
+  ],
   "registeredUsers": [
     {
       "name": "Developer Super Admin",
@@ -37,12 +40,6 @@
       "name": "Bpk. Hendra (Petani)",
       "user": "farmer",
       "pass": "farmer2026",
-      "role": "farmer"
-    },
-    {
-      "name": "Kelompok Tani Tampomas",
-      "user": "tampomas",
-      "pass": "sumedang2026",
       "role": "farmer"
     }
   ]
