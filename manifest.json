@@ -1,8 +1,12 @@
 {
+  "id": "KopiTrace",
   "name": "KopiTrace - Traceability Kopi",
   "short_name": "KopiTrace",
   "start_url": "./index.html",
   "display": "standalone",
+  "orientation": "any",
+  "dir": "ltr",
+  "lang": "id",
   "background_color": "#78350f",
   "theme_color": "#78350f",
   "icons": [
@@ -17,31 +21,4 @@
       "type": "image/png"
     }
   ]
-}
-  "background_color": "#ffffff",
-  "dir": "ltr",
-  "display": "standalone",
-  "name": "KopiTrace",
-  "orientation": "any",
-  "scope": "/",
-  "short_name": "KopiTrace",
-  "start_url": "/",
-  "theme_color": "#78350f",
-  "icons": [
-    {
-      "src": "https://jhansenisasaac.github.io/kopitrace/logo.png",
-      "type": "image/png",
-      "sizes": "78x90",
-      "isSquare": false,
-      "isPng": true,
-      "isWebp": false,
-      "isJpg": false,
-      "width": 78,
-      "is512x512": false,
-      "is256x256": false,
-      "is192x192": false
-    }
-  {,
-  "id": "KopiTrace",
-  "lang": "id"
 }
