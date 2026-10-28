@@ -192,7 +192,7 @@
                     <p id="dash-subtitle" class="text-xs text-amber-900/70">Kelola data batch, pilih kecamatan kebun (zona otomatis), sertifikasi, dan sinkronisasi.</p>
                 </div>
                 <div class="flex flex-wrap gap-2 w-full lg:w-auto">
-                    <button onclick="openGitHubConfigModal()" class="flex-1 lg:flex-none bg-stone-800 hover:bg-stone-900 text-amber-400 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow flex items-center justify-center space-x-2">
+                    <button onclick="openGitHubConfigModal()" class="flex-1 lg:flex-none bg-stone-800 hover:bg-stone-900 text-amber-400 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow flex items-center justify-center space-x-2 cursor-pointer">
                         <i class="fa-brands fa-github"></i>
                         <span>Token Admin</span>
                     </button>
@@ -244,7 +244,7 @@
     </footer>
 
     <!-- AUTH MODAL -->
-    <div id="auth-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+    <div id="auth-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-stone-100 pb-3">
                 <h3 class="font-bold text-base sm:text-lg text-stone-900 flex items-center space-x-2">
@@ -305,14 +305,14 @@
     </div>
 
     <!-- GITHUB TOKEN CONFIG MODAL -->
-    <div id="github-config-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+    <div id="github-config-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4">
             <div class="flex justify-between items-center border-b border-stone-100 pb-3">
                 <h3 class="font-bold text-base sm:text-lg text-stone-900 flex items-center space-x-2">
                     <i class="fa-brands fa-github text-stone-900"></i>
                     <span>Token Admin (Write)</span>
                 </h3>
-                <button onclick="closeGitHubConfigModal()" class="text-stone-400 hover:text-stone-700 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="closeGitHubConfigModal()" class="text-stone-400 hover:text-stone-700 p-1 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="space-y-3 text-xs sm:text-sm">
                 <p class="text-stone-500">Repository diset ke <code>jhansenisasaac/kopitrace</code> (branch <code>main</code>). Masukkan Personal Access Token (PAT) Anda.</p>
@@ -320,13 +320,13 @@
                     <label class="block font-semibold text-stone-700 mb-1">GitHub PAT Token</label>
                     <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-700 focus:outline-none font-mono text-xs">
                 </div>
-                <button onclick="saveAdminToken()" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-semibold py-2.5 rounded-xl transition shadow text-xs sm:text-sm">Simpan Token Admin</button>
+                <button onclick="saveAdminToken()" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-semibold py-2.5 rounded-xl transition shadow text-xs sm:text-sm cursor-pointer">Simpan Token Admin</button>
             </div>
         </div>
     </div>
 
     <!-- TREE / BATCH MODAL -->
-    <div id="tree-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+    <div id="tree-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-stone-100 pb-3">
                 <h3 id="modal-tree-title" class="font-bold text-base sm:text-lg text-stone-900">Tambah Data Batch Kopi</h3>
@@ -405,7 +405,7 @@
                         <option value="Ujungjaya">Ujungjaya (Zona UTR - Utara)</option>
                         <option value="Surian">Surian (Zona UTR - Utara)</option>
                     </select>
-                    <p class="text-[11px] text-amber-900/70 italic">* Zona 3 huruf pada kode unik (Cth: UTR, SLT, TMR, BRT) akan terisi otomatis sesuai pilihan kecamatan di atas.</p>
+                    <p class="text-[11px] text-amber-900/70 italic">* Zona 3 huruf pada kode unik (Cth: UTR, SLT, TMR, BRT, CML, TGR) terisi otomatis.</p>
                 </div>
 
                 <div class="bg-stone-50 p-3 rounded-xl border border-stone-200 space-y-2">
@@ -445,7 +445,7 @@
     </div>
 
     <!-- QR MODAL -->
-    <div id="qr-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div id="qr-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl text-center space-y-4">
             <h3 class="font-bold text-base sm:text-lg text-stone-900">Label QR Code URL Asli</h3>
             <div id="qrcode-render" class="flex justify-center items-center bg-stone-50 p-4 rounded-xl border border-stone-200 min-h-[192px]"></div>
@@ -471,7 +471,7 @@
         const TARGET_GUILD_ID = '1564644279681286195';
         const ROLE_ADMIN_ID = '1564682206830665889';
 
-        // Mapping Kecamatan Sumedang ke Zona 3 Huruf (Arah Mata Angin / Wilayah) & Koordinat Peta
+        // Mapping Kecamatan Sumedang ke Zona 3 Huruf (Arah Mata Angin / Wilayah)
         const SUMEDANG_ZONES = {
             "Sumedang Utara": { zona: "UTR", lat: -6.8529, lng: 107.9205 },
             "Sumedang Selatan": { zona: "SLT", lat: -6.8687, lng: 107.9150 },
@@ -637,8 +637,20 @@
 
         async function fetchRealTimeData() {
             const statusEl = document.getElementById('github-sync-status');
-            const rawUrl = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.branch}/${GITHUB_CONFIG.path}?t=${new Date().getTime()}`;
+            const token = localStorage.getItem('kopiTraceAdminToken');
             
+            // Jika tidak ada token, gunakan mode lokal tanpa memanggil GitHub API yang menyebabkan CORS/404 error
+            if (!token) {
+                const local = localStorage.getItem('kopiTraceData');
+                coffeeData = local ? JSON.parse(local) : defaultCoffeeData;
+                if (statusEl) statusEl.innerText = 'Mode Lokal (Tanpa Token)';
+                if (currentView === 'public-home') { renderPublicCards(); updateStats(); }
+                else if (currentView === 'public-map') { initMap(); }
+                else if (currentView === 'dashboard') { renderDashboardTable(); }
+                return;
+            }
+
+            const rawUrl = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.branch}/${GITHUB_CONFIG.path}?t=${new Date().getTime()}`;
             try {
                 if (statusEl) statusEl.innerText = 'Syncing...';
                 const res = await fetch(rawUrl);
@@ -652,7 +664,7 @@
             } catch (e) {
                 const local = localStorage.getItem('kopiTraceData');
                 coffeeData = local ? JSON.parse(local) : defaultCoffeeData;
-                if (statusEl) statusEl.innerText = 'Mode Lokal';
+                if (statusEl) statusEl.innerText = 'Auto-Sync: Offline';
             }
 
             if (currentView === 'public-home') { renderPublicCards(); updateStats(); }
@@ -685,6 +697,33 @@
                 console.error("GitHub Save Error:", e); 
                 return false; 
             }
+        }
+
+        function openGitHubConfigModal() {
+            const tokenInput = document.getElementById('gh-token');
+            if (tokenInput) tokenInput.value = localStorage.getItem('kopiTraceAdminToken') || '';
+            const modal = document.getElementById('github-config-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeGitHubConfigModal() {
+            const modal = document.getElementById('github-config-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        async function saveAdminToken() {
+            const token = document.getElementById('gh-token').value.trim();
+            if (!token) { alert('Masukkan token PAT Anda!'); return; }
+            localStorage.setItem('kopiTraceAdminToken', token);
+            closeGitHubConfigModal();
+            alert('Token berhasil disimpan!');
+            await fetchRealTimeData();
         }
 
         function saveToStorage() {
@@ -751,7 +790,7 @@
             coffeeData.slice(0, 3).forEach(item => {
                 const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
                 const photo = item.fotoUrl || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80';
-                const kecamatanStr = item.kecamatan ? `Kec. ${item.kecamatan}` : `Zona ${item.zona}`;
+                const kecamatanStr = item.kecamatan ? `Kec. ${item.kecamatan} (${item.zona})` : `Zona ${item.zona}`;
                 container.innerHTML += `
                     <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden space-y-3 hover:shadow-md transition">
                         <div class="h-36 sm:h-40 overflow-hidden bg-stone-200 relative">
@@ -766,7 +805,7 @@
                             </div>
                             <div class="text-xs text-stone-600 pt-2 border-t border-stone-100 flex justify-between items-center">
                                 <span><i class="fa-solid fa-certificate text-emerald-600 mr-1"></i>${item.sertifikasi ? item.sertifikasi.split('&')[0] : 'Standar Mutu'}</span>
-                                <button onclick="selectAndTrace('${code}')" class="text-amber-700 font-bold hover:underline">Lacak &rarr;</button>
+                                <button onclick="selectAndTrace('${code}')" class="text-amber-700 font-bold hover:underline cursor-pointer">Lacak &rarr;</button>
                             </div>
                         </div>
                     </div>
@@ -781,7 +820,7 @@
             coffeeData.forEach(item => {
                 const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
                 container.innerHTML += `
-                    <button onclick="fillAndTrace('${code}')" class="bg-stone-100 hover:bg-amber-100 text-stone-800 hover:text-amber-900 text-xs font-mono px-3 py-1.5 rounded-lg border border-stone-200 transition">
+                    <button onclick="fillAndTrace('${code}')" class="bg-stone-100 hover:bg-amber-100 text-stone-800 hover:text-amber-900 text-xs font-mono px-3 py-1.5 rounded-lg border border-stone-200 transition cursor-pointer">
                         ${code}
                     </button>
                 `;
@@ -927,8 +966,8 @@
                     <div class="space-y-1 text-xs">
                         <b class="font-mono text-amber-800 text-sm">${code}</b><br>
                         <b>Petani:</b> ${item.petani}<br>
-                        <b>Kec. ${item.kecamatan || 'Sumedang'}</b><br>
-                        <button onclick="selectAndTrace('${code}')" class="mt-2 bg-amber-700 text-white px-2 py-1 rounded font-semibold w-full">Lacak</button>
+                        <b>Kec. ${item.kecamatan || 'Sumedang'} (${item.zona})</b><br>
+                        <button onclick="selectAndTrace('${code}')" class="mt-2 bg-amber-700 text-white px-2 py-1 rounded font-semibold w-full cursor-pointer">Lacak</button>
                     </div>
                 `);
                 markersLayer.addLayer(marker);
@@ -948,8 +987,20 @@
             if (e.ctrlKey && e.shiftKey && e.key.toUpperCase() === 'A') { e.preventDefault(); openAuthModal(); }
         });
 
-        function openAuthModal() { document.getElementById('auth-modal').classList.remove('hidden'); }
-        function closeAuthModal() { document.getElementById('auth-modal').classList.add('hidden'); }
+        function openAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+        function closeAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
 
         function switchAuthTab(tab) {
             const loginPane = document.getElementById('form-login-pane');
@@ -984,7 +1035,7 @@
             const name = document.getElementById('reg-name').value.trim();
             const u = document.getElementById('reg-user').value.trim();
             const p = document.getElementById('reg-pass').value.trim();
-            if (!name || !u || !p) { document.getElementById('reg-error').classList.add('hidden'); return; }
+            if (!name || !u || !p) { document.getElementById('reg-error').classList.remove('hidden'); return; }
             if (registeredUsers.some(item => item.user === u)) { alert('Username sudah digunakan!'); return; }
             const newUser = { name, user: u, pass: p, role: 'farmer' };
             registeredUsers.push(newUser); currentUser = newUser;
@@ -1030,9 +1081,9 @@
                         <td class="p-3 sm:p-4">${item.petani}</td>
                         <td class="p-3 sm:p-4">${item.varietas}</td>
                         <td class="p-3 sm:p-4 text-center space-x-1">
-                            <button onclick="openQrModal('${code}')" class="text-stone-600 hover:text-stone-900 p-1.5" title="QR"><i class="fa-solid fa-qrcode"></i></button>
-                            <button onclick="openEditTreeModal(${actualIndex})" class="text-amber-700 hover:text-amber-900 p-1.5" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button onclick="deleteTreeData(${actualIndex})" class="text-red-600 hover:text-red-800 p-1.5" title="Hapus"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="openQrModal('${code}')" class="text-stone-600 hover:text-stone-900 p-1.5 cursor-pointer" title="QR"><i class="fa-solid fa-qrcode"></i></button>
+                            <button onclick="openEditTreeModal(${actualIndex})" class="text-amber-700 hover:text-amber-900 p-1.5 cursor-pointer" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteTreeData(${actualIndex})" class="text-red-600 hover:text-red-800 p-1.5 cursor-pointer" title="Hapus"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `;
@@ -1046,7 +1097,9 @@
             document.getElementById('form-foto').value = '';
             document.getElementById('preview-container').classList.add('hidden');
             if (currentUser && currentUser.role === 'farmer') document.getElementById('form-petani').value = currentUser.name;
-            document.getElementById('tree-modal').classList.remove('hidden');
+            const modal = document.getElementById('tree-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
         function openEditTreeModal(index) {
@@ -1073,10 +1126,16 @@
                 document.getElementById('preview-container').classList.remove('hidden');
             } else { document.getElementById('preview-container').classList.add('hidden'); }
             document.getElementById('form-distribusi').value = item.distribusi ? item.distribusi.map(d => `${d.tanggal} | ${d.aktivitas}`).join('\n') : '';
-            document.getElementById('tree-modal').classList.remove('hidden');
+            const modal = document.getElementById('tree-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
-        function closeTreeModal() { document.getElementById('tree-modal').classList.add('hidden'); }
+        function closeTreeModal() {
+            const modal = document.getElementById('tree-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
 
         function saveTreeData(e) {
             e.preventDefault();
@@ -1136,9 +1195,15 @@
             const container = document.getElementById('qrcode-render');
             container.innerHTML = '';
             try { new QRCode(container, { text: fullBatchUrl, width: 150, height: 150 }); } catch (err) {}
-            document.getElementById('qr-modal').classList.remove('hidden');
+            const modal = document.getElementById('qr-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
-        function closeQrModal() { document.getElementById('qr-modal').classList.add('hidden'); }
+        function closeQrModal() {
+            const modal = document.getElementById('qr-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
 
         function exportDataJSON() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ coffeeData, registeredUsers }, null, 2));
