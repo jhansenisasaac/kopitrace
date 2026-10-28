@@ -33,6 +33,13 @@
       "user": "farmer",
       "pass": "farmer2026",
       "role": "farmer"
+    },
+    {
+      "name": "sudarmin",
+      "user": "imin",
+      "pass": "iminsudarmin",
+      "wa": "085163225621",
+      "role": "farmer"
     }
   ]
 }
