@@ -761,12 +761,12 @@
 
         // Data Dinamis Petani & Prosesor tersinkron ke database.json / localStorage
         let defaultFarmers = [
-            { name: "Bpk. Hendra & Kelompok Tani Tampomas Lestari", location: "Kec. Cimalaka & Sumedang Utara (Zona CML & UTR)", mdpl: "1.200 – 1.500 MDPL", varietas: "Arabica Line S, Sigarar Utang, Typica", desc: "Berada di tanah vulkanik subur, meneruskan tradisi leluhur perkebunan kopi Java Preanger dengan pendekatan modern ramah lingkungan serta sistem panen pilih merah (selective picking).", foto: "https://images.unsplash.com/photo-1595974482597-4f82c4e0dd10?auto=format&fit=crop&w=400&q=80" }
+            { name: "Bpk. Hendra & Kelompok Tani Tampomas Lestari", location: "Kec. Cimalaka & Sumedang Utara (Zona CML & UTR)", mdpl: "1.200 – 1.500 MDPL", varietas: "Arabica Line S, Sigarar Utang, Typica", desc: "Berada di tanah vulkanik subur, meneruskan tradisi leluhur perkebunan kopi Java Preanger dengan pendekatan modern ramah lingkungan serta sistem panen pilih merah (selective picking).", foto: "https://images.unsplash.com/photo-1595974482597-4f82c4e0dd10?auto=format&fit=crop&w=400&q=80", createdBy: "dev" }
         ];
         let farmersData = JSON.parse(localStorage.getItem('kopiTraceFarmers')) || defaultFarmers;
 
         let defaultProcessors = [
-            { name: "Preanger Processing Station (Sumedang Coffee Mill)", location: "Kecamatan Rancakalong (Zona TGR - Tengah)", methods: "Washed, Natural, Experimental Honey & Winey", desc: "Berperan sebagai jembatan penting antara petani dan roastery, digawangi anak muda lokal yang ahli mengontrol fermentasi untuk menciptakan clean cup dan fruity notes terbaik.", foto: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=400&q=80" }
+            { name: "Preanger Processing Station (Sumedang Coffee Mill)", location: "Kecamatan Rancakalong (Zona TGR - Tengah)", methods: "Washed, Natural, Experimental Honey & Winey", desc: "Berperan sebagai jembatan penting antara petani dan roastery, digawangi anak muda lokal yang ahli mengontrol fermentasi untuk menciptakan clean cup dan fruity notes terbaik.", foto: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=400&q=80", createdBy: "dev" }
         ];
         let processorsData = JSON.parse(localStorage.getItem('kopiTraceProcessors')) || defaultProcessors;
 
@@ -834,7 +834,6 @@
     const statusEl = document.getElementById('github-sync-status');
     const token = GITHUB_CONFIG.token || localStorage.getItem('kopiTraceAdminToken');
 
-    // 1. URL Raw GitHub untuk menarik data secara publik & real-time tanpa token bagi pengunjung
     const rawUrl = `https://raw.githubusercontent.com/jhansenisasaac/kopitrace/main/database.json?t=${new Date().getTime()}`;
     
     try {
@@ -843,7 +842,6 @@
         if (!res.ok) throw new Error('404');
         const data = await res.json();
         
-        // Memperbarui data aplikasi secara otomatis dari file database.json
         if (data.coffeeData) coffeeData = data.coffeeData;
         if (data.registeredUsers) registeredUsers = data.registeredUsers;
         if (data.supplyChainData) { 
@@ -859,7 +857,6 @@
             localStorage.setItem('kopiTraceProcessors', JSON.stringify(processorsData));
         }
 
-        // Simpan ke localStorage sebagai cadangan offline
         localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
         localStorage.setItem('kopiTraceUsers', JSON.stringify(registeredUsers));
         
@@ -868,7 +865,6 @@
         renderProcessorProfilesUI();
         if (statusEl) statusEl.innerText = 'Auto-Sync: Aktif';
     } catch (e) {
-        // Fallback ke penyimpanan lokal jika offline atau gagal fetch
         const local = localStorage.getItem('kopiTraceData');
         coffeeData = local ? JSON.parse(local) : defaultCoffeeData;
         if (statusEl) statusEl.innerText = 'Auto-Sync: Offline';
@@ -957,7 +953,7 @@
             if (!container) return;
             let html = '';
             farmersData.forEach((f, idx) => {
-                const isAdmin = currentUser && (currentUser.role === 'dev' || currentUser.role === 'farmer');
+                const isOwnerOrDev = currentUser && (currentUser.role === 'dev' || (currentUser.role === 'farmer' && f.createdBy === currentUser.user));
                 html += `
                     <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 space-y-3 flex flex-col justify-between">
                         <div class="space-y-2">
@@ -969,7 +965,7 @@
                                         <span class="text-[11px] text-amber-800 font-semibold"><i class="fa-solid fa-location-dot mr-1"></i>${f.location}</span>
                                     </div>
                                 </div>
-                                ${isAdmin ? `
+                                ${isOwnerOrDev ? `
                                 <div class="flex space-x-1">
                                     <button onclick="openEditFarmerModal(${idx})" class="text-amber-700 hover:text-amber-900 p-1.5 bg-amber-50 rounded-lg cursor-pointer" title="Edit Profil"><i class="fa-solid fa-pen-to-square text-xs"></i></button>
                                     <button onclick="deleteFarmerProfile(${idx})" class="text-red-600 hover:text-red-800 p-1.5 bg-red-50 rounded-lg cursor-pointer" title="Hapus Profil"><i class="fa-solid fa-trash text-xs"></i></button>
@@ -989,110 +985,112 @@
         }
 
         function renderProcessorProfilesUI() {
-    const container = document.getElementById('processor-profiles-container');
-    if (!container) return;
-    let html = '';
-    processorsData.forEach((p, idx) => {
-        const isOwnerOrDev = currentUser && (currentUser.role === 'dev' || (currentUser.role === 'farmer' && p.createdBy === currentUser.user));
-        
-        html += `
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 space-y-3 flex flex-col justify-between">
-                <div class="space-y-2">
-                    <div class="flex items-start justify-between">
-                        <div class="flex items-center space-x-3">
-                            <img src="${p.foto || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=200&q=80'}" alt="Prosesor" class="w-14 h-14 rounded-xl object-cover border border-amber-600/40 shadow">
-                            <div>
-                                <h4 class="font-bold text-stone-900 text-base">${p.name}</h4>
-                                <span class="text-[11px] text-amber-800 font-semibold"><i class="fa-solid fa-location-dot mr-1"></i>${p.location}</span>
+            const container = document.getElementById('processor-profiles-container');
+            if (!container) return;
+            let html = '';
+            processorsData.forEach((p, idx) => {
+                const isOwnerOrDev = currentUser && (currentUser.role === 'dev' || (currentUser.role === 'farmer' && p.createdBy === currentUser.user));
+                html += `
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 space-y-3 flex flex-col justify-between">
+                        <div class="space-y-2">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <img src="${p.foto || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=200&q=80'}" alt="Prosesor" class="w-14 h-14 rounded-xl object-cover border border-amber-600/40 shadow">
+                                    <div>
+                                        <h4 class="font-bold text-stone-900 text-base">${p.name}</h4>
+                                        <span class="text-[11px] text-amber-800 font-semibold"><i class="fa-solid fa-location-dot mr-1"></i>${p.location}</span>
+                                    </div>
+                                </div>
+                                ${isOwnerOrDev ? `
+                                <div class="flex space-x-1">
+                                    <button onclick="openEditProcessorModal(${idx})" class="text-amber-700 hover:text-amber-900 p-1.5 bg-amber-50 rounded-lg cursor-pointer" title="Edit Profil"><i class="fa-solid fa-pen-to-square text-xs"></i></button>
+                                    <button onclick="deleteProcessorProfile(${idx})" class="text-red-600 hover:text-red-800 p-1.5 bg-red-50 rounded-lg cursor-pointer" title="Hapus Profil"><i class="fa-solid fa-trash text-xs"></i></button>
+                                </div>
+                                ` : ''}
                             </div>
+                            <p class="text-xs text-stone-600 leading-relaxed pt-1">${p.desc}</p>
                         </div>
-                        ${isOwnerOrDev ? `
-                        <div class="flex space-x-1">
-                            <button onclick="openEditProcessorModal(${idx})" class="text-amber-700 hover:text-amber-900 p-1.5 bg-amber-50 rounded-lg cursor-pointer" title="Edit Profil"><i class="fa-solid fa-pen-to-square text-xs"></i></button>
-                            <button onclick="deleteProcessorProfile(${idx})" class="text-red-600 hover:text-red-800 p-1.5 bg-red-50 rounded-lg cursor-pointer" title="Hapus Profil"><i class="fa-solid fa-trash text-xs"></i></button>
+                        <div class="pt-3 border-t border-stone-100 text-[11px] text-stone-500">
+                            <strong class="text-stone-800">Metode Unggulan:</strong> <span class="text-amber-900 font-medium">${p.methods}</span>
                         </div>
-                        ` : ''}
                     </div>
-                    <p class="text-xs text-stone-600 leading-relaxed pt-1">${p.desc}</p>
-                </div>
-                <div class="pt-3 border-t border-stone-100 text-[11px] text-stone-500">
-                    <strong class="text-stone-800">Metode Unggulan:</strong> <span class="text-amber-900 font-medium">${p.methods}</span>
-                </div>
-            </div>
-        `;
-    });
-    container.innerHTML = html;
-}
+                `;
+            });
+            container.innerHTML = html;
+        }
+
         function renderDashboardProfilesLists() {
             const fList = document.getElementById('dash-farmers-list');
             const pList = document.getElementById('dash-processors-list');
             if (fList) {
-                fList.innerHTML = farmersData.map((f, idx) => `
+                fList.innerHTML = farmersData.map((f, idx) => {
+                    const canEdit = !currentUser || currentUser.role === 'dev' || f.createdBy === currentUser.user;
+                    return `
                     <div class="flex items-center justify-between bg-stone-50 p-2.5 rounded-xl border border-stone-200">
                         <div class="truncate pr-2">
                             <div class="font-bold text-stone-900">${f.name}</div>
                             <div class="text-[10px] text-stone-500">${f.location}</div>
                         </div>
                         <div class="flex space-x-1 shrink-0">
+                            ${canEdit ? `
                             <button onclick="openEditFarmerModal(${idx})" class="px-2 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold rounded text-[11px] cursor-pointer">Edit</button>
                             <button onclick="deleteFarmerProfile(${idx})" class="px-2 py-1 bg-red-100 hover:bg-red-200 text-red-700 font-bold rounded text-[11px] cursor-pointer">Hapus</button>
+                            ` : `<span class="text-[10px] text-stone-400 italic px-2 py-1">Terkunci</span>`}
                         </div>
                     </div>
-                `).join('') || '<div class="text-stone-400 italic">Belum ada data petani.</div>';
+                `;
+                }).join('') || '<div class="text-stone-400 italic">Belum ada data petani.</div>';
             }
             if (pList) {
-                pList.innerHTML = processorsData.map((p, idx) => `
+                pList.innerHTML = processorsData.map((p, idx) => {
+                    const canEdit = !currentUser || currentUser.role === 'dev' || p.createdBy === currentUser.user;
+                    return `
                     <div class="flex items-center justify-between bg-stone-50 p-2.5 rounded-xl border border-stone-200">
                         <div class="truncate pr-2">
                             <div class="font-bold text-stone-900">${p.name}</div>
                             <div class="text-[10px] text-stone-500">${p.location}</div>
                         </div>
                         <div class="flex space-x-1 shrink-0">
+                            ${canEdit ? `
                             <button onclick="openEditProcessorModal(${idx})" class="px-2 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold rounded text-[11px] cursor-pointer">Edit</button>
                             <button onclick="deleteProcessorProfile(${idx})" class="px-2 py-1 bg-red-100 hover:bg-red-200 text-red-700 font-bold rounded text-[11px] cursor-pointer">Hapus</button>
+                            ` : `<span class="text-[10px] text-stone-400 italic px-2 py-1">Terkunci</span>`}
                         </div>
                     </div>
-                `).join('') || '<div class="text-stone-400 italic">Belum ada data prosesor.</div>';
+                `;
+                }).join('') || '<div class="text-stone-400 italic">Belum ada data prosesor.</div>';
             }
         }
 
-        function renderFarmerProfilesUI() {
-    const container = document.getElementById('farmer-profiles-container');
-    if (!container) return;
-    let html = '';
-    farmersData.forEach((f, idx) => {
-        // Hanya Admin (dev) atau pemilik data (createdBy) yang bisa melihat tombol edit/hapus
-        const isOwnerOrDev = currentUser && (currentUser.role === 'dev' || (currentUser.role === 'farmer' && f.createdBy === currentUser.user));
-        
-        html += `
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 space-y-3 flex flex-col justify-between">
-                <div class="space-y-2">
-                    <div class="flex items-start justify-between">
-                        <div class="flex items-center space-x-3">
-                            <img src="${f.foto || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80'}" alt="Petani" class="w-14 h-14 rounded-xl object-cover border border-amber-600/40 shadow">
-                            <div>
-                                <h4 class="font-bold text-stone-900 text-base">${f.name}</h4>
-                                <span class="text-[11px] text-amber-800 font-semibold"><i class="fa-solid fa-location-dot mr-1"></i>${f.location}</span>
-                            </div>
-                        </div>
-                        ${isOwnerOrDev ? `
-                        <div class="flex space-x-1">
-                            <button onclick="openEditFarmerModal(${idx})" class="text-amber-700 hover:text-amber-900 p-1.5 bg-amber-50 rounded-lg cursor-pointer" title="Edit Profil"><i class="fa-solid fa-pen-to-square text-xs"></i></button>
-                            <button onclick="deleteFarmerProfile(${idx})" class="text-red-600 hover:text-red-800 p-1.5 bg-red-50 rounded-lg cursor-pointer" title="Hapus Profil"><i class="fa-solid fa-trash text-xs"></i></button>
-                        </div>
-                        ` : ''}
-                    </div>
-                    <p class="text-xs text-stone-600 leading-relaxed pt-1">${f.desc}</p>
-                </div>
-                <div class="pt-3 border-t border-stone-100 grid grid-cols-2 gap-2 text-[11px] font-medium text-stone-500">
-                    <div><strong class="text-stone-800">MDPL:</strong> ${f.mdpl}</div>
-                    <div><strong class="text-stone-800">Varietas:</strong> ${f.varietas}</div>
-                </div>
-            </div>
-        `;
-    });
-    container.innerHTML = html;
-}
+        function handleFarmerImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64String = e.target.result;
+                    document.getElementById('form-farmer-foto').value = base64String;
+                    const preview = document.getElementById('farmer-photo-preview');
+                    const container = document.getElementById('farmer-preview-container');
+                    if (preview && container) { preview.src = base64String; container.classList.remove('hidden'); }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleProcessorImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64String = e.target.result;
+                    document.getElementById('form-proc-foto').value = base64String;
+                    const preview = document.getElementById('processor-photo-preview');
+                    const container = document.getElementById('processor-preview-container');
+                    if (preview && container) { preview.src = base64String; container.classList.remove('hidden'); }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
 
         function openAddFarmerModal() {
             document.getElementById('farmer-modal-title').innerHTML = `<i class="fa-solid fa-user-plus text-amber-700"></i><span>Tambah Profil Petani Baru</span>`;
@@ -1105,32 +1103,29 @@
         }
 
         function openEditFarmerModal(index) {
-    const f = farmersData[index];
-    if (!f) return;
-    
-    // Validasi: Jika akun petani mencoba mengedit profil milik orang lain
-    if (currentUser && currentUser.role === 'farmer' && f.createdBy && f.createdBy !== currentUser.user) {
-        alert('Akses Ditolak! Anda tidak memiliki izin untuk mengedit profil petani lain.');
-        return;
-    }
-
-    document.getElementById('farmer-modal-title').innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-700"></i><span>Edit Profil Petani</span>`;
-    document.getElementById('farmer-edit-index').value = index;
-    document.getElementById('form-farmer-name').value = f.name;
-    document.getElementById('form-farmer-location').value = f.location;
-    document.getElementById('form-farmer-mdpl').value = f.mdpl;
-    document.getElementById('form-farmer-varietas').value = f.varietas;
-    document.getElementById('form-farmer-desc').value = f.desc;
-    document.getElementById('form-farmer-foto').value = f.foto || '';
-    if (f.foto) {
-        document.getElementById('farmer-photo-preview').src = f.foto;
-        document.getElementById('farmer-preview-container').classList.remove('hidden');
-    } else {
-        document.getElementById('farmer-preview-container').classList.add('hidden');
-    }
-    const modal = document.getElementById('farmer-modal');
-    modal.classList.remove('hidden'); modal.classList.add('flex');
-}
+            const f = farmersData[index];
+            if (!f) return;
+            if (currentUser && currentUser.role === 'farmer' && f.createdBy && f.createdBy !== currentUser.user) {
+                alert('Akses Ditolak! Anda tidak dapat mengedit profil milik petani lain.');
+                return;
+            }
+            document.getElementById('farmer-modal-title').innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-700"></i><span>Edit Profil Petani</span>`;
+            document.getElementById('farmer-edit-index').value = index;
+            document.getElementById('form-farmer-name').value = f.name;
+            document.getElementById('form-farmer-location').value = f.location;
+            document.getElementById('form-farmer-mdpl').value = f.mdpl;
+            document.getElementById('form-farmer-varietas').value = f.varietas;
+            document.getElementById('form-farmer-desc').value = f.desc;
+            document.getElementById('form-farmer-foto').value = f.foto || '';
+            if (f.foto) {
+                document.getElementById('farmer-photo-preview').src = f.foto;
+                document.getElementById('farmer-preview-container').classList.remove('hidden');
+            } else {
+                document.getElementById('farmer-preview-container').classList.add('hidden');
+            }
+            const modal = document.getElementById('farmer-modal');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        }
 
         function closeFarmerModal() {
             const modal = document.getElementById('farmer-modal');
@@ -1138,42 +1133,52 @@
         }
 
         function saveFarmerProfile(e) {
-    e.preventDefault();
-    const index = parseInt(document.getElementById('farmer-edit-index').value);
-    
-    // Validasi keamanan saat menyimpan perubahan
-    if (currentUser && currentUser.role === 'farmer') {
-        if (index !== -1 && farmersData[index].createdBy && farmersData[index].createdBy !== currentUser.user) {
-            alert('Akses Ditolak!');
-            return;
+            e.preventDefault();
+            const index = parseInt(document.getElementById('farmer-edit-index').value);
+            
+            if (currentUser && currentUser.role === 'farmer' && index !== -1) {
+                if (farmersData[index].createdBy && farmersData[index].createdBy !== currentUser.user) {
+                    alert('Akses Ditolak!');
+                    return;
+                }
+            }
+
+            const existingFoto = index !== -1 ? farmersData[index].foto : '';
+            const fotoValue = document.getElementById('form-farmer-foto').value.trim() || existingFoto || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80';
+            
+            const farmerObj = {
+                name: document.getElementById('form-farmer-name').value.trim(),
+                location: document.getElementById('form-farmer-location').value.trim(),
+                mdpl: document.getElementById('form-farmer-mdpl').value.trim(),
+                varietas: document.getElementById('form-farmer-varietas').value.trim(),
+                desc: document.getElementById('form-farmer-desc').value.trim(),
+                foto: fotoValue,
+                createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : (farmersData[index].createdBy || 'dev')
+            };
+            if (index === -1) {
+                farmersData.push(farmerObj);
+            } else {
+                farmersData[index] = farmerObj;
+            }
+            saveToStorage();
+            closeFarmerModal();
+            renderFarmerProfilesUI();
+            renderDashboardProfilesLists();
+            alert('Profil Petani berhasil disimpan dan disinkronkan!');
         }
-    }
 
-    const existingFoto = index !== -1 ? farmersData[index].foto : '';
-    const fotoValue = document.getElementById('form-farmer-foto').value.trim() || existingFoto || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80';
-    
-    const farmerObj = {
-        name: document.getElementById('form-farmer-name').value.trim(),
-        location: document.getElementById('form-farmer-location').value.trim(),
-        mdpl: document.getElementById('form-farmer-mdpl').value.trim(),
-        varietas: document.getElementById('form-farmer-varietas').value.trim(),
-        desc: document.getElementById('form-farmer-desc').value.trim(),
-        foto: fotoValue,
-        // Simpan pembuat data (jika baru, gunakan user aktif; jika edit, pertahankan pembuat aslinya)
-        createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : (farmersData[index].createdBy || 'dev')
-    };
-
-    if (index === -1) {
-        farmersData.push(farmerObj);
-    } else {
-        farmersData[index] = farmerObj;
-    }
-    saveToStorage();
-    closeFarmerModal();
-    renderFarmerProfilesUI();
-    renderDashboardProfilesLists();
-    alert('Profil Petani berhasil disimpan dan disinkronkan!');
-}
+        function deleteFarmerProfile(index) {
+            if (currentUser && currentUser.role === 'farmer' && farmersData[index].createdBy && farmersData[index].createdBy !== currentUser.user) {
+                alert('Akses Ditolak! Anda tidak dapat menghapus profil milik petani lain.');
+                return;
+            }
+            if (confirm('Yakin ingin menghapus profil petani ini?')) {
+                farmersData.splice(index, 1);
+                saveToStorage();
+                renderFarmerProfilesUI();
+                renderDashboardProfilesLists();
+            }
+        }
 
         function openAddProcessorModal() {
             document.getElementById('processor-modal-title').innerHTML = `<i class="fa-solid fa-industry text-amber-700"></i><span>Tambah Rumah Prosesor Baru</span>`;
@@ -1186,43 +1191,28 @@
         }
 
         function openEditProcessorModal(index) {
-    const p = processorsData[index];
-    if (!p) return;
-    
-    // Validasi: Jika akun petani mencoba mengedit profil prosesor milik orang lain
-    if (currentUser && currentUser.role === 'farmer' && p.createdBy && p.createdBy !== currentUser.user) {
-        alert('Akses Ditolak! Anda tidak memiliki izin untuk mengedit profil prosesor lain.');
-        return;
-    }
-
-    document.getElementById('processor-modal-title').innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-700"></i><span>Edit Profil Prosesor</span>`;
-    document.getElementById('processor-edit-index').value = index;
-    document.getElementById('form-proc-name').value = p.name;
-    document.getElementById('form-proc-location').value = p.location;
-    document.getElementById('form-proc-methods').value = p.methods;
-    document.getElementById('form-proc-desc').value = p.desc;
-    document.getElementById('form-proc-foto').value = p.foto || '';
-    if (p.foto) {
-        document.getElementById('processor-photo-preview').src = p.foto;
-        document.getElementById('processor-preview-container').classList.remove('hidden');
-    } else {
-        document.getElementById('processor-preview-container').classList.add('hidden');
-    }
-    const modal = document.getElementById('processor-modal');
-    modal.classList.remove('hidden'); modal.classList.add('flex');
-}
-        function deleteFarmerProfile(index) {
-    if (currentUser && currentUser.role === 'farmer' && farmersData[index].createdBy && farmersData[index].createdBy !== currentUser.user) {
-        alert('Akses Ditolak! Anda tidak dapat menghapus profil milik petani lain.');
-        return;
-    }
-    if (confirm('Yakin ingin menghapus profil petani ini?')) {
-        farmersData.splice(index, 1);
-        saveToStorage();
-        renderFarmerProfilesUI();
-        renderDashboardProfilesLists();
-    }
-}
+            const p = processorsData[index];
+            if (!p) return;
+            if (currentUser && currentUser.role === 'farmer' && p.createdBy && p.createdBy !== currentUser.user) {
+                alert('Akses Ditolak! Anda tidak dapat mengedit profil prosesor milik pihak lain.');
+                return;
+            }
+            document.getElementById('processor-modal-title').innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-700"></i><span>Edit Profil Prosesor</span>`;
+            document.getElementById('processor-edit-index').value = index;
+            document.getElementById('form-proc-name').value = p.name;
+            document.getElementById('form-proc-location').value = p.location;
+            document.getElementById('form-proc-methods').value = p.methods;
+            document.getElementById('form-proc-desc').value = p.desc;
+            document.getElementById('form-proc-foto').value = p.foto || '';
+            if (p.foto) {
+                document.getElementById('processor-photo-preview').src = p.foto;
+                document.getElementById('processor-preview-container').classList.remove('hidden');
+            } else {
+                document.getElementById('processor-preview-container').classList.add('hidden');
+            }
+            const modal = document.getElementById('processor-modal');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        }
 
         function closeProcessorModal() {
             const modal = document.getElementById('processor-modal');
@@ -1230,52 +1220,79 @@
         }
 
         function saveProcessorProfile(e) {
-    e.preventDefault();
-    const index = parseInt(document.getElementById('processor-edit-index').value);
-    
-    if (currentUser && currentUser.role === 'farmer') {
-        if (index !== -1 && processorsData[index].createdBy && processorsData[index].createdBy !== currentUser.user) {
-            alert('Akses Ditolak!');
-            return;
+            e.preventDefault();
+            const index = parseInt(document.getElementById('processor-edit-index').value);
+            
+            if (currentUser && currentUser.role === 'farmer' && index !== -1) {
+                if (processorsData[index].createdBy && processorsData[index].createdBy !== currentUser.user) {
+                    alert('Akses Ditolak!');
+                    return;
+                }
+            }
+
+            const existingFoto = index !== -1 ? processorsData[index].foto : '';
+            const fotoValue = document.getElementById('form-proc-foto').value.trim() || existingFoto || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=200&q=80';
+
+            const procObj = {
+                name: document.getElementById('form-proc-name').value.trim(),
+                location: document.getElementById('form-proc-location').value.trim(),
+                methods: document.getElementById('form-proc-methods').value.trim(),
+                desc: document.getElementById('form-proc-desc').value.trim(),
+                foto: fotoValue,
+                createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : (processorsData[index].createdBy || 'dev')
+            };
+            if (index === -1) {
+                processorsData.push(procObj);
+            } else {
+                processorsData[index] = procObj;
+            }
+            saveToStorage();
+            closeProcessorModal();
+            renderProcessorProfilesUI();
+            renderDashboardProfilesLists();
+            alert('Profil Prosesor berhasil disimpan dan disinkronkan!');
         }
-    }
-
-    const existingFoto = index !== -1 ? processorsData[index].foto : '';
-    const fotoValue = document.getElementById('form-proc-foto').value.trim() || existingFoto || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=200&q=80';
-
-    const procObj = {
-        name: document.getElementById('form-proc-name').value.trim(),
-        location: document.getElementById('form-proc-location').value.trim(),
-        methods: document.getElementById('form-proc-methods').value.trim(),
-        desc: document.getElementById('form-proc-desc').value.trim(),
-        foto: fotoValue,
-        createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : (processorsData[index].createdBy || 'dev')
-    };
-
-    if (index === -1) {
-        processorsData.push(procObj);
-    } else {
-        processorsData[index] = procObj;
-    }
-    saveToStorage();
-    closeProcessorModal();
-    renderProcessorProfilesUI();
-    renderDashboardProfilesLists();
-    alert('Profil Prosesor berhasil disimpan dan disinkronkan!');
-}
 
         function deleteProcessorProfile(index) {
-    if (currentUser && currentUser.role === 'farmer' && processorsData[index].createdBy && processorsData[index].createdBy !== currentUser.user) {
-        alert('Akses Ditolak!');
-        return;
-    }
-    if (confirm('Yakin ingin menghapus profil prosesor ini?')) {
-        processorsData.splice(index, 1);
-        saveToStorage();
-        renderProcessorProfilesUI();
-        renderDashboardProfilesLists();
-    }
-}
+            if (currentUser && currentUser.role === 'farmer' && processorsData[index].createdBy && processorsData[index].createdBy !== currentUser.user) {
+                alert('Akses Ditolak! Anda tidak dapat menghapus profil prosesor milik pihak lain.');
+                return;
+            }
+            if (confirm('Yakin ingin menghapus profil prosesor ini?')) {
+                processorsData.splice(index, 1);
+                saveToStorage();
+                renderProcessorProfilesUI();
+                renderDashboardProfilesLists();
+            }
+        }
+
+        function openSupplyEditModal() {
+            document.getElementById('input-txt-hulu').value = supplyChainData.hulu;
+            document.getElementById('input-txt-pascapanen').value = supplyChainData.pascapanen;
+            document.getElementById('input-txt-trace').value = supplyChainData.trace;
+            document.getElementById('input-txt-hilir').value = supplyChainData.hilir;
+            const modal = document.getElementById('supply-edit-modal');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        }
+
+        function closeSupplyEditModal() {
+            const modal = document.getElementById('supply-edit-modal');
+            modal.classList.add('hidden'); modal.classList.remove('flex');
+        }
+
+        function saveSupplyChain() {
+            supplyChainData = {
+                hulu: document.getElementById('input-txt-hulu').value.trim(),
+                pascapanen: document.getElementById('input-txt-pascapanen').value.trim(),
+                trace: document.getElementById('input-txt-trace').value.trim(),
+                hilir: document.getElementById('input-txt-hilir').value.trim()
+            };
+            saveToStorage();
+            closeSupplyEditModal();
+            renderSupplyChainUI();
+            alert('Analisis Hulu ke Hilir berhasil diperbarui!');
+        }
+
         function installAppPrompt() {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
