@@ -1,17 +1,5 @@
 {
-  "coffeeData": [
-    {
-      "id": "UTR-001",
-      "name": "Arabica Sumedang Utara - Natural",
-      "zone": "UTR",
-      "farmer": "ucok",
-      "processor": "Preanger Processing Station (Sumedang Coffee Mill)",
-      "roastLevel": "Medium to Dark",
-      "harvestDate": "2026-06-15",
-      "notes": "Floral, Fruity, Sweet Caramel",
-      "story": "Kopi pilihan yang dipetik merah dari lereng Gunung Tampomas dengan proses pascapanen metode natural untuk menonjolkan cita rasa buah yang kuat."
-    }
-  ],
+  "coffeeData": [],
   "registeredUsers": [
     {
       "name": "Developer Super Admin",
