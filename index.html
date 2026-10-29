@@ -832,9 +832,8 @@
         }
         async function fetchRealTimeData() {
     const statusEl = document.getElementById('github-sync-status');
-    const token = localStorage.getItem('kopiTraceAdminToken');
 
-    // URL Raw GitHub untuk menarik data secara publik & real-time dengan anti-cache timestamp
+    // Mengambil data langsung dari Raw GitHub secara publik tanpa memedulikan token login/admin
     const rawUrl = `https://raw.githubusercontent.com/jhansenisasaac/kopitrace/main/database.json?t=${new Date().getTime()}`;
     
     try {
@@ -843,7 +842,7 @@
         if (!res.ok) throw new Error('404');
         const data = await res.json();
         
-        // Memperbarui data aplikasi secara otomatis dari file database.json
+        // Memperbarui data aplikasi secara otomatis untuk publik
         if (data.coffeeData) coffeeData = data.coffeeData;
         if (data.registeredUsers) registeredUsers = data.registeredUsers;
         if (data.supplyChainData) { 
@@ -868,7 +867,7 @@
         renderProcessorProfilesUI();
         if (statusEl) statusEl.innerText = 'Auto-Sync: Aktif';
     } catch (e) {
-        // Fallback ke penyimpanan lokal jika offline atau gagal fetch
+        // Fallback ke penyimpanan lokal jika offline
         const local = localStorage.getItem('kopiTraceData');
         coffeeData = local ? JSON.parse(local) : defaultCoffeeData;
         if (statusEl) statusEl.innerText = 'Auto-Sync: Offline';
