@@ -757,18 +757,14 @@
             hilir: "Distribusi ke gudang logistik, gerai specialty coffee, kedai konsep Alaska/Western Bar, serta penetrasi pasar regional dan ekspor global."
         };
 
-        let supplyChainData = JSON.parse(localStorage.getItem('kopiTraceSupply')) || defaultSupplyChain;
+        let defaultCoffeeData = []; 
+            let coffeeData = JSON.parse(localStorage.getItem('kopiTraceData')) || defaultCoffeeData;
 
-        // Data Dinamis Petani & Prosesor tersinkron ke database.json / localStorage
-        let defaultFarmers = [
-            { name: "Bpk. Hendra & Kelompok Tani Tampomas Lestari", location: "Kec. Cimalaka & Sumedang Utara (Zona CML & UTR)", mdpl: "1.200 – 1.500 MDPL", varietas: "Arabica Line S, Sigarar Utang, Typica", desc: "Berada di tanah vulkanik subur, meneruskan tradisi leluhur perkebunan kopi Java Preanger dengan pendekatan modern ramah lingkungan serta sistem panen pilih merah (selective picking).", foto: "https://images.unsplash.com/photo-1595974482597-4f82c4e0dd10?auto=format&fit=crop&w=400&q=80" }
-        ];
-        let farmersData = JSON.parse(localStorage.getItem('kopiTraceFarmers')) || defaultFarmers;
+            let defaultFarmers = [];
+            let farmersData = JSON.parse(localStorage.getItem('kopiTraceFarmers')) || defaultFarmers;
 
-        let defaultProcessors = [
-            { name: "Preanger Processing Station (Sumedang Coffee Mill)", location: "Kecamatan Rancakalong (Zona TGR - Tengah)", methods: "Washed, Natural, Experimental Honey & Winey", desc: "Berperan sebagai jembatan penting antara petani dan roastery, digawangi anak muda lokal yang ahli mengontrol fermentasi untuk menciptakan clean cup dan fruity notes terbaik.", foto: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=400&q=80" }
-        ];
-        let processorsData = JSON.parse(localStorage.getItem('kopiTraceProcessors')) || defaultProcessors;
+            let defaultProcessors = [];
+            let processorsData = JSON.parse(localStorage.getItem('kopiTraceProcessors')) || defaultProcessors;
 
         function startCameraScanner() {
             const readerEl = document.getElementById('reader');
