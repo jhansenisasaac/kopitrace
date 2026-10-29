@@ -1,27 +1,5 @@
 {
-  "coffeeData": [
-    {
-      "zona": "TMR",
-      "metode": "HON",
-      "tahun": "2026",
-      "batch": "005",
-      "petani": "hernansyah",
-      "varietas": "robusta",
-      "mdpl": "600",
-      "kecamatan": "Darmaraja",
-      "lat": -6.9012,
-      "lng": 108.0345,
-      "sejarah": "Kopi Sumedang di kawasan dataran tinggi vulkanik, memiliki sejarah panjang sebagai bagian dari tradisi agraris Java Preanger yang terkenal di pasar internasional.",
-      "destName": "gudang sumedang",
-      "destLat": -6.8687,
-      "destLng": 107.915,
-      "sertifikasi": "organik",
-      "cupping": "coklat",
-      "fotoUrl": "",
-      "distribusi": [],
-      "createdBy": "823842225611866183"
-    }
-  ],
+  "coffeeData": [],
   "registeredUsers": [
     {
       "name": "Developer Super Admin",
