@@ -832,9 +832,9 @@
         }
         async function fetchRealTimeData() {
     const statusEl = document.getElementById('github-sync-status');
-    const token = GITHUB_CONFIG.token || localStorage.getItem('kopiTraceAdminToken');
+    const token = localStorage.getItem('kopiTraceAdminToken');
 
-    // 1. URL Raw GitHub untuk menarik data secara publik & real-time tanpa token bagi pengunjung
+    // URL Raw GitHub untuk menarik data secara publik & real-time dengan anti-cache timestamp
     const rawUrl = `https://raw.githubusercontent.com/jhansenisasaac/kopitrace/main/database.json?t=${new Date().getTime()}`;
     
     try {
