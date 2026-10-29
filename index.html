@@ -1123,39 +1123,55 @@
         }
 
         function saveFarmerProfile(e) {
-            e.preventDefault();
-            const index = parseInt(document.getElementById('farmer-edit-index').value);
-            const existingFoto = index !== -1 ? farmersData[index].foto : '';
-            const fotoValue = document.getElementById('form-farmer-foto').value.trim() || existingFoto || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80';
-            
-            const farmerObj = {
-                name: document.getElementById('form-farmer-name').value.trim(),
-                location: document.getElementById('form-farmer-location').value.trim(),
-                mdpl: document.getElementById('form-farmer-mdpl').value.trim(),
-                varietas: document.getElementById('form-farmer-varietas').value.trim(),
-                desc: document.getElementById('form-farmer-desc').value.trim(),
-                foto: fotoValue
-            };
-            if (index === -1) {
-                farmersData.push(farmerObj);
-            } else {
-                farmersData[index] = farmerObj;
-            }
-            saveToStorage();
-            closeFarmerModal();
-            renderFarmerProfilesUI();
-            renderDashboardProfilesLists();
-            alert('Profil Petani berhasil disimpan dan disinkronkan!');
+    e.preventDefault();
+    const index = parseInt(document.getElementById('farmer-edit-index').value);
+    
+    // Validasi: Jika role petani, pastikan dia hanya mengedit miliknya sendiri
+    if (currentUser && currentUser.role === 'farmer') {
+        if (index !== -1 && farmersData[index].createdBy && farmersData[index].createdBy !== currentUser.user) {
+            alert('Akses Ditolak! Anda tidak dapat mengedit profil milik petani lain.');
+            return;
         }
+    }
 
-        function deleteFarmerProfile(index) {
-            if (confirm('Yakin ingin menghapus profil petani ini?')) {
-                farmersData.splice(index, 1);
-                saveToStorage();
-                renderFarmerProfilesUI();
-                renderDashboardProfilesLists();
-            }
-        }
+    const existingFoto = index !== -1 ? farmersData[index].foto : '';
+    const fotoValue = document.getElementById('form-farmer-foto').value.trim() || existingFoto || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80';
+    
+    const farmerObj = {
+        name: document.getElementById('form-farmer-name').value.trim(),
+        location: document.getElementById('form-farmer-location').value.trim(),
+        mdpl: document.getElementById('form-farmer-mdpl').value.trim(),
+        varietas: document.getElementById('form-farmer-varietas').value.trim(),
+        desc: document.getElementById('form-farmer-desc').value.trim(),
+        foto: fotoValue,
+        createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : (farmersData[index].createdBy || 'dev')
+    };
+
+    if (index === -1) {
+        farmersData.push(farmerObj);
+    } else {
+        farmersData[index] = farmerObj;
+    }
+    
+    saveToStorage();
+    closeFarmerModal();
+    renderFarmerProfilesUI();
+    renderDashboardProfilesLists();
+    alert('Profil Petani berhasil disimpan dan disinkronkan!');
+}
+
+      function deleteFarmerProfile(index) {
+    if (currentUser && currentUser.role === 'farmer' && farmersData[index].createdBy && farmersData[index].createdBy !== currentUser.user) {
+        alert('Akses Ditolak! Anda tidak dapat menghapus profil milik petani lain.');
+        return;
+    }
+    if (confirm('Yakin ingin menghapus profil petani ini?')) {
+        farmersData.splice(index, 1);
+        saveToStorage();
+        renderFarmerProfilesUI();
+        renderDashboardProfilesLists();
+    }
+}
 
         function openAddProcessorModal() {
             document.getElementById('processor-modal-title').innerHTML = `<i class="fa-solid fa-industry text-amber-700"></i><span>Tambah Rumah Prosesor Baru</span>`;
@@ -1193,38 +1209,52 @@
         }
 
         function saveProcessorProfile(e) {
-            e.preventDefault();
-            const index = parseInt(document.getElementById('processor-edit-index').value);
-            const existingFoto = index !== -1 ? processorsData[index].foto : '';
-            const fotoValue = document.getElementById('form-proc-foto').value.trim() || existingFoto || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=200&q=80';
-
-            const procObj = {
-                name: document.getElementById('form-proc-name').value.trim(),
-                location: document.getElementById('form-proc-location').value.trim(),
-                methods: document.getElementById('form-proc-methods').value.trim(),
-                desc: document.getElementById('form-proc-desc').value.trim(),
-                foto: fotoValue
-            };
-            if (index === -1) {
-                processorsData.push(procObj);
-            } else {
-                processorsData[index] = procObj;
-            }
-            saveToStorage();
-            closeProcessorModal();
-            renderProcessorProfilesUI();
-            renderDashboardProfilesLists();
-            alert('Profil Prosesor berhasil disimpan dan disinkronkan!');
+    e.preventDefault();
+    const index = parseInt(document.getElementById('processor-edit-index').value);
+    
+    if (currentUser && currentUser.role === 'farmer') {
+        if (index !== -1 && processorsData[index].createdBy && processorsData[index].createdBy !== currentUser.user) {
+            alert('Akses Ditolak! Anda tidak dapat mengedit profil prosesor milik pihak lain.');
+            return;
         }
+    }
 
+    const existingFoto = index !== -1 ? processorsData[index].foto : '';
+    const fotoValue = document.getElementById('form-proc-foto').value.trim() || existingFoto || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=200&q=80';
+
+    const procObj = {
+        name: document.getElementById('form-proc-name').value.trim(),
+        location: document.getElementById('form-proc-location').value.trim(),
+        methods: document.getElementById('form-proc-methods').value.trim(),
+        desc: document.getElementById('form-proc-desc').value.trim(),
+        foto: fotoValue,
+        createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : (processorsData[index].createdBy || 'dev')
+    };
+
+    if (index === -1) {
+        processorsData.push(procObj);
+    } else {
+        processorsData[index] = procObj;
+    }
+    
+    saveToStorage();
+    closeProcessorModal();
+    renderProcessorProfilesUI();
+    renderDashboardProfilesLists();
+    alert('Profil Prosesor berhasil disimpan dan disinkronkan!');
+}
         function deleteProcessorProfile(index) {
-            if (confirm('Yakin ingin menghapus profil prosesor ini?')) {
-                processorsData.splice(index, 1);
-                saveToStorage();
-                renderProcessorProfilesUI();
-                renderDashboardProfilesLists();
-            }
-        }
+    if (currentUser && currentUser.role === 'farmer' && processorsData[index].createdBy && processorsData[index].createdBy !== currentUser.user) {
+        alert('Akses Ditolak! Anda tidak dapat menghapus profil prosesor milik pihak lain.');
+        return;
+    }
+    if (confirm('Yakin ingin menghapus profil prosesor ini?')) {
+        processorsData.splice(index, 1);
+        saveToStorage();
+        renderProcessorProfilesUI();
+        renderDashboardProfilesLists();
+    }
+}}
 
         function openSupplyEditModal() {
             document.getElementById('input-txt-hulu').value = supplyChainData.hulu;
