@@ -830,64 +830,85 @@
                 icon.className = 'fa-solid fa-eye text-xs';
             }
         }
-        async function fetchRealTimeData() {
-    const statusEl = document.getElementById('github-sync-status');
+     async function fetchRealTimeData() {
+        const statusEl = document.getElementById('github-sync-status');
+        const rawUrl = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.branch}/${GITHUB_CONFIG.path}?t=${new Date().getTime()}`;
+        
+        try {
+            if (statusEl) statusEl.innerText = 'Syncing...';
+            const res = await fetch(rawUrl);
+            if (!res.ok) throw new Error('404');
+            const data = await res.json();
+            
+            if (data.coffeeData) coffeeData = data.coffeeData;
+            if (data.registeredUsers) registeredUsers = data.registeredUsers;
+            if (data.supplyChainData) { 
+                supplyChainData = data.supplyChainData; 
+                localStorage.setItem('kopiTraceSupply', JSON.stringify(supplyChainData)); 
+            }
+            if (data.farmersData) {
+                farmersData = data.farmersData;
+                localStorage.setItem('kopiTraceFarmers', JSON.stringify(farmersData));
+            }
+            if (data.processorsData) {
+                processorsData = data.processorsData;
+                localStorage.setItem('kopiTraceProcessors', JSON.stringify(processorsData));
+            }
 
-    // Mengambil data langsung dari Raw GitHub secara publik tanpa memedulikan token login/admin
-    const rawUrl = `https://raw.githubusercontent.com/jhansenisasaac/kopitrace/main/database.json?t=${new Date().getTime()}`;
-    
-    try {
-        const getRes = await fetch(apiUrl, { 
-            headers: { 
-                'Authorization': `Bearer ${token}`, 
-                'Accept': 'application/vnd.github+json' 
-            } 
-        });
-        
-        if (getRes.ok) { 
-            const fileInfo = await getRes.json(); 
-            githubFileSha = fileInfo.sha; 
+            localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
+            localStorage.setItem('kopiTraceUsers', JSON.stringify(registeredUsers));
+            
+            renderSupplyChainUI();
+            renderFarmerProfilesUI();
+            renderProcessorProfilesUI();
+            if (statusEl) statusEl.innerText = 'Auto-Sync: Aktif';
+        } catch (e) {
+            const local = localStorage.getItem('kopiTraceData');
+            coffeeData = local ? JSON.parse(local) : defaultCoffeeData;
+            if (statusEl) statusEl.innerText = 'Auto-Sync: Offline';
         }
-        
-        const fileContent = JSON.stringify({ 
-            coffeeData, 
-            registeredUsers, 
-            supplyChainData, 
-            farmersData, 
-            processorsData 
-        }, null, 2);
-        
-        const base64Content = btoa(unescape(encodeURIComponent(fileContent)));
-        
-        const putRes = await fetch(apiUrl, {
-            method: 'PUT',
-            headers: { 
-                'Authorization': `Bearer ${token}`, 
-                'Accept': 'application/vnd.github+json', 
-                'Content-Type': 'application/json' 
-            },
-            body: JSON.stringify({ 
-                message: "Update database with new batch and profiles via KopiTrace App", 
-                content: base64Content, 
-                sha: githubFileSha || undefined, 
-                branch: GITHUB_CONFIG.branch 
-            })
-        });
-        
-        if (!putRes.ok) {
-            const errData = await putRes.json();
-            throw new Error(`Gagal menyimpan ke GitHub: ${errData.message}`);
-        }
-        
-        const putData = await putRes.json();
-        githubFileSha = putData.content.sha;
-        return true;
-    } catch (e) { 
-        console.error("GitHub Save Error:", e); 
-        alert("Gagal sinkronisasi ke GitHub. Periksa kembali izin token PAT Anda.");
-        return false; 
+
+        if (currentView === 'public-home') { renderPublicCards(); updateStats(); }
+        else if (currentView === 'public-map') { initMap(); }
+        else if (currentView === 'dashboard') { renderDashboardTable(); renderDashboardProfilesLists(); }
     }
-}
+
+    // --- FUNGSI PENYIMPANAN KE GITHUB KHUSUS ADMIN (DENGAN TOKEN) ---
+    async function saveToGitHub() {
+        const token = localStorage.getItem('kopiTraceAdminToken');
+        if (!token) return false;
+        
+        const apiUrl = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`;
+        try {
+            const getRes = await fetch(apiUrl, { 
+                headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' } 
+            });
+            let sha = undefined;
+            if (getRes.ok) { 
+                const fileInfo = await getRes.json(); 
+                sha = fileInfo.sha; 
+            }
+            
+            const fileContent = JSON.stringify({ coffeeData, registeredUsers, supplyChainData, farmersData, processorsData }, null, 2);
+            const base64Content = btoa(unescape(encodeURIComponent(fileContent)));
+            
+            const putRes = await fetch(apiUrl, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    message: "Update database otomatis via KopiTrace", 
+                    content: base64Content, 
+                    sha: sha, 
+                    branch: GITHUB_CONFIG.branch 
+                })
+            });
+            if (!putRes.ok) throw new Error('Gagal menyimpan ke GitHub');
+            return true;
+        } catch (e) { 
+            console.error("GitHub Save Error:", e); 
+            return false; 
+        }
+    }
         async function sendAuthNotification(message) {
             if (!DISCORD_WEBHOOK_AUTH) return;
             try {
