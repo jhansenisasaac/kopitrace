@@ -11,6 +11,7 @@
     <link rel="apple-touch-icon" href="./logo.png">
     <link rel="manifest" href="manifest.json">
     
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="KopiTrace">
@@ -34,6 +35,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <!-- Logo -->
+                console.log("Logo diklik");
                 <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="handleSecretLogoClick()" title="KopiTrace Sumedang">
                     <img src="./logo.png" alt="Logo KopiTrace" class="w-10 h-10 rounded-xl object-cover shadow border border-amber-700/50" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=100&q=80';">
                     <div>
@@ -757,14 +759,10 @@
             hilir: "Distribusi ke gudang logistik, gerai specialty coffee, kedai konsep Alaska/Western Bar, serta penetrasi pasar regional dan ekspor global."
         };
 
-        let defaultCoffeeData = []; 
-            let coffeeData = JSON.parse(localStorage.getItem('kopiTraceData')) || defaultCoffeeData;
-
-            let defaultFarmers = [];
-            let farmersData = JSON.parse(localStorage.getItem('kopiTraceFarmers')) || defaultFarmers;
-
-            let defaultProcessors = [];
-            let processorsData = JSON.parse(localStorage.getItem('kopiTraceProcessors')) || defaultProcessors;
+       let coffeeData = JSON.parse(localStorage.getItem('kopiTraceData')) || defaultCoffeeData;
+let farmersData = JSON.parse(localStorage.getItem('kopiTraceFarmers')) || defaultFarmers;
+let processorsData = JSON.parse(localStorage.getItem('kopiTraceProcessors')) || defaultProcessors;
+let supplyChainData = JSON.parse(localStorage.getItem('kopiTraceSupply')) || defaultSupplyChain;
 
         function startCameraScanner() {
             const readerEl = document.getElementById('reader');
