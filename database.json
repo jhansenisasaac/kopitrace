@@ -1,5 +1,27 @@
 {
-  "coffeeData": [],
+  "coffeeData": [
+    {
+      "zona": "UTR",
+      "metode": "EXP",
+      "tahun": "2026",
+      "batch": "005",
+      "petani": "Bpk. udin (Petani)",
+      "varietas": "Arabica Gayo",
+      "mdpl": "1450 mdpl",
+      "kecamatan": "Sumedang Utara",
+      "lat": -6.8529,
+      "lng": 107.9205,
+      "sejarah": "Kopi Sumedang di kawasan dataran tinggi vulkanik, memiliki sejarah panjang sebagai bagian dari tradisi agraris Java Preanger yang terkenal di pasar internasional.",
+      "destName": "guadang rancakalong",
+      "destLat": -6.8687,
+      "destLng": 107.915,
+      "sertifikasi": "organik",
+      "cupping": "contoh",
+      "fotoUrl": "",
+      "distribusi": [],
+      "createdBy": "823842225611866183"
+    }
+  ],
   "registeredUsers": [
     {
       "name": "Developer Super Admin",
