@@ -12,12 +12,6 @@
       "user": "farmer",
       "pass": "farmer2026",
       "role": "farmer"
-    },
-    {
-      "name": "Ucok (Petani)",
-      "user": "ucok",
-      "pass": "ucok123",
-      "role": "farmer"
     }
   ],
   "supplyChainData": {
@@ -32,17 +26,9 @@
       "location": "Kec. Cimalaka & Sumedang Utara (Zona CML & UTR)",
       "mdpl": "1.200 – 1.500 MDPL",
       "varietas": "Arabica Line S, Sigarar Utang, Typica",
-      "desc": "Petani kopi lokal yang berfokus pada kualitas biji kopi petik merah dan budidaya ramah lingkungan.",
-      "foto": "https://images.unsplash.com/photo-1595974482597-4f8fc73ac1a9?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      "name": "Bpk. Hendra",
-      "location": "Kecamatan Rancakalong (Zona TGR)",
-      "mdpl": "1.300 – 1.600 MDPL",
-      "varietas": "Arabica Typica & Sigarar Utang",
-      "desc": "Tokoh petani senior yang konsisten merawat tanaman kopi dengan sistem tumpang sari organik.",
-      "foto": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80"
-    }
+      "desc": "contoh",
+      "foto": ""https://images.unsplash.com/photo-1595974482597-4f8fc73ac1a9?auto=format&fit=crop&w=400&q=80"
+ }
   ],
   "processorsData": [
     {
