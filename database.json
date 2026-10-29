@@ -1,47 +1,5 @@
 {
-  "coffeeData": [
-    {
-      "zona": "UTR",
-      "metode": "HON",
-      "tahun": "2026",
-      "batch": "005",
-      "petani": "Bpk. Hendra (Petani)",
-      "varietas": "robusta sumedang",
-      "mdpl": "1450 mdpl",
-      "kecamatan": "Tanjungkerta",
-      "lat": -6.7865,
-      "lng": 107.9012,
-      "destName": "gudang sumedang",
-      "destLat": -6.8687,
-      "destLng": 107.915,
-      "sertifikasi": "organik",
-      "cupping": "citrus",
-      "fotoUrl": "",
-      "distribusi": [],
-      "createdBy": "823842225611866183"
-    },
-    {
-      "zona": "TMR",
-      "metode": "HON",
-      "tahun": "2026",
-      "batch": "003",
-      "petani": "hernansyah",
-      "varietas": "robusta",
-      "mdpl": "600 mdpl",
-      "kecamatan": "Buahdua",
-      "lat": -6.7423,
-      "lng": 107.9812,
-      "sejarah": "Kopi Sumedang di kawasan dataran tinggi vulkanik, memiliki sejarah panjang sebagai bagian dari tradisi agraris Java Preanger yang terkenal di pasar internasional.",
-      "destName": "guadang rancakalong",
-      "destLat": -6.8687,
-      "destLng": 107.915,
-      "sertifikasi": "organik",
-      "cupping": "contoh",
-      "fotoUrl": "",
-      "distribusi": [],
-      "createdBy": "823842225611866183"
-    }
-  ],
+  "coffeeData": [],
   "registeredUsers": [
     {
       "name": "Developer Super Admin",
@@ -82,7 +40,3 @@
     }
   ]
 }
-"registeredUsers": [
-  { "name": "Developer Super Admin", "user": "dev", "pass": "m0r94n", "role": "dev" },
-  { "name": "Bpk. Hendra (Petani)", "user": "farmer", "pass": "farmer2026", "role": "farmer" }
-]
