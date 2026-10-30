@@ -1,29 +1,5 @@
 {
-  "coffeeData": [
-    {
-      "zona": "TGR",
-      "metode": "WNE",
-      "tahun": "2026",
-      "batch": "001",
-      "petani": "bpk. budi sitisna",
-      "varietas": "Arabica",
-      "mdpl": "1450 mdpl",
-      "qtyCeri": 100,
-      "qtyGb": 80,
-      "kecamatan": "Rancakalong",
-      "lat": -6.8398,
-      "lng": 107.8489,
-      "sejarah": "Kopi Sumedang di kawasan dataran tinggi vulkanik, memiliki sejarah panjang sebagai bagian dari tradisi agraris Java Preanger yang terkenal di pasar internasional.",
-      "destName": "Gudang Sumedang",
-      "destLat": -6.8687,
-      "destLng": 107.915,
-      "sertifikasi": "kimia",
-      "cupping": "citrus",
-      "fotoUrl": "",
-      "distribusi": [],
-      "createdBy": "823842225611866183"
-    }
-  ],
+  "coffeeData": [],
   "registeredUsers": [
     {
       "name": "Sudarmi",
