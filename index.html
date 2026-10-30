@@ -830,50 +830,6 @@
                 icon.className = 'fa-solid fa-eye text-xs';
             }
         }
-        async function fetchRealTimeData() {
-    const statusEl = document.getElementById('github-sync-status');
-    const token = GITHUB_CONFIG.token || localStorage.getItem('kopiTraceAdminToken');
-
-    const rawUrl = `https://raw.githubusercontent.com/jhansenisasaac/kopitrace/main/database.json?t=${new Date().getTime()}`;
-    
-    try {
-        if (statusEl) statusEl.innerText = 'Syncing...';
-        const res = await fetch(rawUrl);
-        if (!res.ok) throw new Error('404');
-        const data = await res.json();
-        
-        if (data.coffeeData) coffeeData = data.coffeeData;
-        if (data.registeredUsers) registeredUsers = data.registeredUsers;
-        if (data.supplyChainData) { 
-            supplyChainData = data.supplyChainData; 
-            localStorage.setItem('kopiTraceSupply', JSON.stringify(supplyChainData)); 
-        }
-        if (data.farmersData) {
-            farmersData = data.farmersData;
-            localStorage.setItem('kopiTraceFarmers', JSON.stringify(farmersData));
-        }
-        if (data.processorsData) {
-            processorsData = data.processorsData;
-            localStorage.setItem('kopiTraceProcessors', JSON.stringify(processorsData));
-        }
-
-        localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
-        localStorage.setItem('kopiTraceUsers', JSON.stringify(registeredUsers));
-        
-        renderSupplyChainUI();
-        renderFarmerProfilesUI();
-        renderProcessorProfilesUI();
-        if (statusEl) statusEl.innerText = 'Auto-Sync: Aktif';
-    } catch (e) {
-        const local = localStorage.getItem('kopiTraceData');
-        coffeeData = local ? JSON.parse(local) : defaultCoffeeData;
-        if (statusEl) statusEl.innerText = 'Auto-Sync: Offline';
-    }
-
-    if (currentView === 'public-home') { renderPublicCards(); updateStats(); }
-    else if (currentView === 'public-map') { initMap(); }
-    else if (currentView === 'dashboard') { renderDashboardTable(); renderDashboardProfilesLists(); }
-}
 
         async function sendAuthNotification(message) {
             if (!DISCORD_WEBHOOK_AUTH) return;
@@ -1314,6 +1270,7 @@
             }
         }
 
+        // FUNGSI SINKRONISASI GITHUB YANG DIPERBAIKI
         async function fetchRealTimeData() {
             const statusEl = document.getElementById('github-sync-status');
             const token = localStorage.getItem('kopiTraceAdminToken');
@@ -1342,7 +1299,15 @@
             try {
                 if (statusEl) statusEl.innerText = 'Syncing...';
                 const res = await fetch(rawUrl);
-                if (!res.ok) throw new Error('404');
+                
+                // Jika file belum ada di repo (404), buat otomatis file baru
+                if (!res.ok) {
+                    if (res.status === 404) {
+                        await saveToGitHub();
+                    }
+                    throw new Error('404 Not Found');
+                }
+                
                 const data = await res.json();
                 if (data.coffeeData) coffeeData = data.coffeeData;
                 if (data.registeredUsers) registeredUsers = data.registeredUsers;
@@ -1372,19 +1337,39 @@
             if (!token) return false;
             const apiUrl = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`;
             try {
+                let fileSha = undefined;
                 const getRes = await fetch(apiUrl, { headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' } });
                 if (getRes.ok) { 
                     const fileInfo = await getRes.json(); 
-                    githubFileSha = fileInfo.sha; 
+                    fileSha = fileInfo.sha; 
                 }
+                
                 const fileContent = JSON.stringify({ coffeeData, registeredUsers, supplyChainData, farmersData, processorsData }, null, 2);
-                const base64Content = btoa(unescape(encodeURIComponent(fileContent)));
+                
+                // Encoding UTF-8 yang aman untuk Base64
+                const utf8Bytes = new TextEncoder().encode(fileContent);
+                let binaryString = '';
+                for (let i = 0; i < utf8Bytes.length; i++) {
+                    binaryString += String.fromCharCode(utf8Bytes[i]);
+                }
+                const base64Content = btoa(binaryString);
+
                 const putRes = await fetch(apiUrl, {
                     method: 'PUT',
                     headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: "Update database with farmer & processor profiles via KopiTrace App", content: base64Content, sha: githubFileSha || undefined, branch: GITHUB_CONFIG.branch })
+                    body: JSON.stringify({ 
+                        message: "Update database via KopiTrace App", 
+                        content: base64Content, 
+                        sha: fileSha, 
+                        branch: GITHUB_CONFIG.branch 
+                    })
                 });
-                if (!putRes.ok) throw new Error('Gagal menyimpan ke GitHub');
+                
+                if (!putRes.ok) {
+                    const errData = await putRes.json();
+                    throw new Error(errData.message || 'Gagal menyimpan ke GitHub');
+                }
+                
                 const putData = await putRes.json();
                 githubFileSha = putData.content.sha;
                 return true;
@@ -1948,10 +1933,6 @@
             if (sharedCode) { switchView('public-scanner'); fillAndTrace(sharedCode.toUpperCase()); }
             else { renderPublicCards(); updateStats(); }
         };
-        window.onload = function() {
-    fetchRealTimeData();
-    // Inisialisasi fungsi lainnya...
-};
     </script>
 </body>
 </html>
