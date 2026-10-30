@@ -90,10 +90,10 @@
       "role": "farmer"
     },
     {
-      "name": "Gunawan",
-      "user": "Gunawan",
-      "pass": "gunawan",
-      "role": "farmer"
+      "name": "M.agni",
+      "user": "masyarakat_umum",
+      "pass": "agni",
+      "role": "dev"
     }
   ],
   "supplyChainData": {},
