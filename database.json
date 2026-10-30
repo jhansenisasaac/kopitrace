@@ -49,6 +49,12 @@
       "user": "Sudarmi",
       "pass": "sudarmi",
       "role": "farmer"
+    },
+    {
+      "name": "Ujang",
+      "user": "Ujangtangker",
+      "pass": "ujang",
+      "role": "farmer"
     }
   ],
   "supplyChainData": {},
