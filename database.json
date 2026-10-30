@@ -62,6 +62,27 @@
       "fotoUrl": "",
       "distribusi": [],
       "createdBy": "823842225611866183"
+    },
+    {
+      "zona": "TMR",
+      "metode": "WASH",
+      "tahun": "2026",
+      "batch": "002",
+      "petani": "bpk. santoso",
+      "varietas": "Arabica",
+      "mdpl": "3.078 mdpl",
+      "kecamatan": "Darmaraja",
+      "lat": -6.9012,
+      "lng": 108.0345,
+      "sejarah": "Kopi Sumedang di kawasan dataran tinggi vulkanik, memiliki sejarah panjang sebagai bagian dari tradisi agraris Java Preanger yang terkenal di pasar internasional.",
+      "destName": "jakarta",
+      "destLat": -6.8687,
+      "destLng": 107.915,
+      "sertifikasi": "kimia",
+      "cupping": "coklat",
+      "fotoUrl": "",
+      "distribusi": [],
+      "createdBy": "823842225611866183"
     }
   ],
   "registeredUsers": [
