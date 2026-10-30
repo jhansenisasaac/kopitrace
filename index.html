@@ -1290,7 +1290,7 @@
                 return;
             }
 
-            const rawUrl = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.branch}/${GITHUB_CONFIG.path}?t=${new Date().getTime()}`;
+            const rawUrl = `https://raw.githubusercontent.com/jhansenisasaac/kopitrace/main/database.json?t=${new Date().getTime()}`;
             try {
                 if (statusEl) statusEl.innerText = 'Syncing...';
                 const res = await fetch(rawUrl);
