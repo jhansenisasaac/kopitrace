@@ -51,8 +51,8 @@
                     <button onclick="switchView('public-scanner')" class="hover:text-amber-400 transition py-2 cursor-pointer">Lacak / Scan</button>
                     <button onclick="switchView('farmer-profile')" class="hover:text-amber-400 transition py-2 cursor-pointer text-amber-200">Profil Petani</button>
                     <button onclick="switchView('processor-profile')" class="hover:text-amber-400 transition py-2 cursor-pointer text-amber-200">Profil Prosesor</button>
+                    <button onclick="switchView('public-news')" class="hover:text-amber-400 transition py-2 cursor-pointer">Berita Kopi</button>
                     <button onclick="installAppPrompt()" id="install-btn" class="hidden text-amber-400 hover:text-amber-300 transition py-2 items-center space-x-1.5 font-semibold cursor-pointer">
-                    <button onclick="switchView('public-news')" class="hover:text-amber-400 transition py-2 cursor-pointer">Berita Kopi</button>   
                         <i class="fa-solid fa-download"></i>
                         <span>Instal</span>
                     </button>
@@ -82,8 +82,8 @@
             <button onclick="switchView('public-scanner'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Lacak / Scan Kode</button>
             <button onclick="switchView('farmer-profile'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition text-amber-300">Profil Petani (Hulu)</button>
             <button onclick="switchView('processor-profile'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition text-amber-300">Profil Prosesor (Pasca-Panen)</button>
+            <button onclick="switchView('public-news'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Berita & Wawasan Kopi</button>
             <button onclick="installAppPrompt(); toggleMobileMenu();" id="mobile-install-btn" class="hidden w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition text-amber-400 font-semibold items-center space-x-2">
-            <button onclick="switchView('public-news'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Berita & Wawasan Kopi</button>   
                 <i class="fa-solid fa-download mr-1"></i>
                 <span>Instal Aplikasi</span>
             </button>
@@ -266,6 +266,23 @@
             </div>
         </section>
 
+        <!-- 7. PUBLIC NEWS / BERITA KOPI SUMEDANG -->
+        <section id="view-news" class="space-y-6 hidden max-w-5xl mx-auto">
+            <div class="flex justify-between items-center flex-wrap gap-3">
+                <div>
+                    <span class="text-xs font-bold text-amber-700 uppercase tracking-widest">Wawasan & Tren</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-stone-900">Berita Industri Kopi Sumedang</h2>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="add-news-btn" onclick="openAddNewsModal()" class="hidden bg-amber-700 hover:bg-amber-800 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center space-x-1.5 shadow cursor-pointer">
+                        <i class="fa-solid fa-newspaper"></i><span>Tambah Berita Baru</span>
+                    </button>
+                    <button onclick="switchView('public-home')" class="bg-stone-200 hover:bg-stone-300 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium cursor-pointer">Kembali</button>
+                </div>
+            </div>
+            <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        </section>
+
         <!-- 6. DASHBOARD -->
         <section id="view-dashboard" class="space-y-6 hidden">
             <div id="dashboard-banner" class="bg-amber-50 border border-amber-200 rounded-2xl p-4 sm:p-6 flex flex-col lg:flex-row justify-between items-start lg:items-center shadow-sm gap-4">
@@ -292,74 +309,11 @@
                     <button id="dev-export-btn" onclick="exportDataJSON()" class="hidden bg-stone-700 hover:bg-stone-800 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center space-x-2 cursor-pointer">
                         <i class="fa-solid fa-download"></i>
                         <span>Export</span>
-                     <button onclick="syncChartAndSpreadsheetToDiscord()" class="flex-1 lg:flex-none bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow flex items-center justify-center space-x-2 cursor-pointer">
+                    </button>
+                    <button onclick="syncChartAndSpreadsheetToDiscord()" class="flex-1 lg:flex-none bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow flex items-center justify-center space-x-2 cursor-pointer">
                         <i class="fa-solid fa-file-arrow-up"></i>
                         <span>Sync Grafik & Spreadsheet</span>
                     </button>
-                </div>
-            </div>
-            <!-- 7. PUBLIC NEWS / BERITA KOPI SUMEDANG -->
-        <section id="view-news" class="space-y-6 hidden max-w-5xl mx-auto">
-            <div class="flex justify-between items-center flex-wrap gap-3">
-                <div>
-                    <span class="text-xs font-bold text-amber-700 uppercase tracking-widest">Wawasan & Tren</span>
-                    <h2 class="text-2xl sm:text-3xl font-extrabold text-stone-900">Berita Industri Kopi Sumedang</h2>
-                </div>
-                <div class="flex space-x-2">
-                    <button id="add-news-btn" onclick="openAddNewsModal()" class="hidden bg-amber-700 hover:bg-amber-800 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center space-x-1.5 shadow cursor-pointer">
-                        <i class="fa-solid fa-newspaper"></i><span>Tambah Berita Baru</span>
-                    </button>
-                    <button onclick="switchView('public-news')" class="bg-stone-200 hover:bg-stone-300 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium cursor-pointer">Kembali</button>
-                </div>
-            </div>
-            <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-        </section>
-
-            <!-- MODAL TAMBAH / EDIT BERITA -->
-    <div id="news-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-4">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center border-b border-stone-100 pb-3">
-                <h3 id="news-modal-title" class="font-bold text-base sm:text-lg text-stone-900 flex items-center space-x-2">
-                    <i class="fa-solid fa-newspaper text-amber-700"></i>
-                    <span>Tambah Berita Baru</span>
-                </h3>
-                <button onclick="closeNewsModal()" class="text-stone-400 hover:text-stone-700 p-1 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <form id="news-form" onsubmit="saveNewsArticle(event)" class="space-y-3.5 text-xs sm:text-sm">
-                <input type="hidden" id="news-edit-index" value="-1">
-                <div>
-                    <label class="block font-semibold text-stone-700 mb-1">Judul Berita</label>
-                    <input type="text" id="form-news-title" placeholder="Cth: Kopi Sumedang Tembus Pasar Ekspor Global" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block font-semibold text-stone-700 mb-1">Kategori</label>
-                        <input type="text" id="form-news-category" placeholder="Cth: Ekspor / Budidaya / Tren" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-stone-700 mb-1">Tanggal Publikasi</label>
-                        <input type="date" id="form-news-date" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
-                    </div>
-                </div>
-                <div>
-                    <label class="block font-semibold text-stone-700 mb-1">Isi Berita / Artikel</label>
-                    <textarea id="form-news-content" rows="4" placeholder="Tuliskan ulasan atau informasi lengkap mengenai industri kopi..." required class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs"></textarea>
-                </div>
-                
-                <div class="space-y-2 bg-stone-50 p-3 rounded-xl border border-stone-200">
-                    <label class="block font-semibold text-stone-700">Upload Gambar Utama</label>
-                    <input type="file" id="form-news-file-foto" accept="image/*" onchange="handleNewsImageUpload(event)" class="w-full text-xs text-stone-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-700 file:text-white cursor-pointer">
-                    <input type="hidden" id="form-news-foto">
-                    <div id="news-preview-container" class="hidden pt-2">
-                        <img id="news-photo-preview" src="" alt="Preview" class="h-24 w-auto rounded-lg border border-stone-300 object-cover">
-                    </div>
-                </div>
-
-                <div class="flex justify-end space-x-2 pt-2">
-                    <button type="button" onclick="closeNewsModal()" class="bg-stone-200 hover:bg-stone-300 px-4 py-2 rounded-xl text-xs font-medium cursor-pointer">Batal</button>
-                    <button type="submit" class="bg-amber-700 hover:bg-amber-800 text-white px-5 py-2 rounded-xl text-xs font-semibold shadow cursor-pointer">Simpan Berita</button>
-                        </div>
-                    </form>
                 </div>
             </div>
 
@@ -568,6 +522,54 @@
                 <div class="flex justify-end space-x-2 pt-2">
                     <button type="button" onclick="closeProcessorModal()" class="bg-stone-200 hover:bg-stone-300 px-4 py-2 rounded-xl text-xs font-medium cursor-pointer">Batal</button>
                     <button type="submit" class="bg-stone-900 hover:bg-stone-800 text-white px-5 py-2 rounded-xl text-xs font-semibold shadow cursor-pointer">Simpan Prosesor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL TAMBAH / EDIT BERITA -->
+    <div id="news-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-stone-100 pb-3">
+                <h3 id="news-modal-title" class="font-bold text-base sm:text-lg text-stone-900 flex items-center space-x-2">
+                    <i class="fa-solid fa-newspaper text-amber-700"></i>
+                    <span>Tambah Berita Baru</span>
+                </h3>
+                <button onclick="closeNewsModal()" class="text-stone-400 hover:text-stone-700 p-1 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="news-form" onsubmit="saveNewsArticle(event)" class="space-y-3.5 text-xs sm:text-sm">
+                <input type="hidden" id="news-edit-index" value="-1">
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">Judul Berita</label>
+                    <input type="text" id="form-news-title" placeholder="Cth: Kopi Sumedang Tembus Pasar Ekspor Global" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">Kategori</label>
+                        <input type="text" id="form-news-category" placeholder="Cth: Ekspor / Budidaya / Tren" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">Tanggal Publikasi</label>
+                        <input type="date" id="form-news-date" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">Isi Berita / Artikel</label>
+                    <textarea id="form-news-content" rows="4" placeholder="Tuliskan ulasan atau informasi lengkap mengenai industri kopi..." required class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs"></textarea>
+                </div>
+                
+                <div class="space-y-2 bg-stone-50 p-3 rounded-xl border border-stone-200">
+                    <label class="block font-semibold text-stone-700">Upload Gambar Utama</label>
+                    <input type="file" id="form-news-file-foto" accept="image/*" onchange="handleNewsImageUpload(event)" class="w-full text-xs text-stone-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-700 file:text-white cursor-pointer">
+                    <input type="hidden" id="form-news-foto">
+                    <div id="news-preview-container" class="hidden pt-2">
+                        <img id="news-photo-preview" src="" alt="Preview" class="h-24 w-auto rounded-lg border border-stone-300 object-cover">
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeNewsModal()" class="bg-stone-200 hover:bg-stone-300 px-4 py-2 rounded-xl text-xs font-medium cursor-pointer">Batal</button>
+                    <button type="submit" class="bg-amber-700 hover:bg-amber-800 text-white px-5 py-2 rounded-xl text-xs font-semibold shadow cursor-pointer">Simpan Berita</button>
                 </div>
             </form>
         </div>
@@ -815,14 +817,11 @@
                 path: 'database.json',
                 branch: 'main'
             };
-         }
-
-        if (typeof DISCORD_WEBHOOK_NEWS === 'undefined') {
-        var DISCORD_WEBHOOK_NEWS = 'https://discord.com/api/webhooks/1565773689897619537/4MG6PiJNLrmvbDX0oTVA4sd2G0IPPp4hgFyaXcTL8Qwp33S_6DHARIDmjwK4CnYMbS12'; 
         }
 
+        // Webhook Discord Log yang baru diperbarui
         if (typeof DISCORD_WEBHOOK_LOG === 'undefined') {
-        var DISCORD_WEBHOOK_LOG = 'https://discord.com/api/webhooks/1565744285284958270/U6jF7A_UvXs7vRxGcjNY8xZiVb6J3kC-icZRJiDL-31eoHMcMY1IyfVp9GVR_gHt9h98'; 
+            var DISCORD_WEBHOOK_LOG = 'https://discord.com/api/webhooks/1565773689897619537/4MG6PiJNLrmvbDX0oTVA4sd2G0IPPp4hgFyaXcTL8Qwp33S_6DHARIDmjwK4CnYMbS12'; 
         }
 
         if (typeof DISCORD_WEBHOOK_BATCH === 'undefined') {
@@ -889,6 +888,27 @@
             { name: "Preanger Processing Station (Sumedang Coffee Mill)", location: "Kecamatan Rancakalong (Zona TGR - Tengah)", methods: "Washed, Natural, Experimental Honey & Winey", desc: "Berperan sebagai jembatan penting antara petani dan roastery, digawangi anak muda lokal yang ahli mengontrol fermentasi untuk menciptakan clean cup dan fruity notes terbaik.", foto: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=400&q=80", createdBy: "dev" }
         ];
         let processorsData = JSON.parse(localStorage.getItem('kopiTraceProcessors')) || defaultProcessors;
+
+        // Data Berita Industri Kopi
+        let defaultNews = [
+            {
+                title: "Kopi Arabika Sumedang Kian Diminati Pasar Specialty Internasional",
+                category: "Ekspor & Pasar",
+                date: "2026-06-01",
+                content: "Kawasan dataran tinggi Gunung Tampomas dan Cimalaka di Sumedang terus menunjukkan peningkatan kualitas produksi green bean. Berkat penerapan proses pasca-panen yang ketat seperti Honey dan Experimental Winey, kopi Sumedang kini dilirik oleh roastery mancanegara.",
+                foto: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80",
+                createdBy: "dev"
+            },
+            {
+                title: "Pelatihan Petik Merah Selektif untuk Petani Kopi di Rancakalong",
+                category: "Edukasi & Hulu",
+                date: "2026-05-20",
+                content: "Dinas pertanian bersama komunitas penggiat kopi lokal mengadakan pelatihan intensif mengenai pentingnya petik merah (selective harvesting) guna mendongkrak skor cupping quality standar SCAA.",
+                foto: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
+                createdBy: "dev"
+            }
+        ];
+        let newsData = JSON.parse(localStorage.getItem('kopiTraceNews')) || defaultNews;
 
         let defaultCoffeeData = [
             {
@@ -967,6 +987,7 @@
             renderSupplyChainUI();
             renderFarmerProfilesUI();
             renderProcessorProfilesUI();
+            renderNewsUI();
         });
 
         function startCameraScanner() {
@@ -1042,9 +1063,9 @@
         }
 
         async function sendBatchNotification(message) {
-            if (!DISCORD_WEBHOOK_BATCH) return;
+            if (!DISCORD_WEBHOOK_LOG) return;
             try {
-                await fetch(DISCORD_WEBHOOK_BATCH, {
+                await fetch(DISCORD_WEBHOOK_LOG, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ content: message, username: "KopiTrace Log Bot", avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png" })
@@ -1053,7 +1074,7 @@
         }
 
         async function syncAllBatchesToDiscord() {
-            if (!DISCORD_WEBHOOK_BATCH) {
+            if (!DISCORD_WEBHOOK_LOG) {
                 alert('Webhook Discord untuk log belum diatur.');
                 return;
             }
@@ -1069,10 +1090,10 @@
             let successCount = 0;
             for (const item of coffeeData) {
                 const codeStr = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
-                const message = `🌱 **SYNC BATCH SUMEDANG (BATCH)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${item.kecamatan || '-'}** (Zona: \`${item.zona}\`)\n• Petani: **${item.petani}**\n• Varietas: **${item.varietas}**\n• Metode: **${item.metode}**\n• Ceri: **${item.qtyCeri || 0} Kg** | GB: **${item.qtyGb || 0} Kg**`;
+                const message = `🌱 **SYNC BATCH SUMEDANG (LOG)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${item.kecamatan || '-'}** (Zona: \`${item.zona}\`)\n• Petani: **${item.petani}**\n• Varietas: **${item.varietas}**\n• Metode: **${item.metode}**\n• Ceri: **${item.qtyCeri || 0} Kg** | GB: **${item.qtyGb || 0} Kg**`;
                 
                 try {
-                    await fetch(DISCORD_WEBHOOK_BATCH, {
+                    await fetch(DISCORD_WEBHOOK_LOG, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ 
@@ -1177,6 +1198,135 @@
                 `;
             });
             container.innerHTML = html;
+        }
+
+        // Render Berita Kopi
+        function renderNewsUI() {
+            const container = document.getElementById('news-container');
+            if (!container) return;
+            const addNewsBtn = document.getElementById('add-news-btn');
+            if (addNewsBtn) {
+                if (currentUser && currentUser.role === 'dev') {
+                    addNewsBtn.classList.remove('hidden');
+                } else {
+                    addNewsBtn.classList.add('hidden');
+                }
+            }
+
+            let html = '';
+            newsData.forEach((news, idx) => {
+                const canEdit = currentUser && currentUser.role === 'dev';
+                const newsPhoto = getValidImage(news.foto, 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80');
+                
+                html += `
+                    <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden flex flex-col justify-between hover:shadow-md transition">
+                        <div>
+                            <div class="h-48 overflow-hidden relative">
+                                <img src="${newsPhoto}" alt="${news.title}" class="w-full h-full object-cover">
+                                <span class="absolute top-3 left-3 bg-amber-700 text-white text-[11px] px-2.5 py-1 rounded-md font-bold uppercase tracking-wider">${news.category}</span>
+                            </div>
+                            <div class="p-5 space-y-2.5">
+                                <div class="text-xs text-stone-400 font-mono"><i class="fa-regular fa-calendar mr-1.5"></i>${news.date}</div>
+                                <h3 class="font-extrabold text-stone-900 text-base sm:text-lg leading-snug">${news.title}</h3>
+                                <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">${news.content}</p>
+                            </div>
+                        </div>
+                        ${canEdit ? `
+                        <div class="px-5 pb-4 pt-2 border-t border-stone-100 flex justify-end space-x-2">
+                            <button onclick="openEditNewsModal(${idx})" class="px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold rounded-lg text-xs cursor-pointer"><i class="fa-solid fa-pen-to-square mr-1"></i>Edit</button>
+                            <button onclick="deleteNewsArticle(${idx})" class="px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-700 font-bold rounded-lg text-xs cursor-pointer"><i class="fa-solid fa-trash mr-1"></i>Hapus</button>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            container.innerHTML = html || '<div class="text-stone-400 italic col-span-2 text-center py-8">Belum ada berita yang dipublikasikan.</div>';
+        }
+
+        function handleNewsImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64String = e.target.result;
+                    document.getElementById('form-news-foto').value = base64String;
+                    const preview = document.getElementById('news-photo-preview');
+                    const container = document.getElementById('news-preview-container');
+                    if (preview && container) { preview.src = base64String; container.classList.remove('hidden'); }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function openAddNewsModal() {
+            document.getElementById('news-modal-title').innerHTML = `<i class="fa-solid fa-newspaper text-amber-700"></i><span>Tambah Berita Baru</span>`;
+            document.getElementById('news-edit-index').value = -1;
+            document.getElementById('news-form').reset();
+            document.getElementById('form-news-foto').value = '';
+            document.getElementById('news-preview-container').classList.add('hidden');
+            document.getElementById('form-news-date').valueAsDate = new Date();
+            const modal = document.getElementById('news-modal');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        }
+
+        function openEditNewsModal(index) {
+            const news = newsData[index];
+            if (!news) return;
+            document.getElementById('news-modal-title').innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-700"></i><span>Edit Berita</span>`;
+            document.getElementById('news-edit-index').value = index;
+            document.getElementById('form-news-title').value = news.title;
+            document.getElementById('form-news-category').value = news.category;
+            document.getElementById('form-news-date').value = news.date;
+            document.getElementById('form-news-content').value = news.content;
+            document.getElementById('form-news-foto').value = news.foto || '';
+            if (news.foto) {
+                document.getElementById('news-photo-preview').src = news.foto;
+                document.getElementById('news-preview-container').classList.remove('hidden');
+            } else {
+                document.getElementById('news-preview-container').classList.add('hidden');
+            }
+            const modal = document.getElementById('news-modal');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        }
+
+        function closeNewsModal() {
+            const modal = document.getElementById('news-modal');
+            modal.classList.add('hidden'); modal.classList.remove('flex');
+        }
+
+        function saveNewsArticle(e) {
+            e.preventDefault();
+            const index = parseInt(document.getElementById('news-edit-index').value);
+            const existingFoto = index !== -1 && newsData[index] ? newsData[index].foto : '';
+            const fotoValue = document.getElementById('form-news-foto').value.trim() || existingFoto || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80';
+
+            const newsObj = {
+                title: document.getElementById('form-news-title').value.trim(),
+                category: document.getElementById('form-news-category').value.trim(),
+                date: document.getElementById('form-news-date').value,
+                content: document.getElementById('form-news-content').value.trim(),
+                foto: fotoValue,
+                createdBy: currentUser ? currentUser.user : 'dev'
+            };
+
+            if (index === -1 || !newsData[index]) {
+                newsData.unshift(newsObj);
+            } else {
+                newsData[index] = newsObj;
+            }
+
+            saveToStorage();
+            closeNewsModal();
+            renderNewsUI();
+            alert('Berita berhasil disimpan!');
+        }
+
+        function deleteNewsArticle(index) {
+            if (confirm('Yakin ingin menghapus artikel berita ini?')) {
+                newsData.splice(index, 1);
+                saveToStorage();
+                renderNewsUI();
+            }
         }
 
         function renderDashboardProfilesLists() {
@@ -1472,11 +1622,13 @@
             if (localStorage.getItem('kopiTraceSupply')) supplyChainData = JSON.parse(localStorage.getItem('kopiTraceSupply'));
             if (localStorage.getItem('kopiTraceFarmers')) farmersData = JSON.parse(localStorage.getItem('kopiTraceFarmers'));
             if (localStorage.getItem('kopiTraceProcessors')) processorsData = JSON.parse(localStorage.getItem('kopiTraceProcessors'));
+            if (localStorage.getItem('kopiTraceNews')) newsData = JSON.parse(localStorage.getItem('kopiTraceNews'));
 
             if (!token) {
                 renderSupplyChainUI();
                 renderFarmerProfilesUI();
                 renderProcessorProfilesUI();
+                renderNewsUI();
                 if (statusEl) {
                     statusEl.innerText = 'Mode Lokal';
                     statusEl.className = 'text-[10px] sm:text-xs bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full font-bold hidden sm:inline';
@@ -1519,10 +1671,15 @@
                     processorsData = data.processorsData;
                     localStorage.setItem('kopiTraceProcessors', JSON.stringify(processorsData));
                 }
+                if (data.newsData) {
+                    newsData = data.newsData;
+                    localStorage.setItem('kopiTraceNews', JSON.stringify(newsData));
+                }
 
                 renderSupplyChainUI();
                 renderFarmerProfilesUI();
                 renderProcessorProfilesUI();
+                renderNewsUI();
                 if (statusEl) {
                     statusEl.innerText = 'Auto-Sync: Aktif';
                     statusEl.className = 'text-[10px] sm:text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-bold hidden sm:inline';
@@ -1541,6 +1698,7 @@
             if (currentView === 'public-home') { renderPublicCards(); updateStats(); }
             else if (currentView === 'public-map') { initMap(); }
             else if (currentView === 'dashboard') { renderDashboardTable(); renderDashboardProfilesLists(); renderCoffeeChart(); }
+            else if (currentView === 'public-news') { renderNewsUI(); }
         }
 
         async function saveToGitHub() {
@@ -1555,7 +1713,7 @@
                     fileSha = fileInfo.sha; 
                 }
                 
-                const fileContent = JSON.stringify({ coffeeData, registeredUsers, supplyChainData, farmersData, processorsData }, null, 2);
+                const fileContent = JSON.stringify({ coffeeData, registeredUsers, supplyChainData, farmersData, processorsData, newsData }, null, 2);
                 
                 const utf8Bytes = new TextEncoder().encode(fileContent);
                 let binaryString = '';
@@ -1617,6 +1775,7 @@
                 localStorage.setItem('kopiTraceSupply', JSON.stringify(supplyChainData));
                 localStorage.setItem('kopiTraceFarmers', JSON.stringify(farmersData));
                 localStorage.setItem('kopiTraceProcessors', JSON.stringify(processorsData));
+                localStorage.setItem('kopiTraceNews', JSON.stringify(newsData));
                 if (currentUser) {
                     localStorage.setItem('kopiTraceActiveUser', JSON.stringify(currentUser));
                 } else {
@@ -1647,17 +1806,18 @@
 
         function switchView(viewName) {
             currentView = viewName;
-            ['public-home', 'farmer-profile', 'processor-profile', 'public-map', 'public-scanner', 'dashboard'].forEach(v => {
-                const el = document.getElementById('view-' + v);
+            ['public-home', 'farmer-profile', 'processor-profile', 'public-map', 'public-scanner', 'dashboard', 'view-news'].forEach(v => {
+                const el = document.getElementById(v.startsWith('view-') ? v : 'view-' + v);
                 if (el) el.classList.add('hidden');
             });
-            const target = document.getElementById('view-' + viewName);
+            const target = document.getElementById(viewName.startsWith('view-') ? viewName : 'view-' + viewName);
             if (target) target.classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             if (viewName === 'public-home') { renderPublicCards(); updateStats(); }
             else if (viewName === 'farmer-profile') { renderFarmerProfilesUI(); }
             else if (viewName === 'processor-profile') { renderProcessorProfilesUI(); }
+            else if (viewName === 'public-news') { renderNewsUI(); }
             else if (viewName === 'public-map') { setTimeout(initMap, 150); }
             else if (viewName === 'public-scanner') { renderSampleBadges(); }
             else if (viewName === 'dashboard') { if (!currentUser) { openAuthModal(); return; } renderDashboardTable(); renderDashboardProfilesLists(); renderCoffeeChart(); }
@@ -2144,258 +2304,97 @@
             if (index === -1) coffeeData.push(newItem); else coffeeData[index] = newItem;
             saveToStorage(); closeTreeModal(); renderDashboardTable(); updateStats(); renderCoffeeChart();
             const codeStr = `${newItem.zona}/${newItem.metode}/${newItem.tahun}/${newItem.batch}`;
-            sendBatchNotification(`🌱 **BATCH BARU SUMEDANG (BATCH)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${selectedKecamatan}** (Zona: \`${zoneInfo.zona}\`)\n• Petani: **${newItem.petani}**\n• Ceri: **${newItem.qtyCeri} Kg** | GB: **${newItem.qtyGb} Kg**`);
+            sendBatchNotification(`🌱 **BATCH BARU SUMEDANG (LOG)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${selectedKecamatan}** (Zona: \`${zoneInfo.zona}\`)\n• Petani: **${newItem.petani}**\n• Ceri: **${newItem.qtyCeri} Kg** | GB: **${newItem.qtyGb} Kg**`);
         }
 
         async function syncChartAndSpreadsheetToDiscord() {
-    if (!DISCORD_WEBHOOK_BATCH) {
-        alert('Webhook Discord untuk log belum diatur.');
-        return;
-    }
-    if (!coffeeData || coffeeData.length === 0) {
-        alert('Tidak ada data batch kopi yang tersedia untuk disinkronkan.');
-        return;
-    }
+            if (!DISCORD_WEBHOOK_LOG) {
+                alert('Webhook Discord untuk log belum diatur.');
+                return;
+            }
+            if (!coffeeData || coffeeData.length === 0) {
+                alert('Tidak ada data batch kopi yang tersedia untuk disinkronkan.');
+                return;
+            }
 
-    const canvas = document.getElementById('coffeeQuantityChart');
-    if (!canvas) {
-        alert('Elemen grafik tidak ditemukan.');
-        return;
-    }
+            const canvas = document.getElementById('coffeeQuantityChart');
+            if (!canvas) {
+                alert('Elemen grafik tidak ditemukan.');
+                return;
+            }
 
-    // Hitung ringkasan statistik otomatis untuk teks Discord
-    let totalCeri = 0;
-    let totalGb = 0;
-    const varietyCount = {};
-    const zoneCount = {};
+            let totalCeri = 0;
+            let totalGb = 0;
 
-    coffeeData.forEach(item => {
-        const ceri = parseFloat(item.qtyCeri) || 0;
-        const gb = parseFloat(item.qtyGb) || 0;
-        totalCeri += ceri;
-        totalGb += gb;
-
-        varietyCount[item.varietas] = (varietyCount[item.varietas] || 0) + ceri;
-        zoneCount[item.zona] = (zoneCount[item.zona] || 0) + 1;
-    });
-
-    const avgYield = totalCeri > 0 ? ((totalGb / totalCeri) * 100).toFixed(1) : 0;
-
-     // --- MANAJEMEN BERITA INDUSTRI KOPI ---
-let defaultNews = [
-    {
-        title: "Kopi Arabika Sumedang Kian Diminati Pasar Specialty Internasional",
-        category: "Ekspor & Pasar",
-        date: "2026-06-01",
-        content: "Kawasan dataran tinggi Gunung Tampomas dan Cimalaka di Sumedang terus menunjukkan peningkatan kualitas produksi green bean. Berkat penerapan proses pasca-panen yang ketat seperti Honey dan Experimental Winey, kopi Sumedang kini dilirik oleh roastery mancanegara.",
-        foto: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80",
-        createdBy: "dev"
-    },
-    {
-        title: "Pelatihan Petik Merah Selektif untuk Petani Kopi di Rancakalong",
-        category: "Edukasi & Hulu",
-        date: "2026-05-20",
-        content: "Dinas pertanian bersama komunitas penggiat kopi lokal mengadakan pelatihan intensif mengenai pentingnya petik merah (selective harvesting) guna mendongkrak skor cupping quality standar SCAA.",
-        foto: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
-        createdBy: "dev"
-    }
-];
-
-let newsData = JSON.parse(localStorage.getItem('kopiTraceNews')) || defaultNews;
-
-function renderNewsUI() {
-    const container = document.getElementById('news-container');
-    if (!container) return;
-    
-    // Tampilkan tombol tambah berita jika user login sebagai dev
-    const addNewsBtn = document.getElementById('add-news-btn');
-    if (addNewsBtn) {
-        if (currentUser && currentUser.role === 'dev') {
-            addNewsBtn.classList.remove('hidden');
-        } else {
-            addNewsBtn.classList.add('hidden');
-        }
-    }
-
-    let html = '';
-    newsData.forEach((news, idx) => {
-        const canEdit = currentUser && currentUser.role === 'dev';
-        const newsPhoto = getValidImage(news.foto, 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80');
-        
-        html += `
-            <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden flex flex-col justify-between hover:shadow-md transition">
-                <div>
-                    <div class="h-48 overflow-hidden relative">
-                        <img src="${newsPhoto}" alt="${news.title}" class="w-full h-full object-cover">
-                        <span class="absolute top-3 left-3 bg-amber-700 text-white text-[11px] px-2.5 py-1 rounded-md font-bold uppercase tracking-wider">${news.category}</span>
-                    </div>
-                    <div class="p-5 space-y-2.5">
-                        <div class="text-xs text-stone-400 font-mono"><i class="fa-regular fa-calendar mr-1.5"></i>${news.date}</div>
-                        <h3 class="font-extrabold text-stone-900 text-base sm:text-lg leading-snug">${news.title}</h3>
-                        <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">${news.content}</p>
-                    </div>
-                </div>
-                ${canEdit ? `
-                <div class="px-5 pb-4 pt-2 border-t border-stone-100 flex justify-end space-x-2">
-                    <button onclick="openEditNewsModal(${idx})" class="px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold rounded-lg text-xs cursor-pointer"><i class="fa-solid fa-pen-to-square mr-1"></i>Edit</button>
-                    <button onclick="deleteNewsArticle(${idx})" class="px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-700 font-bold rounded-lg text-xs cursor-pointer"><i class="fa-solid fa-trash mr-1"></i>Hapus</button>
-                </div>
-                ` : ''}
-            </div>
-        `;
-    });
-    container.innerHTML = html || '<div class="text-stone-400 italic col-span-2 text-center py-8">Belum ada berita yang dipublikasikan.</div>';
-}
-
-function handleNewsImageUpload(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const base64String = e.target.result;
-            document.getElementById('form-news-foto').value = base64String;
-            const preview = document.getElementById('news-photo-preview');
-            const container = document.getElementById('news-preview-container');
-            if (preview && container) { preview.src = base64String; container.classList.remove('hidden'); }
-        };
-        reader.readAsDataURL(file);
-    }
-}
-
-function openAddNewsModal() {
-    document.getElementById('news-modal-title').innerHTML = `<i class="fa-solid fa-newspaper text-amber-700"></i><span>Tambah Berita Baru</span>`;
-    document.getElementById('news-edit-index').value = -1;
-    document.getElementById('news-form').reset();
-    document.getElementById('form-news-foto').value = '';
-    document.getElementById('news-preview-container').classList.add('hidden');
-    document.getElementById('form-news-date').valueAsDate = new Date();
-    const modal = document.getElementById('news-modal');
-    modal.classList.remove('hidden'); modal.classList.add('flex');
-}
-
-function openEditNewsModal(index) {
-    const news = newsData[index];
-    if (!news) return;
-    document.getElementById('news-modal-title').innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-700"></i><span>Edit Berita</span>`;
-    document.getElementById('news-edit-index').value = index;
-    document.getElementById('form-news-title').value = news.title;
-    document.getElementById('form-news-category').value = news.category;
-    document.getElementById('form-news-date').value = news.date;
-    document.getElementById('form-news-content').value = news.content;
-    document.getElementById('form-news-foto').value = news.foto || '';
-    if (news.foto) {
-        document.getElementById('news-photo-preview').src = news.foto;
-        document.getElementById('news-preview-container').classList.remove('hidden');
-    } else {
-        document.getElementById('news-preview-container').classList.add('hidden');
-    }
-    const modal = document.getElementById('news-modal');
-    modal.classList.remove('hidden'); modal.classList.add('flex');
-}
-
-function closeNewsModal() {
-    const modal = document.getElementById('news-modal');
-    modal.classList.add('hidden'); modal.classList.remove('flex');
-}
-
-function saveNewsArticle(e) {
-    e.preventDefault();
-    const index = parseInt(document.getElementById('news-edit-index').value);
-    const existingFoto = index !== -1 && newsData[index] ? newsData[index].foto : '';
-    const fotoValue = document.getElementById('form-news-foto').value.trim() || existingFoto || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80';
-
-    const newsObj = {
-        title: document.getElementById('form-news-title').value.trim(),
-        category: document.getElementById('form-news-category').value.trim(),
-        date: document.getElementById('form-news-date').value,
-        content: document.getElementById('form-news-content').value.trim(),
-        foto: fotoValue,
-        createdBy: currentUser ? currentUser.user : 'dev'
-    };
-
-    if (index === -1 || !newsData[index]) {
-        newsData.unshift(newsObj); // Masukkan ke urutan paling atas
-    } else {
-        newsData[index] = newsObj;
-    }
-
-    saveToStorage();
-    closeNewsModal();
-    renderNewsUI();
-    alert('Berita berhasil disimpan!');
-}
-
-function deleteNewsArticle(index) {
-    if (confirm('Yakin ingin menghapus artikel berita ini?')) {
-        newsData.splice(index, 1);
-        saveToStorage();
-        renderNewsUI();
-    }
-}       
-
-    // 1. Konversi Chart Canvas menjadi Blob Gambar (PNG)
-    canvas.toBlob(async (chartBlob) => {
-        if (!chartBlob) {
-            alert('Gagal mengekspor gambar grafik.');
-            return;
-        }
-
-        // 2. Buat File Spreadsheet (CSV) yang lengkap dengan ringkasan
-        let csvContent = "Kopitrace Sumedang - Laporan Kuantitas Ceri & Green Bean\n";
-        csvContent += `Waktu Ekspor,"${new Date().toLocaleString('id-ID')}"\n`;
-        csvContent += `Total Batch,${coffeeData.length}\n`;
-        csvContent += `Total Ceri (Kg),${totalCeri}\n`;
-        csvContent += `Total Green Bean (Kg),${totalGb}\n`;
-        csvContent += `Rata-rata Rendemen (%),${avgYield}%\n\n`;
-        
-        csvContent += "Kode Batch,Zona,Kecamatan,Metode,Petani,Varietas,MDPL,Kuantitas Ceri (Kg),Kuantitas Green Bean (Kg),Sertifikasi\n";
-        coffeeData.forEach(item => {
-            const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
-            csvContent += `"${code}","${item.zona}","${item.kecamatan || ''}","${item.metode}","${item.petani}","${item.varietas}","${item.mdpl || ''}",${item.qtyCeri || 0},${item.qtyGb || 0},"${item.sertifikasi || ''}"\n`;
-        });
-        
-        const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-        // 3. Susun Pesan Teks Lengkap untuk Discord
-        let summaryText = `📊 **LAPORAN ANALISIS & REKAP KOPI SUMEDANG**\n`;
-        summaryText += `────────────────────────────────────────\n`;
-        summaryText += `📦 **Total Batch Terdaftar:** ${coffeeData.length} Batch\n`;
-        summaryText += `🍒 **Akumulasi Ceri Kopi:** ${totalCeri.toLocaleString()} Kg\n`;
-        summaryText += `☕ **Akumulasi Green Bean:** ${totalGb.toLocaleString()} Kg\n`;
-        summaryText += `📈 **Rata-rata Rendemen:** ${avgYield}%\n`;
-        summaryText += `────────────────────────────────────────\n`;
-        summaryText += `_Laporan visual grafik kuantitas dan file spreadsheet rekapitulasi data lengkap telah dilampirkan di bawah._`;
-
-        // 4. Kirim menggunakan FormData
-        const formData = new FormData();
-        formData.append('file0', chartBlob, 'grafik_analisis_kopi_sumedang.png');
-        formData.append('file1', csvBlob, 'rekap_lengkap_kopi_sumedang.csv');
-        
-        const payload = {
-            content: summaryText,
-            username: "KopiTrace Analytics Bot",
-            avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png"
-        };
-        formData.append('payload_json', JSON.stringify(payload));
-
-        try {
-            const res = await fetch(DISCORD_WEBHOOK_LOG, {
-                method: 'POST',
-                body: formData
+            coffeeData.forEach(item => {
+                const ceri = parseFloat(item.qtyCeri) || 0;
+                const gb = parseFloat(item.qtyGb) || 0;
+                totalCeri += ceri;
+                totalGb += gb;
             });
 
-            if (res.ok) {
-                alert('Berhasil! Laporan lengkap (Grafik PNG & Spreadsheet CSV beserta statistik ringkas) telah dikirim ke Discord.');
-            } else {
-                const errText = await res.text();
-                throw new Error(errText || 'Gagal mengirim ke Discord');
-            }
-        } catch (err) {
-            console.error("Discord Sync Error:", err);
-            alert('Gagal mengirim ke Discord: ' + err.message);
+            const avgYield = totalCeri > 0 ? ((totalGb / totalCeri) * 100).toFixed(1) : 0;
+
+            canvas.toBlob(async (chartBlob) => {
+                if (!chartBlob) {
+                    alert('Gagal mengekspor gambar grafik.');
+                    return;
+                }
+
+                let csvContent = "Kopitrace Sumedang - Laporan Kuantitas Ceri & Green Bean\n";
+                csvContent += `Waktu Ekspor,"${new Date().toLocaleString('id-ID')}"\n`;
+                csvContent += `Total Batch,${coffeeData.length}\n`;
+                csvContent += `Total Ceri (Kg),${totalCeri}\n`;
+                csvContent += `Total Green Bean (Kg),${totalGb}\n`;
+                csvContent += `Rata-rata Rendemen (%),${avgYield}%\n\n`;
+                
+                csvContent += "Kode Batch,Zona,Kecamatan,Metode,Petani,Varietas,MDPL,Kuantitas Ceri (Kg),Kuantitas Green Bean (Kg),Sertifikasi\n";
+                coffeeData.forEach(item => {
+                    const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
+                    csvContent += `"${code}","${item.zona}","${item.kecamatan || ''}","${item.metode}","${item.petani}","${item.varietas}","${item.mdpl || ''}",${item.qtyCeri || 0},${item.qtyGb || 0},"${item.sertifikasi || ''}"\n`;
+                });
+                
+                const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+                let summaryText = `📊 **LAPORAN ANALISIS & REKAP KOPI SUMEDANG**\n`;
+                summaryText += `────────────────────────────────────────\n`;
+                summaryText += `📦 **Total Batch Terdaftar:** ${coffeeData.length} Batch\n`;
+                summaryText += `🍒 **Akumulasi Ceri Kopi:** ${totalCeri.toLocaleString()} Kg\n`;
+                summaryText += `☕ **Akumulasi Green Bean:** ${totalGb.toLocaleString()} Kg\n`;
+                summaryText += `📈 **Rata-rata Rendemen:** ${avgYield}%\n`;
+                summaryText += `────────────────────────────────────────\n`;
+                summaryText += `_Laporan visual grafik kuantitas dan file spreadsheet rekapitulasi data lengkap telah dilampirkan di bawah._`;
+
+                const formData = new FormData();
+                formData.append('file0', chartBlob, 'grafik_analisis_kopi_sumedang.png');
+                formData.append('file1', csvBlob, 'rekap_lengkap_kopi_sumedang.csv');
+                
+                const payload = {
+                    content: summaryText,
+                    username: "KopiTrace Analytics Bot",
+                    avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png"
+                };
+                formData.append('payload_json', JSON.stringify(payload));
+
+                try {
+                    const res = await fetch(DISCORD_WEBHOOK_LOG, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (res.ok) {
+                        alert('Berhasil! Laporan lengkap (Grafik PNG & Spreadsheet CSV beserta statistik ringkas) telah dikirim ke Discord.');
+                    } else {
+                        const errText = await res.text();
+                        throw new Error(errText || 'Gagal mengirim ke Discord');
+                    }
+                } catch (err) {
+                    console.error("Discord Sync Error:", err);
+                    alert('Gagal mengirim ke Discord: ' + err.message);
+                }
+            }, 'image/png');
         }
-    }, 'image/png');
-}
+
         function deleteTreeData(index) {
             if (currentUser && currentUser.role === 'farmer' && coffeeData[index].createdBy !== currentUser.user) { alert('Akses Ditolak!'); return; }
             if (confirm('Yakin ingin menghapus data batch ini?')) {
@@ -2419,7 +2418,7 @@ function deleteNewsArticle(index) {
         }
 
         function exportDataJSON() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ coffeeData, registeredUsers, supplyChainData, farmersData, processorsData }, null, 2));
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ coffeeData, registeredUsers, supplyChainData, farmersData, processorsData, newsData }, null, 2));
             const dl = document.createElement('a'); dl.setAttribute("href", dataStr); dl.setAttribute("download", "kopitrace_sumedang_backup.json"); dl.click();
         }
 
@@ -2451,99 +2450,6 @@ function deleteNewsArticle(index) {
             const sharedCode = urlParams.get('code');
             if (sharedCode) { switchView('public-scanner'); fillAndTrace(sharedCode.toUpperCase()); }
             else { renderPublicCards(); updateStats(); }
-
-         async function syncChartAndSpreadsheetToDiscord() {
-            if (!DISCORD_WEBHOOK_NEWS) {
-            alert('Webhook Discord untuk log belum diatur.');
-            return;
-            }
-                if (!coffeeData || coffeeData.length === 0) {
-                alert('Tidak ada data batch kopi yang tersedia untuk disinkronkan.');
-                 return;
-            }
-
-            const canvas = document.getElementById('coffeeQuantityChart');
-            if (!canvas) {
-            alert('Elemen grafik tidak ditemukan.');
-                return;
-            }
-
-           // Hitung ringkasan statistik otomatis untuk teks Discord
-            let totalCeri = 0;
-            let totalGb = 0;
-
-            coffeeData.forEach(item => {
-            const ceri = parseFloat(item.qtyCeri) || 0;
-            const gb = parseFloat(item.qtyGb) || 0;
-            totalCeri += ceri;
-            totalGb += gb;
-            });
-
-            const avgYield = totalCeri > 0 ? ((totalGb / totalCeri) * 100).toFixed(1) : 0;
-
-            // 1. Konversi Chart Canvas menjadi Blob Gambar (PNG)
-            canvas.toBlob(async (chartBlob) => {
-            if (!chartBlob) {
-            alert('Gagal mengekspor gambar grafik.');
-            return;
-            }
-
-            // 2. Buat File Spreadsheet (CSV) yang lengkap dengan ringkasan
-            let csvContent = "Kopitrace Sumedang - Laporan Kuantitas Ceri & Green Bean\n";
-            csvContent += `Waktu Ekspor,"${new Date().toLocaleString('id-ID')}"\n`;
-            csvContent += `Total Batch,${coffeeData.length}\n`;
-            csvContent += `Total Ceri (Kg),${totalCeri}\n`;
-            csvContent += `Total Green Bean (Kg),${totalGb}\n`;
-            csvContent += `Rata-rata Rendemen (%),${avgYield}%\n\n`;
-        
-            csvContent += "Kode Batch,Zona,Kecamatan,Metode,Petani,Varietas,MDPL,Kuantitas Ceri (Kg),Kuantitas Green Bean (Kg),Sertifikasi\n";
-            coffeeData.forEach(item => {
-                const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
-                csvContent += `"${code}","${item.zona}","${item.kecamatan || ''}","${item.metode}","${item.petani}","${item.varietas}","${item.mdpl || ''}",${item.qtyCeri || 0},${item.qtyGb || 0},"${item.sertifikasi || ''}"\n`;
-            });
-        
-            const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-            // 3. Susun Pesan Teks Lengkap untuk Discord
-            let summaryText = `📊 **LAPORAN ANALISIS & REKAP KOPI SUMEDANG**\n`;
-            summaryText += `────────────────────────────────────────\n`;
-            summaryText += `📦 **Total Batch Terdaftar:** ${coffeeData.length} Batch\n`;
-            summaryText += `🍒 **Akumulasi Ceri Kopi:** ${totalCeri.toLocaleString()} Kg\n`;
-            summaryText += `☕ **Akumulasi Green Bean:** ${totalGb.toLocaleString()} Kg\n`;
-            summaryText += `📈 **Rata-rata Rendemen:** ${avgYield}%\n`;
-            summaryText += `────────────────────────────────────────\n`;
-            summaryText += `_Laporan visual grafik kuantitas dan file spreadsheet rekapitulasi data lengkap telah dilampirkan di bawah._`;
-
-            // 4. Kirim menggunakan FormData ke Webhook Discord Baru
-            const formData = new FormData();
-             formData.append('file0', chartBlob, 'grafik_analisis_kopi_sumedang.png');
-            formData.append('file1', csvBlob, 'rekap_lengkap_kopi_sumedang.csv');
-        
-            const payload = {
-                content: summaryText,
-                username: "KopiTrace Analytics Bot",
-                avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png"
-            };
-            formData.append('payload_json', JSON.stringify(payload));
-    
-            try {
-                const res = await fetch(DISCORD_WEBHOOK_NEWS, {
-                    method: 'POST',
-                    body: formData
-                });
-    
-                if (res.ok) {
-                    alert('Berhasil! Grafik dan file spreadsheet rekap telah dikirim ke channel Discord baru Anda.');
-                } else {
-                    const errText = await res.text();
-                    throw new Error(errText || 'Gagal mengirim ke Discord');
-                }
-            } catch (err) {
-                console.error("Discord Sync Error:", err);
-                alert('Gagal mengirim ke Discord: ' + err.message);
-            }
-        }, 'image/png');
-     }
         };
     </script>
 </body>
