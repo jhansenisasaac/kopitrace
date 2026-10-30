@@ -186,7 +186,8 @@
                     <h2 class="text-2xl sm:text-3xl font-extrabold text-stone-900">Direktori Profil Petani Sumedang</h2>
                 </div>
                 <div class="flex space-x-2">
-                    <button onclick="openAddFarmerModal()" class="bg-amber-700 hover:bg-amber-800 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center space-x-1.5 shadow cursor-pointer">
+                    <!-- Tombol Tambah Petani (Disembunyikan untuk Pengunjung Publik) -->
+                    <button id="add-farmer-btn" onclick="openAddFarmerModal()" class="hidden bg-amber-700 hover:bg-amber-800 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center space-x-1.5 shadow cursor-pointer">
                         <i class="fa-solid fa-user-plus"></i><span>Tambah Petani Baru</span>
                     </button>
                     <button onclick="switchView('public-home')" class="bg-stone-200 hover:bg-stone-300 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium cursor-pointer">Kembali</button>
@@ -203,7 +204,8 @@
                     <h2 class="text-2xl sm:text-3xl font-extrabold text-stone-900">Direktori Rumah Prosesor Kopi Sumedang</h2>
                 </div>
                 <div class="flex space-x-2">
-                    <button onclick="openAddProcessorModal()" class="bg-stone-900 hover:bg-stone-800 text-amber-300 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center space-x-1.5 shadow cursor-pointer">
+                    <!-- Tombol Tambah Prosesor (Disembunyikan untuk Pengunjung Publik) -->
+                    <button id="add-processor-btn" onclick="openAddProcessorModal()" class="hidden bg-stone-900 hover:bg-stone-800 text-amber-300 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center space-x-1.5 shadow cursor-pointer">
                         <i class="fa-solid fa-industry"></i><span>Tambah Prosesor Baru</span>
                     </button>
                     <button onclick="switchView('public-home')" class="bg-stone-200 hover:bg-stone-300 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium cursor-pointer">Kembali</button>
@@ -1056,6 +1058,7 @@
             const modal = document.getElementById('farmer-modal');
             modal.classList.remove('hidden'); modal.classList.add('flex');
         }
+
         function openEditFarmerModal(index) {
             const f = farmersData[index];
             if (!f) return;
@@ -1100,7 +1103,7 @@
                 varietas: document.getElementById('form-farmer-varietas').value.trim(),
                 desc: document.getElementById('form-farmer-desc').value.trim(),
                 foto: fotoValue,
-                createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : (farmersData[index] ? farmersData[index].createdBy : 'dev')
+                createdBy: index === -1 || !farmersData[index] ? (currentUser ? currentUser.user : 'dev') : (farmersData[index].createdBy || 'dev')
             };
 
             if (index === -1 || !farmersData[index]) {
@@ -1116,15 +1119,6 @@
             alert('Profil Petani berhasil disimpan dan disinkronkan!');
         }
 
-        function openAddProcessorModal() {
-            document.getElementById('processor-modal-title').innerHTML = `<i class="fa-solid fa-industry text-amber-700"></i><span>Tambah Rumah Prosesor Baru</span>`;
-            document.getElementById('processor-edit-index').value = -1;
-            document.getElementById('processor-form').reset();
-            document.getElementById('form-proc-foto').value = '';
-            document.getElementById('processor-preview-container').classList.add('hidden');
-            const modal = document.getElementById('processor-modal');
-            modal.classList.remove('hidden'); modal.classList.add('flex');
-        }
         function deleteFarmerProfile(index) {
             if (currentUser && currentUser.role === 'farmer' && farmersData[index].createdBy && farmersData[index].createdBy !== currentUser.user) {
                 alert('Akses Ditolak! Anda tidak dapat menghapus profil milik petani lain.');
@@ -1190,7 +1184,7 @@
                 methods: document.getElementById('form-proc-methods').value.trim(),
                 desc: document.getElementById('form-proc-desc').value.trim(),
                 foto: fotoValue,
-                createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : (processorsData[index] ? processorsData[index].createdBy : 'dev')
+                createdBy: index === -1 || !processorsData[index] ? (currentUser ? currentUser.user : 'dev') : (processorsData[index].createdBy || 'dev')
             };
 
             if (index === -1 || !processorsData[index]) {
@@ -1267,12 +1261,11 @@
             }
         }
 
-        // FUNGSI SINKRONISASI & AMAN LOCAL STORAGE DIPERBAIKI
+        // FUNGSI SINKRONISASI & AMAN LOCAL STORAGE DIPERBAIKI (ANTIHILANG)
         async function fetchRealTimeData() {
             const statusEl = document.getElementById('github-sync-status');
             const token = localStorage.getItem('kopiTraceAdminToken');
             
-            // Selalu muat data dari localStorage terlebih dahulu agar data lokal aman tidak hilang
             const localData = localStorage.getItem('kopiTraceData');
             if (localData) coffeeData = JSON.parse(localData);
             
@@ -1289,7 +1282,10 @@
                 renderSupplyChainUI();
                 renderFarmerProfilesUI();
                 renderProcessorProfilesUI();
-                if (statusEl) statusEl.innerText = 'Mode Lokal';
+                if (statusEl) {
+                    statusEl.innerText = 'Mode Lokal';
+                    statusEl.className = 'text-[10px] sm:text-xs bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full font-bold hidden sm:inline';
+                }
                 updateViewUI();
                 return;
             }
@@ -1308,8 +1304,6 @@
                 
                 const data = await res.json();
                 
-                // Prioritaskan data remote jika jumlah data remote lebih banyak atau sama, 
-                // namun tetap amankan data lokal jika ada penambahan batch baru secara offline
                 if (data.coffeeData && data.coffeeData.length >= coffeeData.length) {
                     coffeeData = data.coffeeData;
                     localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
@@ -1334,10 +1328,16 @@
                 renderSupplyChainUI();
                 renderFarmerProfilesUI();
                 renderProcessorProfilesUI();
-                if (statusEl) statusEl.innerText = 'Auto-Sync: Aktif';
+                if (statusEl) {
+                    statusEl.innerText = 'Auto-Sync: Aktif';
+                    statusEl.className = 'text-[10px] sm:text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-bold hidden sm:inline';
+                }
             } catch (e) {
                 console.warn("Sync error, menggunakan data lokal:", e);
-                if (statusEl) statusEl.innerText = 'Auto-Sync: Offline';
+                if (statusEl) {
+                    statusEl.innerText = 'Auto-Sync: Offline';
+                    statusEl.className = 'text-[10px] sm:text-xs bg-red-100 text-red-800 px-2.5 py-1 rounded-full font-bold hidden sm:inline';
+                }
             }
 
             updateViewUI();
@@ -1758,11 +1758,17 @@
             const roleLabel = document.getElementById('auth-role-label');
             const devExportBtn = document.getElementById('dev-export-btn');
             const editSupplyBtn = document.getElementById('edit-supply-btn');
+            const addFarmerBtn = document.getElementById('add-farmer-btn');
+            const addProcessorBtn = document.getElementById('add-processor-btn');
 
             if (currentUser) {
                 navAuth.classList.remove('hidden');
                 navAuth.classList.add('flex');
                 if (roleLabel) roleLabel.innerText = `${currentUser.name} (${currentUser.role})`;
+                
+                // Tampilkan tombol tambah profil saat sudah login
+                if (addFarmerBtn) addFarmerBtn.classList.remove('hidden');
+                if (addProcessorBtn) addProcessorBtn.classList.remove('hidden');
                 
                 if (currentUser.role === 'dev') {
                     if (devExportBtn) devExportBtn.classList.remove('hidden');
@@ -1772,6 +1778,11 @@
             } else { 
                 navAuth.classList.add('hidden'); 
                 navAuth.classList.remove('flex');
+                
+                // Sembunyikan tombol tambah profil untuk pengunjung publik
+                if (addFarmerBtn) addFarmerBtn.classList.add('hidden');
+                if (addProcessorBtn) addProcessorBtn.classList.add('hidden');
+                if (devExportBtn) devExportBtn.classList.add('hidden');
             }
         }
 
