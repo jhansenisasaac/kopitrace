@@ -819,9 +819,12 @@
             };
         }
 
-        // Webhook Discord Log yang baru diperbarui
+        if (typeof DISCORD_WEBHOOK_NEWS === 'undefined') {
+        var DISCORD_WEBHOOK_NEWS = 'https://discord.com/api/webhooks/1565773689897619537/4MG6PiJNLrmvbDX0oTVA4sd2G0IPPp4hgFyaXcTL8Qwp33S_6DHARIDmjwK4CnYMbS12'; 
+        }
+
         if (typeof DISCORD_WEBHOOK_LOG === 'undefined') {
-            var DISCORD_WEBHOOK_LOG = 'https://discord.com/api/webhooks/1565773689897619537/4MG6PiJNLrmvbDX0oTVA4sd2G0IPPp4hgFyaXcTL8Qwp33S_6DHARIDmjwK4CnYMbS12'; 
+        var DISCORD_WEBHOOK_LOG = 'https://discord.com/api/webhooks/1565744285284958270/U6jF7A_UvXs7vRxGcjNY8xZiVb6J3kC-icZRJiDL-31eoHMcMY1IyfVp9GVR_gHt9h98'; 
         }
 
         if (typeof DISCORD_WEBHOOK_BATCH === 'undefined') {
@@ -839,6 +842,7 @@
         if (typeof ROLE_ADMIN_ID === 'undefined') {
             var ROLE_ADMIN_ID = '1564682206830665889';
         }
+
 
         const SUMEDANG_ZONES = {
             "Sumedang Utara": { zona: "UTR", lat: -6.8529, lng: 107.9205 },
@@ -1074,7 +1078,7 @@
         }
 
         async function syncAllBatchesToDiscord() {
-            if (!DISCORD_WEBHOOK_LOG) {
+            if (!DISCORD_WEBHOOK_BATCH) {
                 alert('Webhook Discord untuk log belum diatur.');
                 return;
             }
@@ -1090,10 +1094,10 @@
             let successCount = 0;
             for (const item of coffeeData) {
                 const codeStr = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
-                const message = `🌱 **SYNC BATCH SUMEDANG (LOG)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${item.kecamatan || '-'}** (Zona: \`${item.zona}\`)\n• Petani: **${item.petani}**\n• Varietas: **${item.varietas}**\n• Metode: **${item.metode}**\n• Ceri: **${item.qtyCeri || 0} Kg** | GB: **${item.qtyGb || 0} Kg**`;
+                const message = `🌱 **SYNC BATCH SUMEDANG (BATCH)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${item.kecamatan || '-'}** (Zona: \`${item.zona}\`)\n• Petani: **${item.petani}**\n• Varietas: **${item.varietas}**\n• Metode: **${item.metode}**\n• Ceri: **${item.qtyCeri || 0} Kg** | GB: **${item.qtyGb || 0} Kg**`;
                 
                 try {
-                    await fetch(DISCORD_WEBHOOK_LOG, {
+                    await fetch(DISCORD_WEBHOOK_BATCH, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ 
@@ -2304,7 +2308,7 @@
             if (index === -1) coffeeData.push(newItem); else coffeeData[index] = newItem;
             saveToStorage(); closeTreeModal(); renderDashboardTable(); updateStats(); renderCoffeeChart();
             const codeStr = `${newItem.zona}/${newItem.metode}/${newItem.tahun}/${newItem.batch}`;
-            sendBatchNotification(`🌱 **BATCH BARU SUMEDANG (LOG)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${selectedKecamatan}** (Zona: \`${zoneInfo.zona}\`)\n• Petani: **${newItem.petani}**\n• Ceri: **${newItem.qtyCeri} Kg** | GB: **${newItem.qtyGb} Kg**`);
+            sendBatchNotification(`🌱 **BATCH BARU SUMEDANG (BATCH)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${selectedKecamatan}** (Zona: \`${zoneInfo.zona}\`)\n• Petani: **${newItem.petani}**\n• Ceri: **${newItem.qtyCeri} Kg** | GB: **${newItem.qtyGb} Kg**`);
         }
 
         async function syncChartAndSpreadsheetToDiscord() {
@@ -2377,7 +2381,7 @@
                 formData.append('payload_json', JSON.stringify(payload));
 
                 try {
-                    const res = await fetch(DISCORD_WEBHOOK_LOG, {
+                    const res = await fetch(DISCORD_WEBHOOK_NEWS, {
                         method: 'POST',
                         body: formData
                     });
