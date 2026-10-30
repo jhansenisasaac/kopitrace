@@ -717,7 +717,6 @@
 
         const DISCORD_WEBHOOK_AUTH = 'https://discord.com/api/webhooks/1564693546764734504/B7-i_t9keiZuOPG7HIJpWHA55mK5VeQvKxGGJW2WrT_XNWe0SGZWKJearSTsQOUB2wnz';
         const DISCORD_WEBHOOK_BATCH = 'https://discord.com/api/webhooks/1564644685912219678/71hpotxn9KvQE0Zci5TkJoVcXGgJa_xhw8XptVwmA58NYDrelcNInUB_39XauWmsXhnN';
-        const DISCORD_WEBHOOK_BATCH = 'https://discord.com/api/webhooks/1565605508763750450/PHO4Te_DfSLb5zn3fdgr8Ne81yMydIxI1-J7sQL8X5LHeBKwU9MG-wdLJ_9dcNj6Xjq5';
         const DISCORD_CLIENT_ID = '1564650682991120497'; 
         
         const TARGET_GUILD_ID = '1564644279681286195';
@@ -1285,8 +1284,8 @@
         return;
     }
 
-    // Gunakan GitHub Contents API (api.github.com) agar mendukung Header Token & terhindar dari CORS error
-    const apiUrl = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}?t=${new Date().getTime()}`;
+    // Gunakan GitHub Contents API agar mendukung Private Repository dengan Token
+    const apiUrl = `https://raw.githubusercontent.com/jhansenisasaac/kopitrace/main/database.json?t=${new Date().getTime()}`;
     try {
         if (statusEl) statusEl.innerText = 'Syncing...';
         const res = await fetch(apiUrl, {
