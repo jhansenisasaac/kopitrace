@@ -1,5 +1,29 @@
 {
-  "coffeeData": [],
+  "coffeeData": [
+    {
+      "zona": "UTR",
+      "metode": "NAT",
+      "tahun": "2026",
+      "batch": "001",
+      "petani": "ibu. edah",
+      "varietas": "Arabica",
+      "mdpl": "1450 mdpl",
+      "qtyCeri": 100,
+      "qtyGb": 80,
+      "kecamatan": "Sumedang Utara",
+      "lat": -6.8529,
+      "lng": 107.9205,
+      "sejarah": "Kopi Sumedang di kawasan dataran tinggi vulkanik, memiliki sejarah panjang sebagai bagian dari tradisi agraris Java Preanger yang terkenal di pasar internasional.",
+      "destName": "Gudang Ekspor Sumedang Pusat",
+      "destLat": -6.8687,
+      "destLng": 107.915,
+      "sertifikasi": "organik",
+      "cupping": "citrus",
+      "fotoUrl": "",
+      "distribusi": [],
+      "createdBy": "823842225611866183"
+    }
+  ],
   "registeredUsers": [
     {
       "name": "Sudarmi",
