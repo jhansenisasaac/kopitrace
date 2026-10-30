@@ -999,7 +999,7 @@
             let successCount = 0;
             for (const item of coffeeData) {
                 const codeStr = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
-                const message = `🌱 **SYNC BATCH SUMEDANG (LOG)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${item.kecamatan || '-'}** (Zona: \`${item.zona}\`)\n• Petani: **${item.petani}**\n• Varietas: **${item.varietas}**\n• Metode: **${item.metode}**\n• Ceri: **${item.qtyCeri || 0} Kg** | GB: **${item.qtyGb || 0} Kg**`;
+                const message = `🌱 **SYNC BATCH SUMEDANG (BATCH LOG)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${item.kecamatan || '-'}** (Zona: \`${item.zona}\`)\n• Petani: **${item.petani}**\n• Varietas: **${item.varietas}**\n• Metode: **${item.metode}**\n• Ceri: **${item.qtyCeri || 0} Kg** | GB: **${item.qtyGb || 0} Kg**`;
                 
                 try {
                     await fetch(DISCORD_WEBHOOK_LOG, {
