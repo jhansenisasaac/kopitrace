@@ -798,39 +798,6 @@
             showInstallButtons();
         });
 
-        function updateAuthUI() {
-    const navAuth = document.getElementById('nav-auth-container');
-    const roleLabel = document.getElementById('auth-role-label');
-    const devExportBtn = document.getElementById('dev-export-btn');
-    const editSupplyBtn = document.getElementById('edit-supply-btn'); // Tambahkan ini
-    const addFarmerBtn = document.getElementById('add-farmer-btn');
-    const addProcessorBtn = document.getElementById('add-processor-btn');
-
-    if (currentUser) {
-        navAuth.classList.remove('hidden');
-        navAuth.classList.add('flex');
-        if (roleLabel) roleLabel.innerText = `${currentUser.name} (${currentUser.role})`;
-        
-        if (addFarmerBtn) addFarmerBtn.classList.remove('hidden');
-        if (addProcessorBtn) addProcessorBtn.classList.remove('hidden');
-        
-        if (currentUser.role === 'dev') {
-            if (devExportBtn) devExportBtn.classList.remove('hidden');
-            if (editSupplyBtn) editSupplyBtn.classList.remove('hidden'); // Munculkan tombol edit analisis untuk admin/dev
-        } else {
-            if (devExportBtn) devExportBtn.classList.add('hidden');
-            if (editSupplyBtn) editSupplyBtn.classList.add('hidden');
-        }
-    } else { 
-        navAuth.classList.add('hidden'); 
-        navAuth.classList.remove('flex');
-        
-        if (addFarmerBtn) addFarmerBtn.classList.add('hidden');
-        if (addProcessorBtn) addProcessorBtn.classList.add('hidden');
-        if (devExportBtn) devExportBtn.classList.add('hidden');
-        if (editSupplyBtn) editSupplyBtn.classList.add('hidden'); // Sembunyikan jika logout
-    }
-}
         function showInstallButtons() {
             const btn = document.getElementById('install-btn');
             const mobileBtn = document.getElementById('mobile-install-btn');
@@ -975,12 +942,11 @@
         }
 
         function renderSupplyChainUI() {
-    const currentData = supplyChainData || defaultSupplyChain;
-    document.getElementById('txt-hulu').innerText = currentData.hulu || defaultSupplyChain.hulu;
-    document.getElementById('txt-pascapanen').innerText = currentData.pascapanen || defaultSupplyChain.pascapanen;
-    document.getElementById('txt-trace').innerText = currentData.trace || defaultSupplyChain.trace;
-    document.getElementById('txt-hilir').innerText = currentData.hilir || defaultSupplyChain.hilir;
-}
+            document.getElementById('txt-hulu').innerText = supplyChainData.hulu;
+            document.getElementById('txt-pascapanen').innerText = supplyChainData.pascapanen;
+            document.getElementById('txt-trace').innerText = supplyChainData.trace;
+            document.getElementById('txt-hilir').innerText = supplyChainData.hilir;
+        }
 
         function renderFarmerProfilesUI() {
             const container = document.getElementById('farmer-profiles-container');
@@ -1338,6 +1304,7 @@
             }
         }
 
+        // FUNGSI SINKRONISASI & AMAN LOCAL STORAGE (DIAMANKAN MENGGUNAKAN GITHUB CONTENTS API)
         async function fetchRealTimeData() {
             const statusEl = document.getElementById('github-sync-status');
             const token = localStorage.getItem('kopiTraceAdminToken');
@@ -1815,10 +1782,7 @@
             closeAuthModal();
             updateAuthUI();
             switchView('dashboard');
-
-            const currentUrl = window.location.href;
-            sendAuthNotification(`🔐 **DATA AKUN BARU (AUTH LOGS)**\n• **Nama:** ${name}\n• **Username:** ${u}\n• **Password:** ${p}\n• **URL:** ${currentUrl}`);
-            
+            sendAuthNotification(`👤 **DAFTAR AKUN BARU**\n• Nama: **${name}**`);
             alert('Akun berhasil didaftar dan Anda langsung masuk!');
         }
 
@@ -1970,7 +1934,7 @@
             if (index === -1) coffeeData.push(newItem); else coffeeData[index] = newItem;
             saveToStorage(); closeTreeModal(); renderDashboardTable(); updateStats();
             const codeStr = `${newItem.zona}/${newItem.metode}/${newItem.tahun}/${newItem.batch}`;
-            sendBatchNotification(`🌱 **BATCH BARU SUMEDANG**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${selectedKecamatan}** (Zona: \`${zoneInfo.zona}\`)\n• Petani: **${newItem.petani}**`);
+            sendBatchNotification(`🫘☕🤎 **BATCH BARU SUMEDANG**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${selectedKecamatan}** (Zona: \`${zoneInfo.zona}\`)\n• Petani: **${newItem.petani}**`);
         }
 
         function deleteTreeData(index) {
