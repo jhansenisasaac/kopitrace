@@ -966,6 +966,39 @@
 
             alert(`Berhasil mensinkronkan ${successCount} dari ${coffeeData.length} batch ke channel Discord!`);
         }
+        function updateAuthUI() {
+            const navAuth = document.getElementById('nav-auth-container');
+            const roleLabel = document.getElementById('auth-role-label');
+            const devExportBtn = document.getElementById('dev-export-btn');
+            const editSupplyBtn = document.getElementById('edit-supply-btn');
+            const addFarmerBtn = document.getElementById('add-farmer-btn');
+            const addProcessorBtn = document.getElementById('add-processor-btn');
+    
+    if (currentUser) {
+        navAuth.classList.remove('hidden');
+        navAuth.classList.add('flex');
+        if (roleLabel) roleLabel.innerText = `${currentUser.name} (${currentUser.role})`;
+        
+        if (addFarmerBtn) addFarmerBtn.classList.remove('hidden');
+        if (addProcessorBtn) addProcessorBtn.classList.remove('hidden');
+        
+            if (currentUser.role === 'dev') {
+                    if (devExportBtn) devExportBtn.classList.remove('hidden');
+                   if (editSupplyBtn) editSupplyBtn.classList.remove('hidden'); // Muncul untuk Dev/Admin
+            } else {
+                if (devExportBtn) devExportBtn.classList.add('hidden');
+                if (editSupplyBtn) editSupplyBtn.classList.add('hidden');
+                }
+            } else { 
+            navAuth.classList.add('hidden'); 
+            navAuth.classList.remove('flex');
+        
+            if (addFarmerBtn) addFarmerBtn.classList.add('hidden');
+            if (addProcessorBtn) addProcessorBtn.classList.add('hidden');
+            if (devExportBtn) devExportBtn.classList.add('hidden');
+            if (editSupplyBtn) addSupplyBtn.classList.add('hidden');
+            }
+        }
 
         function loginWithDiscord() {
             if (!DISCORD_CLIENT_ID) { alert('Client ID Discord belum diatur.'); return; }
@@ -975,53 +1008,26 @@
         }
 
         function renderSupplyChainUI() {
-    const currentData = supplyChainData || defaultSupplyChain;
-    document.getElementById('txt-hulu').innerText = currentData.hulu || defaultSupplyChain.hulu;
-    document.getElementById('txt-pascapanen').innerText = currentData.pascapanen || defaultSupplyChain.pascapanen;
-    document.getElementById('txt-trace').innerText = currentData.trace || defaultSupplyChain.trace;
-    document.getElementById('txt-hilir').innerText = currentData.hilir || defaultSupplyChain.hilir;
-}
-
-        function renderFarmerProfilesUI() {
-            const container = document.getElementById('farmer-profiles-container');
-            if (!container) return;
-            let html = '';
-            farmersData.forEach((f, idx) => {
-                const isOwnerOrDev = currentUser && (currentUser.role === 'dev' || (currentUser.role === 'farmer' && f.createdBy === currentUser.user));
-                html += `
-                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 space-y-3 flex flex-col justify-between">
-                        <div class="space-y-2">
-                            <div class="flex items-start justify-between">
-                                <div class="flex items-center space-x-3">
-                                    <img src="${f.foto || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80'}" alt="Petani" class="w-14 h-14 rounded-xl object-cover border border-amber-600/40 shadow">
-                                    <div>
-                                        <h4 class="font-bold text-stone-900 text-base">${f.name}</h4>
-                                        <span class="text-[11px] text-amber-800 font-semibold"><i class="fa-solid fa-location-dot mr-1"></i>${f.location}</span>
-                                    </div>
-                                </div>
-                                ${isOwnerOrDev ? `
-                                <div class="flex space-x-1">
-                                    <button onclick="openEditFarmerModal(${idx})" class="text-amber-700 hover:text-amber-900 p-1.5 bg-amber-50 rounded-lg cursor-pointer" title="Edit Profil"><i class="fa-solid fa-pen-to-square text-xs"></i></button>
-                                    <button onclick="deleteFarmerProfile(${idx})" class="text-red-600 hover:text-red-800 p-1.5 bg-red-50 rounded-lg cursor-pointer" title="Hapus Profil"><i class="fa-solid fa-trash text-xs"></i></button>
-                                </div>
-                                ` : ''}
-                            </div>
-                            <p class="text-xs text-stone-600 leading-relaxed pt-1">${f.desc}</p>
-                        </div>
-                        <div class="pt-3 border-t border-stone-100 grid grid-cols-2 gap-2 text-[11px] font-medium text-stone-500">
-                            <div><strong class="text-stone-800">MDPL:</strong> ${f.mdpl}</div>
-                            <div><strong class="text-stone-800">Varietas:</strong> ${f.varietas}</div>
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
+        const currentData = supplyChainData || defaultSupplyChain;
+            document.getElementById('txt-hulu').innerText = currentData.hulu || defaultSupplyChain.hulu;
+            document.getElementById('txt-pascapanen').innerText = currentData.pascapanen || defaultSupplyChain.pascapanen;
+            document.getElementById('txt-trace').innerText = currentData.trace || defaultSupplyChain.trace;
+            document.getElementById('txt-hilir').innerText = currentData.hilir || defaultSupplyChain.hilir;
+        }
+        
+         function getValidImage(url, fallbackUrl) {
+            if (!url || url.includes('...') || url.trim() === 'data:image/png;base64,') {
+              return fallbackUrl;
+                }
+            return url;
         }
 
         function renderProcessorProfilesUI() {
             const container = document.getElementById('processor-profiles-container');
+            const procPhoto = getValidImage(p.foto, 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=200&q=80');
             if (!container) return;
             let html = '';
+            <img src="${procPhoto}" alt="Prosesor" class="w-14 h-14 rounded-xl object-cover border border-amber-600/40 shadow">
             processorsData.forEach((p, idx) => {
                 const isOwnerOrDev = currentUser && (currentUser.role === 'dev' || (currentUser.role === 'farmer' && p.createdBy === currentUser.user));
                 html += `
