@@ -290,6 +290,9 @@
                     <button id="dev-export-btn" onclick="exportDataJSON()" class="hidden bg-stone-700 hover:bg-stone-800 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center space-x-2 cursor-pointer">
                         <i class="fa-solid fa-download"></i>
                         <span>Export</span>
+                     <button onclick="syncChartAndSpreadsheetToDiscord()" class="flex-1 lg:flex-none bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow flex items-center justify-center space-x-2 cursor-pointer">
+                        <i class="fa-solid fa-file-arrow-up"></i>
+                        <span>Sync Grafik & Spreadsheet</span>
                     </button>
                 </div>
             </div>
@@ -749,7 +752,7 @@
          }
 
         if (typeof DISCORD_WEBHOOK_LOG === 'undefined') {
-            var DISCORD_WEBHOOK_LOG = 'https://discord.com/api/webhooks/1564644685912219678/71hpotxn9KvQE0Zci5TkJoVcXGgJa_xhw8XptVwmA58NYDrelcNInUB_39XauWmsXhnN';
+        var DISCORD_WEBHOOK_LOG = 'https://discord.com/api/webhooks/1565744285284958270/U6jF7A_UvXs7vRxGcjNY8xZiVb6J3kC-icZRJiDL-31eoHMcMY1IyfVp9GVR_gHt9h98'; 
         }
 
         if (typeof DISCORD_WEBHOOK_BATCH === 'undefined') {
@@ -2074,6 +2077,103 @@
             sendBatchNotification(`🌱 **BATCH BARU SUMEDANG (LOG)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${selectedKecamatan}** (Zona: \`${zoneInfo.zona}\`)\n• Petani: **${newItem.petani}**\n• Ceri: **${newItem.qtyCeri} Kg** | GB: **${newItem.qtyGb} Kg**`);
         }
 
+        async function syncChartAndSpreadsheetToDiscord() {
+    if (!DISCORD_WEBHOOK_LOG) {
+        alert('Webhook Discord untuk log belum diatur.');
+        return;
+    }
+    if (!coffeeData || coffeeData.length === 0) {
+        alert('Tidak ada data batch kopi yang tersedia untuk disinkronkan.');
+        return;
+    }
+
+    const canvas = document.getElementById('coffeeQuantityChart');
+    if (!canvas) {
+        alert('Elemen grafik tidak ditemukan.');
+        return;
+    }
+
+    // Hitung ringkasan statistik otomatis untuk teks Discord
+    let totalCeri = 0;
+    let totalGb = 0;
+    const varietyCount = {};
+    const zoneCount = {};
+
+    coffeeData.forEach(item => {
+        const ceri = parseFloat(item.qtyCeri) || 0;
+        const gb = parseFloat(item.qtyGb) || 0;
+        totalCeri += ceri;
+        totalGb += gb;
+
+        varietyCount[item.varietas] = (varietyCount[item.varietas] || 0) + ceri;
+        zoneCount[item.zona] = (zoneCount[item.zona] || 0) + 1;
+    });
+
+    const avgYield = totalCeri > 0 ? ((totalGb / totalCeri) * 100).toFixed(1) : 0;
+
+    // 1. Konversi Chart Canvas menjadi Blob Gambar (PNG)
+    canvas.toBlob(async (chartBlob) => {
+        if (!chartBlob) {
+            alert('Gagal mengekspor gambar grafik.');
+            return;
+        }
+
+        // 2. Buat File Spreadsheet (CSV) yang lengkap dengan ringkasan
+        let csvContent = "Kopitrace Sumedang - Laporan Kuantitas Ceri & Green Bean\n";
+        csvContent += `Waktu Ekspor,"${new Date().toLocaleString('id-ID')}"\n`;
+        csvContent += `Total Batch,${coffeeData.length}\n`;
+        csvContent += `Total Ceri (Kg),${totalCeri}\n`;
+        csvContent += `Total Green Bean (Kg),${totalGb}\n`;
+        csvContent += `Rata-rata Rendemen (%),${avgYield}%\n\n`;
+        
+        csvContent += "Kode Batch,Zona,Kecamatan,Metode,Petani,Varietas,MDPL,Kuantitas Ceri (Kg),Kuantitas Green Bean (Kg),Sertifikasi\n";
+        coffeeData.forEach(item => {
+            const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
+            csvContent += `"${code}","${item.zona}","${item.kecamatan || ''}","${item.metode}","${item.petani}","${item.varietas}","${item.mdpl || ''}",${item.qtyCeri || 0},${item.qtyGb || 0},"${item.sertifikasi || ''}"\n`;
+        });
+        
+        const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+        // 3. Susun Pesan Teks Lengkap untuk Discord
+        let summaryText = `📊 **LAPORAN ANALISIS & REKAP KOPI SUMEDANG**\n`;
+        summaryText += `────────────────────────────────────────\n`;
+        summaryText += `📦 **Total Batch Terdaftar:** ${coffeeData.length} Batch\n`;
+        summaryText += `🍒 **Akumulasi Ceri Kopi:** ${totalCeri.toLocaleString()} Kg\n`;
+        summaryText += `☕ **Akumulasi Green Bean:** ${totalGb.toLocaleString()} Kg\n`;
+        summaryText += `📈 **Rata-rata Rendemen:** ${avgYield}%\n`;
+        summaryText += `────────────────────────────────────────\n`;
+        summaryText += `_Laporan visual grafik kuantitas dan file spreadsheet rekapitulasi data lengkap telah dilampirkan di bawah._`;
+
+        // 4. Kirim menggunakan FormData
+        const formData = new FormData();
+        formData.append('file0', chartBlob, 'grafik_analisis_kopi_sumedang.png');
+        formData.append('file1', csvBlob, 'rekap_lengkap_kopi_sumedang.csv');
+        
+        const payload = {
+            content: summaryText,
+            username: "KopiTrace Analytics Bot",
+            avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png"
+        };
+        formData.append('payload_json', JSON.stringify(payload));
+
+        try {
+            const res = await fetch(DISCORD_WEBHOOK_LOG, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (res.ok) {
+                alert('Berhasil! Laporan lengkap (Grafik PNG & Spreadsheet CSV beserta statistik ringkas) telah dikirim ke Discord.');
+            } else {
+                const errText = await res.text();
+                throw new Error(errText || 'Gagal mengirim ke Discord');
+            }
+        } catch (err) {
+            console.error("Discord Sync Error:", err);
+            alert('Gagal mengirim ke Discord: ' + err.message);
+        }
+    }, 'image/png');
+}
         function deleteTreeData(index) {
             if (currentUser && currentUser.role === 'farmer' && coffeeData[index].createdBy !== currentUser.user) { alert('Akses Ditolak!'); return; }
             if (confirm('Yakin ingin menghapus data batch ini?')) {
