@@ -41,6 +41,27 @@
       "fotoUrl": "data:image/png;base64,...",
       "distribusi": [],
       "createdBy": "823842225611866183"
+    },
+    {
+      "zona": "UTR",
+      "metode": "WNE",
+      "tahun": "2026",
+      "batch": "005",
+      "petani": "hernansyah",
+      "varietas": "robusta",
+      "mdpl": "600 mdpl",
+      "kecamatan": "Sumedang Utara",
+      "lat": -6.8529,
+      "lng": 107.9205,
+      "sejarah": "Kopi Sumedang di kawasan dataran tinggi vulkanik, memiliki sejarah panjang sebagai bagian dari tradisi agraris Java Preanger yang terkenal di pasar internasional.",
+      "destName": "jakarta",
+      "destLat": -6.8687,
+      "destLng": 107.915,
+      "sertifikasi": "SNI Organik & USDA Organic Certified",
+      "cupping": "citrus",
+      "fotoUrl": "",
+      "distribusi": [],
+      "createdBy": "823842225611866183"
     }
   ],
   "registeredUsers": [
