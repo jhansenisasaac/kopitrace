@@ -43,7 +43,14 @@
       "createdBy": "823842225611866183"
     }
   ],
-  "registeredUsers": [],
+  "registeredUsers": [
+    {
+      "name": "Sudarmi",
+      "user": "Sudarmi",
+      "pass": "sudarmi",
+      "role": "farmer"
+    }
+  ],
   "supplyChainData": {},
   "farmersData": [
     {
