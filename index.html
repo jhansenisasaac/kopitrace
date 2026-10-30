@@ -972,9 +972,9 @@
         }
 
         async function sendBatchNotification(message) {
-            if (!DISCORD_WEBHOOK_LOG) return;
+            if (!DISCORD_WEBHOOK_BATCH) return;
             try {
-                await fetch(DISCORD_WEBHOOK_LOG, {
+                await fetch(DISCORD_WEBHOOK_BATCH, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ content: message, username: "KopiTrace Log Bot", avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png" })
@@ -983,7 +983,7 @@
         }
 
         async function syncAllBatchesToDiscord() {
-            if (!DISCORD_WEBHOOK_LOG) {
+            if (!DISCORD_WEBHOOK_BATCH) {
                 alert('Webhook Discord untuk log belum diatur.');
                 return;
             }
@@ -999,10 +999,10 @@
             let successCount = 0;
             for (const item of coffeeData) {
                 const codeStr = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
-                const message = `🌱 **SYNC BATCH SUMEDANG (BATCH LOG)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${item.kecamatan || '-'}** (Zona: \`${item.zona}\`)\n• Petani: **${item.petani}**\n• Varietas: **${item.varietas}**\n• Metode: **${item.metode}**\n• Ceri: **${item.qtyCeri || 0} Kg** | GB: **${item.qtyGb || 0} Kg**`;
+                const message = `🌱 **SYNC BATCH SUMEDANG (BATCH)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${item.kecamatan || '-'}** (Zona: \`${item.zona}\`)\n• Petani: **${item.petani}**\n• Varietas: **${item.varietas}**\n• Metode: **${item.metode}**\n• Ceri: **${item.qtyCeri || 0} Kg** | GB: **${item.qtyGb || 0} Kg**`;
                 
                 try {
-                    await fetch(DISCORD_WEBHOOK_LOG, {
+                    await fetch(DISCORD_WEBHOOK_BATCH, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ 
@@ -2074,11 +2074,11 @@
             if (index === -1) coffeeData.push(newItem); else coffeeData[index] = newItem;
             saveToStorage(); closeTreeModal(); renderDashboardTable(); updateStats(); renderCoffeeChart();
             const codeStr = `${newItem.zona}/${newItem.metode}/${newItem.tahun}/${newItem.batch}`;
-            sendBatchNotification(`🌱 **BATCH BARU SUMEDANG (LOG)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${selectedKecamatan}** (Zona: \`${zoneInfo.zona}\`)\n• Petani: **${newItem.petani}**\n• Ceri: **${newItem.qtyCeri} Kg** | GB: **${newItem.qtyGb} Kg**`);
+            sendBatchNotification(`🌱 **BATCH BARU SUMEDANG (BATCH)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${selectedKecamatan}** (Zona: \`${zoneInfo.zona}\`)\n• Petani: **${newItem.petani}**\n• Ceri: **${newItem.qtyCeri} Kg** | GB: **${newItem.qtyGb} Kg**`);
         }
 
         async function syncChartAndSpreadsheetToDiscord() {
-    if (!DISCORD_WEBHOOK_LOG) {
+    if (!DISCORD_WEBHOOK_BATCH) {
         alert('Webhook Discord untuk log belum diatur.');
         return;
     }
