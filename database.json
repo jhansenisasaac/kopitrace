@@ -1,5 +1,27 @@
 {
-  "coffeeData": [],
+  "coffeeData": [
+    {
+      "zona": "BRT",
+      "metode": "WASH",
+      "tahun": "2026",
+      "batch": "001",
+      "petani": "udin",
+      "varietas": "robusta sumedang",
+      "mdpl": "1450 mdpl",
+      "kecamatan": "Pamulihan",
+      "lat": -6.8904,
+      "lng": 107.8285,
+      "sejarah": "Kopi Sumedang di kawasan dataran tinggi vulkanik, memiliki sejarah panjang sebagai bagian dari tradisi agraris Java Preanger yang terkenal di pasar internasional.",
+      "destName": "guadang rancakalong",
+      "destLat": -6.8687,
+      "destLng": 107.915,
+      "sertifikasi": "organik",
+      "cupping": "coklat",
+      "fotoUrl": "",
+      "distribusi": [],
+      "createdBy": "823842225611866183"
+    }
+  ],
   "registeredUsers": [
     {
       "name": "Developer Super Admin",
