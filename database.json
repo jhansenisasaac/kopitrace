@@ -55,6 +55,12 @@
       "user": "Ujangtangker",
       "pass": "ujang",
       "role": "farmer"
+    },
+    {
+      "name": "Ujang",
+      "user": "Ujang",
+      "pass": "ujang",
+      "role": "farmer"
     }
   ],
   "supplyChainData": {},
