@@ -1,5 +1,27 @@
 {
-  "coffeeData": [],
+  "coffeeData": [
+    {
+      "zona": "UTR",
+      "metode": "NAT",
+      "tahun": "2026",
+      "batch": "005",
+      "petani": "udin",
+      "varietas": "robusta sumedang",
+      "mdpl": "600 mdpl",
+      "kecamatan": "Tanjungkerta",
+      "lat": -6.7865,
+      "lng": 107.9012,
+      "sejarah": "Kopi Sumedang di kawasan dataran tinggi vulkanik, memiliki sejarah panjang sebagai bagian dari tradisi agraris Java Preanger yang terkenal di pasar internasional.",
+      "destName": "Gudang Ekspor Sumedang Pusat",
+      "destLat": -6.8687,
+      "destLng": 107.915,
+      "sertifikasi": "SNI Organik & USDA Organic Certified",
+      "cupping": "contoh",
+      "fotoUrl": "",
+      "distribusi": [],
+      "createdBy": "823842225611866183"
+    }
+  ],
   "registeredUsers": [],
   "supplyChainData": {},
   "farmersData": [
