@@ -1067,9 +1067,9 @@
         }
 
         async function sendBatchNotification(message) {
-            if (!DISCORD_WEBHOOK_LOG) return;
+            if (!DISCORD_WEBHOOK_BATCH) return;
             try {
-                await fetch(DISCORD_WEBHOOK_LOG, {
+                await fetch(DISCORD_WEBHOOK_BATCH, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ content: message, username: "KopiTrace Log Bot", avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png" })
