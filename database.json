@@ -45,6 +45,29 @@
       "fotoUrl": "",
       "distribusi": [],
       "createdBy": "823842225611866183"
+    },
+    {
+      "zona": "BRT",
+      "metode": "HON",
+      "tahun": "2026",
+      "batch": "001",
+      "petani": "udin",
+      "varietas": "Arabica",
+      "mdpl": "3.078 mdpl",
+      "qtyCeri": 100,
+      "qtyGb": 80,
+      "kecamatan": "Sukasari",
+      "lat": -6.8797,
+      "lng": 107.7946,
+      "sejarah": "Kopi Sumedang di kawasan dataran tinggi vulkanik, memiliki sejarah panjang sebagai bagian dari tradisi agraris Java Preanger yang terkenal di pasar internasional.",
+      "destName": "Gudang Ekspor Sumedang Pusat",
+      "destLat": -6.8687,
+      "destLng": 107.915,
+      "sertifikasi": "organik",
+      "cupping": "floral",
+      "fotoUrl": "",
+      "distribusi": [],
+      "createdBy": "823842225611866183"
     }
   ],
   "registeredUsers": [
