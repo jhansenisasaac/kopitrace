@@ -283,6 +283,10 @@
                         <i class="fa-solid fa-plus"></i>
                         <span>Tambah Batch</span>
                     </button>
+                    <button onclick="syncAllBatchesToDiscord()" class="flex-1 lg:flex-none bg-[#5865F2] hover:bg-[#4752C4] text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow flex items-center justify-center space-x-2 cursor-pointer">
+                        <i class="fa-brands fa-discord"></i>
+                        <span>Sync ke Discord</span>
+                    </button>
                     <button id="dev-export-btn" onclick="exportDataJSON()" class="hidden bg-stone-700 hover:bg-stone-800 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center space-x-2 cursor-pointer">
                         <i class="fa-solid fa-download"></i>
                         <span>Export</span>
@@ -716,7 +720,7 @@
         };
 
         const DISCORD_WEBHOOK_AUTH = 'https://discord.com/api/webhooks/1564693546764734504/B7-i_t9keiZuOPG7HIJpWHA55mK5VeQvKxGGJW2WrT_XNWe0SGZWKJearSTsQOUB2wnz';
-        const DISCORD_WEBHOOK_BATCH = 'https://discord.com/api/webhooks/1564644685912219678/71hpotxn9KvQE0Zci5TkJoVcXGgJa_xhw8XptVwmA58NYDrelcNInUB_39XauWmsXhnN';
+        const DISCORD_WEBHOOK_BATCH = 'https://discord.com/api/webhooks/1565605508763750450/PHO4Te_DfSLb5zn3fdgr8Ne81yMydIxI1-J7sQL8X5LHeBKwU9MG-wdLJ_9dcNj6Xjq5';
         const DISCORD_CLIENT_ID = '1564650682991120497'; 
         
         const TARGET_GUILD_ID = '1564644279681286195';
@@ -889,6 +893,45 @@
                     body: JSON.stringify({ content: message, username: "KopiTrace Batch Bot", avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png" })
                 });
             } catch (err) { console.error("Batch webhook error:", err); }
+        }
+
+        async function syncAllBatchesToDiscord() {
+            if (!DISCORD_WEBHOOK_BATCH) {
+                alert('Webhook Discord untuk batch belum diatur.');
+                return;
+            }
+            if (!coffeeData || coffeeData.length === 0) {
+                alert('Tidak ada data batch kopi yang tersedia untuk disinkronkan.');
+                return;
+            }
+
+            if (!confirm(`Apakah Anda yakin ingin mengirim ${coffeeData.length} data batch kopi ke channel Discord?`)) {
+                return;
+            }
+
+            let successCount = 0;
+            for (const item of coffeeData) {
+                const codeStr = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
+                const message = `🌱 **SYNC BATCH SUMEDANG**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${item.kecamatan || '-'}** (Zona: \`${item.zona}\`)\n• Petani: **${item.petani}**\n• Varietas: **${item.varietas}**\n• Metode: **${item.metode}**`;
+                
+                try {
+                    await fetch(DISCORD_WEBHOOK_BATCH, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            content: message, 
+                            username: "KopiTrace Batch Bot", 
+                            avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png" 
+                        })
+                    });
+                    successCount++;
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                } catch (err) {
+                    console.error("Gagal mengirim batch ke Discord:", err);
+                }
+            }
+
+            alert(`Berhasil mensinkronkan ${successCount} dari ${coffeeData.length} batch ke channel Discord!`);
         }
 
         function loginWithDiscord() {
@@ -1261,82 +1304,80 @@
             }
         }
 
-        // FUNGSI SINKRONISASI & AMAN LOCAL STORAGE DIPERBAIKI (ANTIHILANG)
+        // FUNGSI SINKRONISASI & AMAN LOCAL STORAGE (DIAMANKAN MENGGUNAKAN GITHUB CONTENTS API)
         async function fetchRealTimeData() {
-    const statusEl = document.getElementById('github-sync-status');
-    const token = localStorage.getItem('kopiTraceAdminToken');
-    
-    // Ambil data lokal dulu sebagai cadangan
-    if (localStorage.getItem('kopiTraceData')) coffeeData = JSON.parse(localStorage.getItem('kopiTraceData'));
-    if (localStorage.getItem('kopiTraceSupply')) supplyChainData = JSON.parse(localStorage.getItem('kopiTraceSupply'));
-    if (localStorage.getItem('kopiTraceFarmers')) farmersData = JSON.parse(localStorage.getItem('kopiTraceFarmers'));
-    if (localStorage.getItem('kopiTraceProcessors')) processorsData = JSON.parse(localStorage.getItem('kopiTraceProcessors'));
+            const statusEl = document.getElementById('github-sync-status');
+            const token = localStorage.getItem('kopiTraceAdminToken');
+            
+            if (localStorage.getItem('kopiTraceData')) coffeeData = JSON.parse(localStorage.getItem('kopiTraceData'));
+            if (localStorage.getItem('kopiTraceSupply')) supplyChainData = JSON.parse(localStorage.getItem('kopiTraceSupply'));
+            if (localStorage.getItem('kopiTraceFarmers')) farmersData = JSON.parse(localStorage.getItem('kopiTraceFarmers'));
+            if (localStorage.getItem('kopiTraceProcessors')) processorsData = JSON.parse(localStorage.getItem('kopiTraceProcessors'));
 
-    if (!token) {
-        renderSupplyChainUI();
-        renderFarmerProfilesUI();
-        renderProcessorProfilesUI();
-        if (statusEl) {
-            statusEl.innerText = 'Mode Lokal';
-            statusEl.className = 'text-[10px] sm:text-xs bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full font-bold hidden sm:inline';
-        }
-        updateViewUI();
-        return;
-    }
+            if (!token) {
+                renderSupplyChainUI();
+                renderFarmerProfilesUI();
+                renderProcessorProfilesUI();
+                if (statusEl) {
+                    statusEl.innerText = 'Mode Lokal';
+                    statusEl.className = 'text-[10px] sm:text-xs bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full font-bold hidden sm:inline';
+                }
+                updateViewUI();
+                return;
+            }
 
-    // Gunakan GitHub Contents API agar mendukung Private Repository dengan Token
-    const apiUrl = `https://raw.githubusercontent.com/jhansenisasaac/kopitrace/main/database.json?t=${new Date().getTime()}`;
-    try {
-        if (statusEl) statusEl.innerText = 'Syncing...';
-        const res = await fetch(apiUrl, {
-            headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' }
-        });
-        
-        if (!res.ok) throw new Error('Gagal mengambil data dari GitHub API');
-        
-        const fileData = await res.json();
-        // Decode base64 content dari GitHub API
-        const decodedBytes = Uint8Array.from(atob(fileData.content), c => c.charCodeAt(0));
-        const decodedString = new TextDecoder().decode(decodedBytes);
-        const data = JSON.parse(decodedString);
-        
-        if (data.coffeeData) {
-            coffeeData = data.coffeeData;
-            localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
-        }
-        if (data.registeredUsers) {
-            registeredUsers = data.registeredUsers;
-            localStorage.setItem('kopiTraceUsers', JSON.stringify(registeredUsers));
-        }
-        if (data.supplyChainData) { 
-            supplyChainData = data.supplyChainData; 
-            localStorage.setItem('kopiTraceSupply', JSON.stringify(supplyChainData)); 
-        }
-        if (data.farmersData) {
-            farmersData = data.farmersData;
-            localStorage.setItem('kopiTraceFarmers', JSON.stringify(farmersData));
-        }
-        if (data.processorsData) {
-            processorsData = data.processorsData;
-            localStorage.setItem('kopiTraceProcessors', JSON.stringify(processorsData));
+            const apiUrl = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}?t=${new Date().getTime()}`;
+            try {
+                if (statusEl) statusEl.innerText = 'Syncing...';
+                const res = await fetch(apiUrl, {
+                    headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' }
+                });
+                
+                if (!res.ok) throw new Error('Gagal mengambil data dari GitHub API');
+                
+                const fileData = await res.json();
+                const decodedBytes = Uint8Array.from(atob(fileData.content), c => c.charCodeAt(0));
+                const decodedString = new TextDecoder().decode(decodedBytes);
+                const data = JSON.parse(decodedString);
+                
+                if (data.coffeeData) {
+                    coffeeData = data.coffeeData;
+                    localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
+                }
+                if (data.registeredUsers) {
+                    registeredUsers = data.registeredUsers;
+                    localStorage.setItem('kopiTraceUsers', JSON.stringify(registeredUsers));
+                }
+                if (data.supplyChainData) { 
+                    supplyChainData = data.supplyChainData; 
+                    localStorage.setItem('kopiTraceSupply', JSON.stringify(supplyChainData)); 
+                }
+                if (data.farmersData) {
+                    farmersData = data.farmersData;
+                    localStorage.setItem('kopiTraceFarmers', JSON.stringify(farmersData));
+                }
+                if (data.processorsData) {
+                    processorsData = data.processorsData;
+                    localStorage.setItem('kopiTraceProcessors', JSON.stringify(processorsData));
+                }
+
+                renderSupplyChainUI();
+                renderFarmerProfilesUI();
+                renderProcessorProfilesUI();
+                if (statusEl) {
+                    statusEl.innerText = 'Auto-Sync: Aktif';
+                    statusEl.className = 'text-[10px] sm:text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-bold hidden sm:inline';
+                }
+            } catch (e) {
+                console.warn("Sync error, menggunakan data lokal:", e);
+                if (statusEl) {
+                    statusEl.innerText = 'Auto-Sync: Offline';
+                    statusEl.className = 'text-[10px] sm:text-xs bg-red-100 text-red-800 px-2.5 py-1 rounded-full font-bold hidden sm:inline';
+                }
+            }
+            updateViewUI();
         }
 
-        renderSupplyChainUI();
-        renderFarmerProfilesUI();
-        renderProcessorProfilesUI();
-        if (statusEl) {
-            statusEl.innerText = 'Auto-Sync: Aktif';
-            statusEl.className = 'text-[10px] sm:text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-bold hidden sm:inline';
-        }
-    } catch (e) {
-        console.warn("Sync error, menggunakan data lokal:", e);
-        if (statusEl) {
-            statusEl.innerText = 'Auto-Sync: Offline';
-            statusEl.className = 'text-[10px] sm:text-xs bg-red-100 text-red-800 px-2.5 py-1 rounded-full font-bold hidden sm:inline';
-        }
-    }
-    updateViewUI();
-}
         function updateViewUI() {
             if (currentView === 'public-home') { renderPublicCards(); updateStats(); }
             else if (currentView === 'public-map') { initMap(); }
@@ -1760,7 +1801,6 @@
                 navAuth.classList.add('flex');
                 if (roleLabel) roleLabel.innerText = `${currentUser.name} (${currentUser.role})`;
                 
-                // Tampilkan tombol tambah profil saat sudah login
                 if (addFarmerBtn) addFarmerBtn.classList.remove('hidden');
                 if (addProcessorBtn) addProcessorBtn.classList.remove('hidden');
                 
@@ -1773,7 +1813,6 @@
                 navAuth.classList.add('hidden'); 
                 navAuth.classList.remove('flex');
                 
-                // Sembunyikan tombol tambah profil untuk pengunjung publik
                 if (addFarmerBtn) addFarmerBtn.classList.add('hidden');
                 if (addProcessorBtn) addProcessorBtn.classList.add('hidden');
                 if (devExportBtn) devExportBtn.classList.add('hidden');
