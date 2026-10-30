@@ -798,6 +798,39 @@
             showInstallButtons();
         });
 
+        function updateAuthUI() {
+    const navAuth = document.getElementById('nav-auth-container');
+    const roleLabel = document.getElementById('auth-role-label');
+    const devExportBtn = document.getElementById('dev-export-btn');
+    const editSupplyBtn = document.getElementById('edit-supply-btn'); // Tambahkan ini
+    const addFarmerBtn = document.getElementById('add-farmer-btn');
+    const addProcessorBtn = document.getElementById('add-processor-btn');
+
+    if (currentUser) {
+        navAuth.classList.remove('hidden');
+        navAuth.classList.add('flex');
+        if (roleLabel) roleLabel.innerText = `${currentUser.name} (${currentUser.role})`;
+        
+        if (addFarmerBtn) addFarmerBtn.classList.remove('hidden');
+        if (addProcessorBtn) addProcessorBtn.classList.remove('hidden');
+        
+        if (currentUser.role === 'dev') {
+            if (devExportBtn) devExportBtn.classList.remove('hidden');
+            if (editSupplyBtn) editSupplyBtn.classList.remove('hidden'); // Munculkan tombol edit analisis untuk admin/dev
+        } else {
+            if (devExportBtn) devExportBtn.classList.add('hidden');
+            if (editSupplyBtn) editSupplyBtn.classList.add('hidden');
+        }
+    } else { 
+        navAuth.classList.add('hidden'); 
+        navAuth.classList.remove('flex');
+        
+        if (addFarmerBtn) addFarmerBtn.classList.add('hidden');
+        if (addProcessorBtn) addProcessorBtn.classList.add('hidden');
+        if (devExportBtn) devExportBtn.classList.add('hidden');
+        if (editSupplyBtn) editSupplyBtn.classList.add('hidden'); // Sembunyikan jika logout
+    }
+}
         function showInstallButtons() {
             const btn = document.getElementById('install-btn');
             const mobileBtn = document.getElementById('mobile-install-btn');
@@ -942,11 +975,12 @@
         }
 
         function renderSupplyChainUI() {
-            document.getElementById('txt-hulu').innerText = supplyChainData.hulu;
-            document.getElementById('txt-pascapanen').innerText = supplyChainData.pascapanen;
-            document.getElementById('txt-trace').innerText = supplyChainData.trace;
-            document.getElementById('txt-hilir').innerText = supplyChainData.hilir;
-        }
+    const currentData = supplyChainData || defaultSupplyChain;
+    document.getElementById('txt-hulu').innerText = currentData.hulu || defaultSupplyChain.hulu;
+    document.getElementById('txt-pascapanen').innerText = currentData.pascapanen || defaultSupplyChain.pascapanen;
+    document.getElementById('txt-trace').innerText = currentData.trace || defaultSupplyChain.trace;
+    document.getElementById('txt-hilir').innerText = currentData.hilir || defaultSupplyChain.hilir;
+}
 
         function renderFarmerProfilesUI() {
             const container = document.getElementById('farmer-profiles-container');
