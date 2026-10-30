@@ -1947,7 +1947,11 @@
             const sharedCode = urlParams.get('code');
             if (sharedCode) { switchView('public-scanner'); fillAndTrace(sharedCode.toUpperCase()); }
             else { renderPublicCards(); updateStats(); }
-        };
+        }
+        window.onload = function() {
+    fetchRealTimeData();
+    // Inisialisasi fungsi lainnya...
+};
     </script>
 </body>
 </html>
