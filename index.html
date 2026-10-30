@@ -267,21 +267,21 @@
         </section>
 
         <!-- 7. PUBLIC NEWS / BERITA KOPI SUMEDANG -->
-        <section id="view-news" class="space-y-6 hidden max-w-5xl mx-auto">
-            <div class="flex justify-between items-center flex-wrap gap-3">
-                <div>
-                    <span class="text-xs font-bold text-amber-700 uppercase tracking-widest">Wawasan & Tren</span>
-                    <h2 class="text-2xl sm:text-3xl font-extrabold text-stone-900">Berita Industri Kopi Sumedang</h2>
-                </div>
-                <div class="flex space-x-2">
-                    <button id="add-news-btn" onclick="openAddNewsModal()" class="hidden bg-amber-700 hover:bg-amber-800 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center space-x-1.5 shadow cursor-pointer">
-                        <i class="fa-solid fa-newspaper"></i><span>Tambah Berita Baru</span>
-                    </button>
-                    <button onclick="switchView('public-home')" class="bg-stone-200 hover:bg-stone-300 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium cursor-pointer">Kembali</button>
-                </div>
-            </div>
-            <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-        </section>
+        <section id="view-public-news" class="space-y-6 hidden max-w-5xl mx-auto">
+    <div class="flex justify-between items-center flex-wrap gap-3">
+        <div>
+            <span class="text-xs font-bold text-amber-700 uppercase tracking-widest">Wawasan & Tren</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-stone-900">Berita Industri Kopi Sumedang</h2>
+        </div>
+        <div class="flex space-x-2">
+            <button id="add-news-btn" onclick="openAddNewsModal()" class="hidden bg-amber-700 hover:bg-amber-800 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center space-x-1.5 shadow cursor-pointer">
+                <i class="fa-solid fa-newspaper"></i><span>Tambah Berita Baru</span>
+            </button>
+            <button onclick="switchView('public-home')" class="bg-stone-200 hover:bg-stone-300 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium cursor-pointer">Kembali</button>
+        </div>
+    </div>
+    <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+</section>
 
         <!-- 6. DASHBOARD -->
         <section id="view-dashboard" class="space-y-6 hidden">
@@ -1809,23 +1809,23 @@
         }
 
         function switchView(viewName) {
-            currentView = viewName;
-            ['public-home', 'farmer-profile', 'processor-profile', 'public-map', 'public-scanner', 'dashboard', 'view-news'].forEach(v => {
-                const el = document.getElementById(v.startsWith('view-') ? v : 'view-' + v);
-                if (el) el.classList.add('hidden');
-            });
-            const target = document.getElementById(viewName.startsWith('view-') ? viewName : 'view-' + viewName);
-            if (target) target.classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+    currentView = viewName;
+    ['public-home', 'farmer-profile', 'processor-profile', 'public-map', 'public-scanner', 'dashboard', 'public-news'].forEach(v => {
+        const el = document.getElementById('view-' + v);
+        if (el) el.classList.add('hidden');
+    });
+    const target = document.getElementById('view-' + viewName);
+    if (target) target.classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            if (viewName === 'public-home') { renderPublicCards(); updateStats(); }
-            else if (viewName === 'farmer-profile') { renderFarmerProfilesUI(); }
-            else if (viewName === 'processor-profile') { renderProcessorProfilesUI(); }
-            else if (viewName === 'public-news') { renderNewsUI(); }
-            else if (viewName === 'public-map') { setTimeout(initMap, 150); }
-            else if (viewName === 'public-scanner') { renderSampleBadges(); }
-            else if (viewName === 'dashboard') { if (!currentUser) { openAuthModal(); return; } renderDashboardTable(); renderDashboardProfilesLists(); renderCoffeeChart(); }
-        }
+    if (viewName === 'public-home') { renderPublicCards(); updateStats(); }
+    else if (viewName === 'farmer-profile') { renderFarmerProfilesUI(); }
+    else if (viewName === 'processor-profile') { renderProcessorProfilesUI(); }
+    else if (viewName === 'public-news') { renderNewsUI(); }
+    else if (viewName === 'public-map') { setTimeout(initMap, 150); }
+    else if (viewName === 'public-scanner') { renderSampleBadges(); }
+    else if (viewName === 'dashboard') { if (!currentUser) { openAuthModal(); return; } renderDashboardTable(); renderDashboardProfilesLists(); renderCoffeeChart(); }
+}
 
         function openDashboard() { switchView('dashboard'); }
 
