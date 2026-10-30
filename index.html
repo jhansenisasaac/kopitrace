@@ -1284,8 +1284,8 @@
         return;
     }
 
-    // Gunakan GitHub Contents API agar mendukung Private Repository dengan Token
-    const apiUrl = `https://raw.githubusercontent.com/jhansenisasaac/kopitrace/main/database.json?t=${new Date().getTime()}`;
+    // Gunakan GitHub Contents API (api.github.com) agar mendukung Header Token & terhindar dari CORS error
+    const apiUrl = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}?t=${new Date().getTime()}`;
     try {
         if (statusEl) statusEl.innerText = 'Syncing...';
         const res = await fetch(apiUrl, {
