@@ -797,7 +797,7 @@
             deferredPrompt = e;
             showInstallButtons();
         });
-        
+
         function showInstallButtons() {
             const btn = document.getElementById('install-btn');
             const mobileBtn = document.getElementById('mobile-install-btn');
@@ -1789,6 +1789,7 @@
     
     alert('Akun berhasil didaftar dan Anda langsung masuk!');
 }
+
         function handleLogout() { currentUser = null; saveToStorage(); updateAuthUI(); switchView('public-home'); }
 
         function updateAuthUI() {
