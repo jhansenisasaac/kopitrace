@@ -1056,7 +1056,6 @@
             const modal = document.getElementById('farmer-modal');
             modal.classList.remove('hidden'); modal.classList.add('flex');
         }
-
         function openEditFarmerModal(index) {
             const f = farmersData[index];
             if (!f) return;
@@ -1091,14 +1090,7 @@
             e.preventDefault();
             const index = parseInt(document.getElementById('farmer-edit-index').value);
             
-            if (currentUser && currentUser.role === 'farmer' && index !== -1) {
-                if (farmersData[index].createdBy && farmersData[index].createdBy !== currentUser.user) {
-                    alert('Akses Ditolak!');
-                    return;
-                }
-            }
-
-            const existingFoto = index !== -1 ? farmersData[index].foto : '';
+            const existingFoto = index !== -1 && farmersData[index] ? farmersData[index].foto : '';
             const fotoValue = document.getElementById('form-farmer-foto').value.trim() || existingFoto || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80';
             
             const farmerObj = {
@@ -1108,13 +1100,15 @@
                 varietas: document.getElementById('form-farmer-varietas').value.trim(),
                 desc: document.getElementById('form-farmer-desc').value.trim(),
                 foto: fotoValue,
-                createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : (farmersData[index].createdBy || 'dev')
+                createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : (farmersData[index] ? farmersData[index].createdBy : 'dev')
             };
-            if (index === -1) {
+
+            if (index === -1 || !farmersData[index]) {
                 farmersData.push(farmerObj);
             } else {
                 farmersData[index] = farmerObj;
             }
+
             saveToStorage();
             closeFarmerModal();
             renderFarmerProfilesUI();
@@ -1122,6 +1116,15 @@
             alert('Profil Petani berhasil disimpan dan disinkronkan!');
         }
 
+        function openAddProcessorModal() {
+            document.getElementById('processor-modal-title').innerHTML = `<i class="fa-solid fa-industry text-amber-700"></i><span>Tambah Rumah Prosesor Baru</span>`;
+            document.getElementById('processor-edit-index').value = -1;
+            document.getElementById('processor-form').reset();
+            document.getElementById('form-proc-foto').value = '';
+            document.getElementById('processor-preview-container').classList.add('hidden');
+            const modal = document.getElementById('processor-modal');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        }
         function deleteFarmerProfile(index) {
             if (currentUser && currentUser.role === 'farmer' && farmersData[index].createdBy && farmersData[index].createdBy !== currentUser.user) {
                 alert('Akses Ditolak! Anda tidak dapat menghapus profil milik petani lain.');
@@ -1178,14 +1181,7 @@
             e.preventDefault();
             const index = parseInt(document.getElementById('processor-edit-index').value);
             
-            if (currentUser && currentUser.role === 'farmer' && index !== -1) {
-                if (processorsData[index].createdBy && processorsData[index].createdBy !== currentUser.user) {
-                    alert('Akses Ditolak!');
-                    return;
-                }
-            }
-
-            const existingFoto = index !== -1 ? processorsData[index].foto : '';
+            const existingFoto = index !== -1 && processorsData[index] ? processorsData[index].foto : '';
             const fotoValue = document.getElementById('form-proc-foto').value.trim() || existingFoto || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=200&q=80';
 
             const procObj = {
@@ -1194,13 +1190,15 @@
                 methods: document.getElementById('form-proc-methods').value.trim(),
                 desc: document.getElementById('form-proc-desc').value.trim(),
                 foto: fotoValue,
-                createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : (processorsData[index].createdBy || 'dev')
+                createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : (processorsData[index] ? processorsData[index].createdBy : 'dev')
             };
-            if (index === -1) {
+
+            if (index === -1 || !processorsData[index]) {
                 processorsData.push(procObj);
             } else {
                 processorsData[index] = procObj;
             }
+
             saveToStorage();
             closeProcessorModal();
             renderProcessorProfilesUI();
