@@ -1263,86 +1263,80 @@
 
         // FUNGSI SINKRONISASI & AMAN LOCAL STORAGE DIPERBAIKI (ANTIHILANG)
         async function fetchRealTimeData() {
-            const statusEl = document.getElementById('github-sync-status');
-            const token = localStorage.getItem('kopiTraceAdminToken');
-            
-            const localData = localStorage.getItem('kopiTraceData');
-            if (localData) coffeeData = JSON.parse(localData);
-            
-            const localSup = localStorage.getItem('kopiTraceSupply');
-            if (localSup) supplyChainData = JSON.parse(localSup);
-            
-            const localFarmers = localStorage.getItem('kopiTraceFarmers');
-            if (localFarmers) farmersData = JSON.parse(localFarmers);
-            
-            const localProcs = localStorage.getItem('kopiTraceProcessors');
-            if (localProcs) processorsData = JSON.parse(localProcs);
+    const statusEl = document.getElementById('github-sync-status');
+    const token = localStorage.getItem('kopiTraceAdminToken');
+    
+    // Ambil data lokal dulu sebagai cadangan
+    if (localStorage.getItem('kopiTraceData')) coffeeData = JSON.parse(localStorage.getItem('kopiTraceData'));
+    if (localStorage.getItem('kopiTraceSupply')) supplyChainData = JSON.parse(localStorage.getItem('kopiTraceSupply'));
+    if (localStorage.getItem('kopiTraceFarmers')) farmersData = JSON.parse(localStorage.getItem('kopiTraceFarmers'));
+    if (localStorage.getItem('kopiTraceProcessors')) processorsData = JSON.parse(localStorage.getItem('kopiTraceProcessors'));
 
-            if (!token) {
-                renderSupplyChainUI();
-                renderFarmerProfilesUI();
-                renderProcessorProfilesUI();
-                if (statusEl) {
-                    statusEl.innerText = 'Mode Lokal';
-                    statusEl.className = 'text-[10px] sm:text-xs bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full font-bold hidden sm:inline';
-                }
-                updateViewUI();
-                return;
-            }
+    if (!token) {
+        renderSupplyChainUI();
+        renderFarmerProfilesUI();
+        renderProcessorProfilesUI();
+        if (statusEl) {
+            statusEl.innerText = 'Mode Lokal';
+            statusEl.className = 'text-[10px] sm:text-xs bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full font-bold hidden sm:inline';
+        }
+        updateViewUI();
+        return;
+    }
 
-            const rawUrl = `https://raw.githubusercontent.com/jhansenisasaac/kopitrace/main/database.json?t=${new Date().getTime()}`;
-            try {
-                if (statusEl) statusEl.innerText = 'Syncing...';
-                const res = await fetch(rawUrl);
-                
-                if (!res.ok) {
-                    if (res.status === 404) {
-                        await saveToGitHub();
-                    }
-                    throw new Error('Gagal mengambil data dari GitHub');
-                }
-                
-                const data = await res.json();
-                
-                if (data.coffeeData && data.coffeeData.length >= coffeeData.length) {
-                    coffeeData = data.coffeeData;
-                    localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
-                }
-                if (data.registeredUsers) {
-                    registeredUsers = data.registeredUsers;
-                    localStorage.setItem('kopiTraceUsers', JSON.stringify(registeredUsers));
-                }
-                if (data.supplyChainData) { 
-                    supplyChainData = data.supplyChainData; 
-                    localStorage.setItem('kopiTraceSupply', JSON.stringify(supplyChainData)); 
-                }
-                if (data.farmersData) {
-                    farmersData = data.farmersData;
-                    localStorage.setItem('kopiTraceFarmers', JSON.stringify(farmersData));
-                }
-                if (data.processorsData) {
-                    processorsData = data.processorsData;
-                    localStorage.setItem('kopiTraceProcessors', JSON.stringify(processorsData));
-                }
-
-                renderSupplyChainUI();
-                renderFarmerProfilesUI();
-                renderProcessorProfilesUI();
-                if (statusEl) {
-                    statusEl.innerText = 'Auto-Sync: Aktif';
-                    statusEl.className = 'text-[10px] sm:text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-bold hidden sm:inline';
-                }
-            } catch (e) {
-                console.warn("Sync error, menggunakan data lokal:", e);
-                if (statusEl) {
-                    statusEl.innerText = 'Auto-Sync: Offline';
-                    statusEl.className = 'text-[10px] sm:text-xs bg-red-100 text-red-800 px-2.5 py-1 rounded-full font-bold hidden sm:inline';
-                }
-            }
-
-            updateViewUI();
+    // Gunakan GitHub Contents API agar mendukung Private Repository dengan Token
+    const apiUrl = `https://raw.githubusercontent.com/jhansenisasaac/kopitrace/main/database.json?t=${new Date().getTime()}`;
+    try {
+        if (statusEl) statusEl.innerText = 'Syncing...';
+        const res = await fetch(apiUrl, {
+            headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' }
+        });
+        
+        if (!res.ok) throw new Error('Gagal mengambil data dari GitHub API');
+        
+        const fileData = await res.json();
+        // Decode base64 content dari GitHub API
+        const decodedBytes = Uint8Array.from(atob(fileData.content), c => c.charCodeAt(0));
+        const decodedString = new TextDecoder().decode(decodedBytes);
+        const data = JSON.parse(decodedString);
+        
+        if (data.coffeeData) {
+            coffeeData = data.coffeeData;
+            localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
+        }
+        if (data.registeredUsers) {
+            registeredUsers = data.registeredUsers;
+            localStorage.setItem('kopiTraceUsers', JSON.stringify(registeredUsers));
+        }
+        if (data.supplyChainData) { 
+            supplyChainData = data.supplyChainData; 
+            localStorage.setItem('kopiTraceSupply', JSON.stringify(supplyChainData)); 
+        }
+        if (data.farmersData) {
+            farmersData = data.farmersData;
+            localStorage.setItem('kopiTraceFarmers', JSON.stringify(farmersData));
+        }
+        if (data.processorsData) {
+            processorsData = data.processorsData;
+            localStorage.setItem('kopiTraceProcessors', JSON.stringify(processorsData));
         }
 
+        renderSupplyChainUI();
+        renderFarmerProfilesUI();
+        renderProcessorProfilesUI();
+        if (statusEl) {
+            statusEl.innerText = 'Auto-Sync: Aktif';
+            statusEl.className = 'text-[10px] sm:text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-bold hidden sm:inline';
+        }
+    } catch (e) {
+        console.warn("Sync error, menggunakan data lokal:", e);
+        if (statusEl) {
+            statusEl.innerText = 'Auto-Sync: Offline';
+            statusEl.className = 'text-[10px] sm:text-xs bg-red-100 text-red-800 px-2.5 py-1 rounded-full font-bold hidden sm:inline';
+        }
+    }
+    updateViewUI();
+}
         function updateViewUI() {
             if (currentView === 'public-home') { renderPublicCards(); updateStats(); }
             else if (currentView === 'public-map') { initMap(); }
