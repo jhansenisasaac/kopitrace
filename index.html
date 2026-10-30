@@ -178,7 +178,7 @@
             </div>
         </section>
 
-        <!-- 2. FARMER PROFILE PAGE (HALAMAN KHUSUS PROFIL PETANI) -->
+        <!-- 2. FARMER PROFILE PAGE -->
         <section id="view-farmer-profile" class="space-y-6 hidden max-w-5xl mx-auto">
             <div class="flex justify-between items-center flex-wrap gap-3">
                 <div>
@@ -195,7 +195,7 @@
             <div id="farmer-profiles-container" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
         </section>
 
-        <!-- 3. PROCESSOR PROFILE PAGE (HALAMAN KHUSUS PROFIL PROSESOR) -->
+        <!-- 3. PROCESSOR PROFILE PAGE -->
         <section id="view-processor-profile" class="space-y-6 hidden max-w-5xl mx-auto">
             <div class="flex justify-between items-center flex-wrap gap-3">
                 <div>
@@ -483,7 +483,7 @@
         </div>
     </div>
 
-    <!-- AUTH MODAL (LOGIN & REGISTER) -->
+    <!-- AUTH MODAL -->
     <div id="auth-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-stone-100 pb-3">
@@ -759,16 +759,52 @@
 
         let supplyChainData = JSON.parse(localStorage.getItem('kopiTraceSupply')) || defaultSupplyChain;
 
-        // Data Dinamis Petani & Prosesor
         let defaultFarmers = [
-            { name: "Bpk. Hendra & Kelompok Tani Tampomas Lestari", location: "Kec. Cimalaka & Sumedang Utara (Zona CML & UTR)", mdpl: "1.200 – 1.500 MDPL", varietas: "Arabica Line S, Sigarar Utang, Typica", desc: "Berada di tanah vulkanik subur, meneruskan tradisi leluhur perkebunan kopi Java Preanger dengan pendekatan modern ramah lingkungan serta sistem panen pilih merah (selective picking).", foto: "https://images.unsplash.com/photo-1595974482597-4f82c4e0dd10?auto=format&fit=crop&w=400&q=80" }
+            { name: "Bpk. Hendra & Kelompok Tani Tampomas Lestari", location: "Kec. Cimalaka & Sumedang Utara (Zona CML & UTR)", mdpl: "1.200 – 1.500 MDPL", varietas: "Arabica Line S, Sigarar Utang, Typica", desc: "Berada di tanah vulkanik subur, meneruskan tradisi leluhur perkebunan kopi Java Preanger dengan pendekatan modern ramah lingkungan serta sistem panen pilih merah (selective picking).", foto: "https://images.unsplash.com/photo-1595974482597-4f82c4e0dd10?auto=format&fit=crop&w=400&q=80", createdBy: "dev" }
         ];
         let farmersData = JSON.parse(localStorage.getItem('kopiTraceFarmers')) || defaultFarmers;
 
         let defaultProcessors = [
-            { name: "Preanger Processing Station (Sumedang Coffee Mill)", location: "Kecamatan Rancakalong (Zona TGR - Tengah)", methods: "Washed, Natural, Experimental Honey & Winey", desc: "Berperan sebagai jembatan penting antara petani dan roastery, digawangi anak muda lokal yang ahli mengontrol fermentasi untuk menciptakan clean cup dan fruity notes terbaik.", foto: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=400&q=80" }
+            { name: "Preanger Processing Station (Sumedang Coffee Mill)", location: "Kecamatan Rancakalong (Zona TGR - Tengah)", methods: "Washed, Natural, Experimental Honey & Winey", desc: "Berperan sebagai jembatan penting antara petani dan roastery, digawangi anak muda lokal yang ahli mengontrol fermentasi untuk menciptakan clean cup dan fruity notes terbaik.", foto: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=400&q=80", createdBy: "dev" }
         ];
         let processorsData = JSON.parse(localStorage.getItem('kopiTraceProcessors')) || defaultProcessors;
+
+        let defaultCoffeeData = [
+            {
+                zona: "UTR", metode: "WASH", tahun: "2026", batch: "001", petani: "Bpk. Hendra", varietas: "Arabica Sumedang", mdpl: "1450 mdpl", kecamatan: "Sumedang Utara", lat: -6.8529, lng: 107.9205, destName: "Gudang Ekspor Sumedang Pusat", destLat: -6.8687, destLng: 107.9150, sertifikasi: "SNI Organik & USDA Organic Certified", cupping: "Brown Sugar, Citrus, Floral", sejarah: "Kopi Sumedang di kawasan utara Gunung Tampomas memiliki akar sejarah panjang sejak era perkebunan kolonial abad ke-19, di mana tanah vulkanik subur menghasilkan biji kopi berkualitas tinggi khas Java Preanger.", fotoUrl: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80", distribusi: [{ tanggal: "2026-06-01", aktivitas: "Panen Selektif Ceri Kopi Sumedang" }], createdBy: "farmer"
+            }
+        ];
+
+        let coffeeData = JSON.parse(localStorage.getItem('kopiTraceData')) || defaultCoffeeData;
+        let registeredUsers = JSON.parse(localStorage.getItem('kopiTraceUsers')) || [
+            { name: 'Developer Super Admin', user: 'dev', pass: 'm0r94n', role: 'dev' },
+            { name: 'Bpk. Hendra (Petani)', user: 'farmer', pass: 'farmer2026', role: 'farmer' }
+        ];
+
+        let currentUser = JSON.parse(localStorage.getItem('kopiTraceActiveUser')) || null;
+        let currentView = 'public-home';
+        let mapInstance = null, markersLayer = null, traceMapInstance = null, githubFileSha = null;
+        let deferredPrompt = null;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            showInstallButtons();
+        });
+
+        function showInstallButtons() {
+            const btn = document.getElementById('install-btn');
+            const mobileBtn = document.getElementById('mobile-install-btn');
+            if (btn) btn.classList.remove('hidden');
+            if (mobileBtn) mobileBtn.classList.remove('hidden');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(showInstallButtons, 300);
+            renderSupplyChainUI();
+            renderFarmerProfilesUI();
+            renderProcessorProfilesUI();
+        });
 
         function startCameraScanner() {
             const readerEl = document.getElementById('reader');
@@ -860,43 +896,6 @@
             window.location.href = discordAuthUrl;
         }
 
-        let defaultCoffeeData = [
-            {
-                zona: "UTR", metode: "WASH", tahun: "2026", batch: "001", petani: "Bpk. Hendra", varietas: "Arabica Sumedang", mdpl: "1450 mdpl", kecamatan: "Sumedang Utara", lat: -6.8529, lng: 107.9205, destName: "Gudang Ekspor Sumedang Pusat", destLat: -6.8687, destLng: 107.9150, sertifikasi: "SNI Organik & USDA Organic Certified", cupping: "Brown Sugar, Citrus, Floral", sejarah: "Kopi Sumedang di kawasan utara Gunung Tampomas memiliki akar sejarah panjang sejak era perkebunan kolonial abad ke-19, di mana tanah vulkanik subur menghasilkan biji kopi berkualitas tinggi khas Java Preanger.", fotoUrl: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80", distribusi: [{ tanggal: "2026-06-01", aktivitas: "Panen Selektif Ceri Kopi Sumedang" }], createdBy: "farmer"
-            }
-        ];
-
-        let coffeeData = JSON.parse(localStorage.getItem('kopiTraceData')) || defaultCoffeeData;
-        let registeredUsers = JSON.parse(localStorage.getItem('kopiTraceUsers')) || [
-            { name: 'Developer Super Admin', user: 'dev', pass: 'm0r94n', role: 'dev' },
-            { name: 'Bpk. Hendra (Petani)', user: 'farmer', pass: 'farmer2026', role: 'farmer' }
-        ];
-
-        let currentUser = JSON.parse(localStorage.getItem('kopiTraceActiveUser')) || null;
-        let currentView = 'public-home';
-        let mapInstance = null, markersLayer = null, traceMapInstance = null, githubFileSha = null;
-        let deferredPrompt = null;
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            showInstallButtons();
-        });
-
-        function showInstallButtons() {
-            const btn = document.getElementById('install-btn');
-            const mobileBtn = document.getElementById('mobile-install-btn');
-            if (btn) btn.classList.remove('hidden');
-            if (mobileBtn) mobileBtn.classList.remove('hidden');
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(showInstallButtons, 300);
-            renderSupplyChainUI();
-            renderFarmerProfilesUI();
-            renderProcessorProfilesUI();
-        });
-
         function renderSupplyChainUI() {
             document.getElementById('txt-hulu').innerText = supplyChainData.hulu;
             document.getElementById('txt-pascapanen').innerText = supplyChainData.pascapanen;
@@ -909,7 +908,7 @@
             if (!container) return;
             let html = '';
             farmersData.forEach((f, idx) => {
-                const isAdmin = currentUser && (currentUser.role === 'dev' || currentUser.role === 'farmer');
+                const isOwnerOrDev = currentUser && (currentUser.role === 'dev' || (currentUser.role === 'farmer' && f.createdBy === currentUser.user));
                 html += `
                     <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 space-y-3 flex flex-col justify-between">
                         <div class="space-y-2">
@@ -921,7 +920,7 @@
                                         <span class="text-[11px] text-amber-800 font-semibold"><i class="fa-solid fa-location-dot mr-1"></i>${f.location}</span>
                                     </div>
                                 </div>
-                                ${isAdmin ? `
+                                ${isOwnerOrDev ? `
                                 <div class="flex space-x-1">
                                     <button onclick="openEditFarmerModal(${idx})" class="text-amber-700 hover:text-amber-900 p-1.5 bg-amber-50 rounded-lg cursor-pointer" title="Edit Profil"><i class="fa-solid fa-pen-to-square text-xs"></i></button>
                                     <button onclick="deleteFarmerProfile(${idx})" class="text-red-600 hover:text-red-800 p-1.5 bg-red-50 rounded-lg cursor-pointer" title="Hapus Profil"><i class="fa-solid fa-trash text-xs"></i></button>
@@ -945,7 +944,7 @@
             if (!container) return;
             let html = '';
             processorsData.forEach((p, idx) => {
-                const isAdmin = currentUser && (currentUser.role === 'dev' || currentUser.role === 'farmer');
+                const isOwnerOrDev = currentUser && (currentUser.role === 'dev' || (currentUser.role === 'farmer' && p.createdBy === currentUser.user));
                 html += `
                     <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 space-y-3 flex flex-col justify-between">
                         <div class="space-y-2">
@@ -957,7 +956,7 @@
                                         <span class="text-[11px] text-amber-800 font-semibold"><i class="fa-solid fa-location-dot mr-1"></i>${p.location}</span>
                                     </div>
                                 </div>
-                                ${isAdmin ? `
+                                ${isOwnerOrDev ? `
                                 <div class="flex space-x-1">
                                     <button onclick="openEditProcessorModal(${idx})" class="text-amber-700 hover:text-amber-900 p-1.5 bg-amber-50 rounded-lg cursor-pointer" title="Edit Profil"><i class="fa-solid fa-pen-to-square text-xs"></i></button>
                                     <button onclick="deleteProcessorProfile(${idx})" class="text-red-600 hover:text-red-800 p-1.5 bg-red-50 rounded-lg cursor-pointer" title="Hapus Profil"><i class="fa-solid fa-trash text-xs"></i></button>
@@ -979,32 +978,42 @@
             const fList = document.getElementById('dash-farmers-list');
             const pList = document.getElementById('dash-processors-list');
             if (fList) {
-                fList.innerHTML = farmersData.map((f, idx) => `
+                fList.innerHTML = farmersData.map((f, idx) => {
+                    const canEdit = !currentUser || currentUser.role === 'dev' || f.createdBy === currentUser.user;
+                    return `
                     <div class="flex items-center justify-between bg-stone-50 p-2.5 rounded-xl border border-stone-200">
                         <div class="truncate pr-2">
                             <div class="font-bold text-stone-900">${f.name}</div>
                             <div class="text-[10px] text-stone-500">${f.location}</div>
                         </div>
                         <div class="flex space-x-1 shrink-0">
+                            ${canEdit ? `
                             <button onclick="openEditFarmerModal(${idx})" class="px-2 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold rounded text-[11px] cursor-pointer">Edit</button>
                             <button onclick="deleteFarmerProfile(${idx})" class="px-2 py-1 bg-red-100 hover:bg-red-200 text-red-700 font-bold rounded text-[11px] cursor-pointer">Hapus</button>
+                            ` : `<span class="text-[10px] text-stone-400 italic px-2 py-1">Terkunci</span>`}
                         </div>
                     </div>
-                `).join('') || '<div class="text-stone-400 italic">Belum ada data petani.</div>';
+                `;
+                }).join('') || '<div class="text-stone-400 italic">Belum ada data petani.</div>';
             }
             if (pList) {
-                pList.innerHTML = processorsData.map((p, idx) => `
+                pList.innerHTML = processorsData.map((p, idx) => {
+                    const canEdit = !currentUser || currentUser.role === 'dev' || p.createdBy === currentUser.user;
+                    return `
                     <div class="flex items-center justify-between bg-stone-50 p-2.5 rounded-xl border border-stone-200">
                         <div class="truncate pr-2">
                             <div class="font-bold text-stone-900">${p.name}</div>
                             <div class="text-[10px] text-stone-500">${p.location}</div>
                         </div>
                         <div class="flex space-x-1 shrink-0">
+                            ${canEdit ? `
                             <button onclick="openEditProcessorModal(${idx})" class="px-2 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold rounded text-[11px] cursor-pointer">Edit</button>
                             <button onclick="deleteProcessorProfile(${idx})" class="px-2 py-1 bg-red-100 hover:bg-red-200 text-red-700 font-bold rounded text-[11px] cursor-pointer">Hapus</button>
+                            ` : `<span class="text-[10px] text-stone-400 italic px-2 py-1">Terkunci</span>`}
                         </div>
                     </div>
-                `).join('') || '<div class="text-stone-400 italic">Belum ada data prosesor.</div>';
+                `;
+                }).join('') || '<div class="text-stone-400 italic">Belum ada data prosesor.</div>';
             }
         }
 
@@ -1051,6 +1060,10 @@
         function openEditFarmerModal(index) {
             const f = farmersData[index];
             if (!f) return;
+            if (currentUser && currentUser.role === 'farmer' && f.createdBy && f.createdBy !== currentUser.user) {
+                alert('Akses Ditolak! Anda tidak dapat mengedit profil milik petani lain.');
+                return;
+            }
             document.getElementById('farmer-modal-title').innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-700"></i><span>Edit Profil Petani</span>`;
             document.getElementById('farmer-edit-index').value = index;
             document.getElementById('form-farmer-name').value = f.name;
@@ -1077,6 +1090,14 @@
         function saveFarmerProfile(e) {
             e.preventDefault();
             const index = parseInt(document.getElementById('farmer-edit-index').value);
+            
+            if (currentUser && currentUser.role === 'farmer' && index !== -1) {
+                if (farmersData[index].createdBy && farmersData[index].createdBy !== currentUser.user) {
+                    alert('Akses Ditolak!');
+                    return;
+                }
+            }
+
             const existingFoto = index !== -1 ? farmersData[index].foto : '';
             const fotoValue = document.getElementById('form-farmer-foto').value.trim() || existingFoto || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80';
             
@@ -1086,7 +1107,8 @@
                 mdpl: document.getElementById('form-farmer-mdpl').value.trim(),
                 varietas: document.getElementById('form-farmer-varietas').value.trim(),
                 desc: document.getElementById('form-farmer-desc').value.trim(),
-                foto: fotoValue
+                foto: fotoValue,
+                createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : (farmersData[index].createdBy || 'dev')
             };
             if (index === -1) {
                 farmersData.push(farmerObj);
@@ -1097,10 +1119,14 @@
             closeFarmerModal();
             renderFarmerProfilesUI();
             renderDashboardProfilesLists();
-            alert('Profil Petani berhasil disimpan dan disinkronisasi!');
+            alert('Profil Petani berhasil disimpan dan disinkronkan!');
         }
 
         function deleteFarmerProfile(index) {
+            if (currentUser && currentUser.role === 'farmer' && farmersData[index].createdBy && farmersData[index].createdBy !== currentUser.user) {
+                alert('Akses Ditolak! Anda tidak dapat menghapus profil milik petani lain.');
+                return;
+            }
             if (confirm('Yakin ingin menghapus profil petani ini?')) {
                 farmersData.splice(index, 1);
                 saveToStorage();
@@ -1122,6 +1148,10 @@
         function openEditProcessorModal(index) {
             const p = processorsData[index];
             if (!p) return;
+            if (currentUser && currentUser.role === 'farmer' && p.createdBy && p.createdBy !== currentUser.user) {
+                alert('Akses Ditolak! Anda tidak dapat mengedit profil prosesor milik pihak lain.');
+                return;
+            }
             document.getElementById('processor-modal-title').innerHTML = `<i class="fa-solid fa-pen-to-square text-amber-700"></i><span>Edit Profil Prosesor</span>`;
             document.getElementById('processor-edit-index').value = index;
             document.getElementById('form-proc-name').value = p.name;
@@ -1147,6 +1177,14 @@
         function saveProcessorProfile(e) {
             e.preventDefault();
             const index = parseInt(document.getElementById('processor-edit-index').value);
+            
+            if (currentUser && currentUser.role === 'farmer' && index !== -1) {
+                if (processorsData[index].createdBy && processorsData[index].createdBy !== currentUser.user) {
+                    alert('Akses Ditolak!');
+                    return;
+                }
+            }
+
             const existingFoto = index !== -1 ? processorsData[index].foto : '';
             const fotoValue = document.getElementById('form-proc-foto').value.trim() || existingFoto || 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=200&q=80';
 
@@ -1155,7 +1193,8 @@
                 location: document.getElementById('form-proc-location').value.trim(),
                 methods: document.getElementById('form-proc-methods').value.trim(),
                 desc: document.getElementById('form-proc-desc').value.trim(),
-                foto: fotoValue
+                foto: fotoValue,
+                createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : (processorsData[index].createdBy || 'dev')
             };
             if (index === -1) {
                 processorsData.push(procObj);
@@ -1166,10 +1205,14 @@
             closeProcessorModal();
             renderProcessorProfilesUI();
             renderDashboardProfilesLists();
-            alert('Profil Prosesor berhasil disimpan dan disinkronisasi!');
+            alert('Profil Prosesor berhasil disimpan dan disinkronkan!');
         }
 
         function deleteProcessorProfile(index) {
+            if (currentUser && currentUser.role === 'farmer' && processorsData[index].createdBy && processorsData[index].createdBy !== currentUser.user) {
+                alert('Akses Ditolak! Anda tidak dapat menghapus profil prosesor milik pihak lain.');
+                return;
+            }
             if (confirm('Yakin ingin menghapus profil prosesor ini?')) {
                 processorsData.splice(index, 1);
                 saveToStorage();
@@ -1226,27 +1269,30 @@
             }
         }
 
+        // FUNGSI SINKRONISASI & AMAN LOCAL STORAGE DIPERBAIKI
         async function fetchRealTimeData() {
             const statusEl = document.getElementById('github-sync-status');
             const token = localStorage.getItem('kopiTraceAdminToken');
             
-            if (!token) {
-                const local = localStorage.getItem('kopiTraceData');
-                coffeeData = local ? JSON.parse(local) : defaultCoffeeData;
-                const localSup = localStorage.getItem('kopiTraceSupply');
-                if(localSup) supplyChainData = JSON.parse(localSup);
-                const localFarmers = localStorage.getItem('kopiTraceFarmers');
-                if(localFarmers) farmersData = JSON.parse(localFarmers);
-                const localProcs = localStorage.getItem('kopiTraceProcessors');
-                if(localProcs) processorsData = JSON.parse(localProcs);
+            // Selalu muat data dari localStorage terlebih dahulu agar data lokal aman tidak hilang
+            const localData = localStorage.getItem('kopiTraceData');
+            if (localData) coffeeData = JSON.parse(localData);
+            
+            const localSup = localStorage.getItem('kopiTraceSupply');
+            if (localSup) supplyChainData = JSON.parse(localSup);
+            
+            const localFarmers = localStorage.getItem('kopiTraceFarmers');
+            if (localFarmers) farmersData = JSON.parse(localFarmers);
+            
+            const localProcs = localStorage.getItem('kopiTraceProcessors');
+            if (localProcs) processorsData = JSON.parse(localProcs);
 
+            if (!token) {
                 renderSupplyChainUI();
                 renderFarmerProfilesUI();
                 renderProcessorProfilesUI();
                 if (statusEl) statusEl.innerText = 'Mode Lokal';
-                if (currentView === 'public-home') { renderPublicCards(); updateStats(); }
-                else if (currentView === 'public-map') { initMap(); }
-                else if (currentView === 'dashboard') { renderDashboardTable(); renderDashboardProfilesLists(); }
+                updateViewUI();
                 return;
             }
 
@@ -1254,34 +1300,52 @@
             try {
                 if (statusEl) statusEl.innerText = 'Syncing...';
                 const res = await fetch(rawUrl);
-                if (!res.ok) throw new Error('404');
+                
+                if (!res.ok) {
+                    if (res.status === 404) {
+                        await saveToGitHub();
+                    }
+                    throw new Error('Gagal mengambil data dari GitHub');
+                }
+                
                 const data = await res.json();
-                if (data.coffeeData) coffeeData = data.coffeeData;
-                if (data.registeredUsers) registeredUsers = data.registeredUsers;
-                if (data.supplyChainData) { supplyChainData = data.supplyChainData; localStorage.setItem('kopiTraceSupply', JSON.stringify(supplyChainData)); }
-                if (data.farmersData) { farmersData = data.farmersData; localStorage.setItem('kopiTraceFarmers', JSON.stringify(farmersData)); }
-                if (data.processorsData) { processorsData = data.processorsData; localStorage.setItem('kopiTraceProcessors', JSON.stringify(processorsData)); }
                 
-                localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
-                localStorage.setItem('kopiTraceUsers', JSON.stringify(registeredUsers));
-                
+                // Prioritaskan data remote jika jumlah data remote lebih banyak atau sama, 
+                // namun tetap amankan data lokal jika ada penambahan batch baru secara offline
+                if (data.coffeeData && data.coffeeData.length >= coffeeData.length) {
+                    coffeeData = data.coffeeData;
+                    localStorage.setItem('kopiTraceData', JSON.stringify(coffeeData));
+                }
+                if (data.registeredUsers) {
+                    registeredUsers = data.registeredUsers;
+                    localStorage.setItem('kopiTraceUsers', JSON.stringify(registeredUsers));
+                }
+                if (data.supplyChainData) { 
+                    supplyChainData = data.supplyChainData; 
+                    localStorage.setItem('kopiTraceSupply', JSON.stringify(supplyChainData)); 
+                }
+                if (data.farmersData) {
+                    farmersData = data.farmersData;
+                    localStorage.setItem('kopiTraceFarmers', JSON.stringify(farmersData));
+                }
+                if (data.processorsData) {
+                    processorsData = data.processorsData;
+                    localStorage.setItem('kopiTraceProcessors', JSON.stringify(processorsData));
+                }
+
                 renderSupplyChainUI();
                 renderFarmerProfilesUI();
                 renderProcessorProfilesUI();
                 if (statusEl) statusEl.innerText = 'Auto-Sync: Aktif';
             } catch (e) {
-                const local = localStorage.getItem('kopiTraceData');
-                coffeeData = local ? JSON.parse(local) : defaultCoffeeData;
-                const localFarmers = localStorage.getItem('kopiTraceFarmers');
-                if(localFarmers) farmersData = JSON.parse(localFarmers);
-                const localProcs = localStorage.getItem('kopiTraceProcessors');
-                if(localProcs) processorsData = JSON.parse(localProcs);
-                
-                renderFarmerProfilesUI();
-                renderProcessorProfilesUI();
+                console.warn("Sync error, menggunakan data lokal:", e);
                 if (statusEl) statusEl.innerText = 'Auto-Sync: Offline';
             }
 
+            updateViewUI();
+        }
+
+        function updateViewUI() {
             if (currentView === 'public-home') { renderPublicCards(); updateStats(); }
             else if (currentView === 'public-map') { initMap(); }
             else if (currentView === 'dashboard') { renderDashboardTable(); renderDashboardProfilesLists(); }
@@ -1292,19 +1356,38 @@
             if (!token) return false;
             const apiUrl = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`;
             try {
+                let fileSha = undefined;
                 const getRes = await fetch(apiUrl, { headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' } });
                 if (getRes.ok) { 
                     const fileInfo = await getRes.json(); 
-                    githubFileSha = fileInfo.sha; 
+                    fileSha = fileInfo.sha; 
                 }
+                
                 const fileContent = JSON.stringify({ coffeeData, registeredUsers, supplyChainData, farmersData, processorsData }, null, 2);
-                const base64Content = btoa(unescape(encodeURIComponent(fileContent)));
+                
+                const utf8Bytes = new TextEncoder().encode(fileContent);
+                let binaryString = '';
+                for (let i = 0; i < utf8Bytes.length; i++) {
+                    binaryString += String.fromCharCode(utf8Bytes[i]);
+                }
+                const base64Content = btoa(binaryString);
+
                 const putRes = await fetch(apiUrl, {
                     method: 'PUT',
                     headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: "Update database with profiles via KopiTrace App", content: base64Content, sha: githubFileSha || undefined, branch: GITHUB_CONFIG.branch })
+                    body: JSON.stringify({ 
+                        message: "Update database via KopiTrace App", 
+                        content: base64Content, 
+                        sha: fileSha, 
+                        branch: GITHUB_CONFIG.branch 
+                    })
                 });
-                if (!putRes.ok) throw new Error('Gagal menyimpan ke GitHub');
+                
+                if (!putRes.ok) {
+                    const errData = await putRes.json();
+                    throw new Error(errData.message || 'Gagal menyimpan ke GitHub');
+                }
+                
                 const putData = await putRes.json();
                 githubFileSha = putData.content.sha;
                 return true;
@@ -1342,7 +1425,6 @@
                 localStorage.setItem('kopiTraceSupply', JSON.stringify(supplyChainData));
                 localStorage.setItem('kopiTraceFarmers', JSON.stringify(farmersData));
                 localStorage.setItem('kopiTraceProcessors', JSON.stringify(processorsData));
-                
                 if (currentUser) {
                     localStorage.setItem('kopiTraceActiveUser', JSON.stringify(currentUser));
                 } else {
