@@ -266,7 +266,7 @@
             </div>
         </section>
 
-        <!-- 7. PUBLIC NEWS / COFFEE NEWS -->
+        <!-- 6. PUBLIC NEWS / COFFEE NEWS -->
         <section id="view-public-news" class="space-y-6 hidden max-w-5xl mx-auto">
             <div class="flex justify-between items-center flex-wrap gap-3">
                 <div>
@@ -283,7 +283,7 @@
             <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
         </section>
 
-        <!-- 6. DASHBOARD -->
+        <!-- 7. DASHBOARD -->
         <section id="view-dashboard" class="space-y-6 hidden">
             <div id="dashboard-banner" class="bg-amber-50 border border-amber-200 rounded-2xl p-4 sm:p-6 flex flex-col lg:flex-row justify-between items-start lg:items-center shadow-sm gap-4">
                 <div class="space-y-1">
@@ -316,6 +316,16 @@
                     </button>
                 </div>
             </div>
+
+            <!-- 8. NEWS DETAIL VIEW -->
+        <section id="view-news-detail" class="space-y-6 hidden max-w-3xl mx-auto">
+            <button onclick="switchView('public-news')" class="bg-stone-200 hover:bg-stone-300 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium cursor-pointer flex items-center space-x-1.5 w-fit">
+                <i class="fa-solid fa-arrow-left"></i><span>Kembali ke Daftar Berita</span>
+            </button>
+            <div id="news-detail-content" class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 space-y-5">
+                <!-- Konten Detail Berita Dimuat Dinamis -->
+            </div>
+        </section>
 
             <!-- GRAFIK / KURVA KUANTITAS CERI & GREEN BEAN -->
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 space-y-4">
@@ -1214,7 +1224,7 @@
         }
 
         // Render Berita Kopi
-        function renderNewsUI() {
+        ffunction renderNewsUI() {
             const container = document.getElementById('news-container');
             if (!container) return;
             const addNewsBtn = document.getElementById('add-news-btn');
@@ -1234,28 +1244,73 @@
                 html += `
                     <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden flex flex-col justify-between hover:shadow-md transition">
                         <div>
-                            <div class="h-48 overflow-hidden relative">
+                            <div class="h-48 overflow-hidden relative cursor-pointer" onclick="openNewsDetail(${idx})">
                                 <img src="${newsPhoto}" alt="${news.title}" class="w-full h-full object-cover">
                                 <span class="absolute top-3 left-3 bg-amber-700 text-white text-[11px] px-2.5 py-1 rounded-md font-bold uppercase tracking-wider">${news.category}</span>
                             </div>
                             <div class="p-5 space-y-2.5">
                                 <div class="text-xs text-stone-400 font-mono"><i class="fa-regular fa-calendar mr-1.5"></i>${news.date}</div>
-                                <h3 class="font-extrabold text-stone-900 text-base sm:text-lg leading-snug">${news.title}</h3>
-                                <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">${news.content}</p>
+                                <h3 onclick="openNewsDetail(${idx})" class="font-extrabold text-stone-900 text-base sm:text-lg leading-snug hover:text-amber-700 cursor-pointer transition">${news.title}</h3>
+                                <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">${news.content.substring(0, 120)}...</p>
                             </div>
                         </div>
-                        ${canEdit ? `
-                        <div class="px-5 pb-4 pt-2 border-t border-stone-100 flex justify-end space-x-2">
-                            <button onclick="openEditNewsModal(${idx})" class="px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold rounded-lg text-xs cursor-pointer"><i class="fa-solid fa-pen-to-square mr-1"></i>Edit</button>
-                            <button onclick="deleteNewsArticle(${idx})" class="px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-700 font-bold rounded-lg text-xs cursor-pointer"><i class="fa-solid fa-trash mr-1"></i>Hapus</button>
+                        <div class="px-5 pb-4 pt-2 border-t border-stone-100 flex justify-between items-center">
+                            <button onclick="openNewsDetail(${idx})" class="text-amber-700 hover:underline font-bold text-xs cursor-pointer">Baca Selengkapnya &rarr;</button>
+                            ${canEdit ? `
+                            <div class="flex space-x-1">
+                                <button onclick="openEditNewsModal(${idx})" class="px-2.5 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold rounded-lg text-xs cursor-pointer"><i class="fa-solid fa-pen-to-square mr-1"></i>Edit</button>
+                                <button onclick="deleteNewsArticle(${idx})" class="px-2.5 py-1 bg-red-100 hover:bg-red-200 text-red-700 font-bold rounded-lg text-xs cursor-pointer"><i class="fa-solid fa-trash mr-1"></i>Hapus</button>
+                            </div>
+                            ` : ''}
                         </div>
-                        ` : ''}
                     </div>
                 `;
             });
             container.innerHTML = html || '<div class="text-stone-400 italic col-span-2 text-center py-8">Belum ada berita yang dipublikasikan.</div>';
         }
 
+        function openNewsDetail(index) {
+            const news = newsData[index];
+            if (!news) return;
+            const container = document.getElementById('news-detail-content');
+            const newsPhoto = getValidImage(news.foto, 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80');
+            
+            container.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-2">
+                        <span class="bg-amber-700 text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">${news.category}</span>
+                        <span class="text-xs text-stone-400 font-mono"><i class="fa-regular fa-calendar mr-1.5"></i>${news.date}</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-stone-900 leading-tight">${news.title}</h1>
+                    <div class="rounded-xl overflow-hidden border border-stone-200 shadow-sm">
+                        <img src="${newsPhoto}" alt="${news.title}" class="w-full h-64 sm:h-80 object-cover">
+                    </div>
+                    <div class="text-sm sm:text-base text-stone-700 leading-relaxed space-y-3 pt-2 whitespace-pre-line">
+                        ${news.content}
+                    </div>
+                </div>
+            `;
+            switchView('news-detail');
+        }
+        function switchView(viewName) {
+            currentView = viewName;
+            ['public-home', 'farmer-profile', 'processor-profile', 'public-map', 'public-scanner', 'dashboard', 'public-news', 'news-detail'].forEach(v => {
+                const el = document.getElementById('view-' + v);
+                if (el) el.classList.add('hidden');
+            });
+            const target = document.getElementById('view-' + viewName);
+            if (target) target.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (viewName === 'public-home') { renderPublicCards(); updateStats(); }
+            else if (viewName === 'farmer-profile') { renderFarmerProfilesUI(); }
+            else if (viewName === 'processor-profile') { renderProcessorProfilesUI(); }
+            else if (viewName === 'public-news') { renderNewsUI(); }
+            else if (viewName === 'public-map') { setTimeout(initMap, 150); }
+            else if (viewName === 'public-scanner') { renderSampleBadges(); }
+            else if (viewName === 'dashboard') { if (!currentUser) { openAuthModal(); return; } renderDashboardTable(); renderDashboardProfilesLists(); renderCoffeeChart(); }
+        }
+        
         function handleNewsImageUpload(event) {
             const file = event.target.files[0];
             if (file) {
