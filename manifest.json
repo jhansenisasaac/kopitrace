@@ -4,7 +4,7 @@
   "name": "KopiTrace - Pemetaan &amp;amp; Traceability Kopi Sumedang",
   "short_name": "KopiTrace",
   "description": "Sistem pemetaan &amp;amp; traceability kopi Sumedang dari hulu ke hilir secara transparan dan real-time.",
-  "start_url": "./index.html",
+  "start_url": "/kopitrace/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#fafaf9",
