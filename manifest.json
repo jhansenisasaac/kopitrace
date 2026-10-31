@@ -4,7 +4,7 @@
   "short_name": "KopiTrace",
   "description": "Sistem pemetaan &amp;amp; traceability kopi Sumedang dari hulu ke hilir secara transparan dan real-time.",
   "start_url": "./index.html",
-  "display": "fullscreen",
+  "display": "standalone",
   "orientation": "portrait",
   "background_color": "#fafaf9",
   "theme_color": "#78350f",
@@ -40,9 +40,6 @@
       "form_factor": "narrow",
       "label": "Tampilan Mobile KopiTrace"
     }
-  ],
-  "display_override": [
-    "fullscreen",
-    "window-controls-overlay"
+ 
   ]
 }
