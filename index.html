@@ -2756,9 +2756,7 @@
             if (sharedCode) { switchView('public-scanner'); fillAndTrace(sharedCode.toUpperCase()); }
             else { renderPublicCards(); updateStats(); }
         };
-        let deferredPrompt;
-        });
-        
+    
         // Service Worker untuk mendukung instalasi PWA / APK
             if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
