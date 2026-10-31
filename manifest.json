@@ -1,8 +1,11 @@
 {
+  "id": "/kopitrace/",
   "name": "KopiTrace - Pemetaan & Traceability Kopi Sumedang",
   "short_name": "KopiTrace",
+  "description": "Sistem pemetaan & traceability kopi Sumedang dari hulu ke hilir secara transparan dan real-time.",
   "start_url": "./index.html",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#fafaf9",
   "theme_color": "#78350f",
   "icons": [
@@ -17,6 +20,22 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "./logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Tampilan Beranda KopiTrace"
+    },
+    {
+      "src": "./logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Tampilan Mobile KopiTrace"
     }
   ]
 }
