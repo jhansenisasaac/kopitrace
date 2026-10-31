@@ -92,6 +92,20 @@
 
     <!-- MAIN CONTAINER -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8">
+
+        <!-- GRAFIK TREN PRODUKSI PER TAHUN (LINE CHART) -->
+<div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 space-y-4 mt-6">
+    <div class="flex justify-between items-center border-b border-stone-100 pb-3">
+        <h3 class="font-bold text-stone-900 text-sm sm:text-base flex items-center space-x-2">
+            <i class="fa-solid fa-chart-line text-amber-700"></i>
+            <span>Grafik Tren Produksi Kopi Berdasarkan Tahun (Line Chart)</span>
+        </h3>
+    </div>
+    <div class="relative h-72 sm:h-80 w-full">
+        <canvas id="coffeeTrendLineChart"></canvas>
+    </div>
+</div>
+
         <!-- 1. PUBLIC HOME -->
         <section id="view-public-home" class="space-y-6 sm:space-y-8">
             <div class="bg-gradient-to-br from-stone-900 via-stone-800 to-amber-950 text-white rounded-2xl p-5 sm:p-8 shadow-xl flex flex-col md:flex-row justify-between items-center relative overflow-hidden gap-6">
@@ -1224,6 +1238,73 @@
             });
             container.innerHTML = html;
         }
+
+        let myTrendLineChart = null;
+
+function renderLineChart() {
+    const ctx = document.getElementById('coffeeTrendLineChart');
+    if (!ctx) return;
+
+    // Agregasi data berdasarkan tahun panen
+    const yearlyData = {};
+    coffeeData.forEach(item => {
+        const year = item.tahun || '2026';
+        if (!yearlyData[year]) {
+            yearlyData[year] = { ceri: 0, gb: 0 };
+        }
+        yearlyData[year].ceri += (item.qtyCeri || 0);
+        yearlyData[year].gb += (item.qtyGb || 0);
+    });
+
+    // Urutkan tahun
+    const years = Object.keys(yearlyData).sort();
+    const ceriTrend = years.map(y => yearlyData[y].ceri);
+    const gbTrend = years.map(y => yearlyData[y].gb);
+
+    if (myTrendLineChart) {
+        myTrendLineChart.destroy();
+    }
+
+    myTrendLineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: years.length > 0 ? years : ['2026'],
+            datasets: [
+                {
+                    label: 'Tren Ceri Kopi (Kg)',
+                    data: years.length > 0 ? ceriTrend : [0],
+                    borderColor: 'rgba(180, 83, 9, 1)',
+                    backgroundColor: 'rgba(180, 83, 9, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.3
+                },
+                {
+                    label: 'Tren Green Bean / GB (Kg)',
+                    data: years.length > 0 ? gbTrend : [0],
+                    borderColor: 'rgba(16, 185, 129, 1)',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.3
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Total Berat (Kg)' }
+                },
+                x: {
+                    title: { display: true, text: 'Tahun Panen' }
+                }
+            }
+        }
+    });
+}
 
         // Render Berita Kopi
         function renderNewsUI() {
