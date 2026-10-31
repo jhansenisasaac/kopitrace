@@ -1342,27 +1342,44 @@
         }
 
         async function sendNewsNotification(newsObj) {
-            if (!DISCORD_WEBHOOK_NEWS) return;
-            try {
-                const payload = {
-                    username: "KopiTrace News Bot",
-                    avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png",
-                    embeds: [
-                        {
-                            title: "📰 BERITA INDUSTRI KOPI SUMEDANG",
-                            color: 15158332,
-                            fields: [
-                                { name: "📌 Judul", value: newsObj.title, inline: false },
-                                { name: "🏷️ Kategori", value: newsObj.category, inline: true },
-                                { name: "📅 Tanggal", value: newsObj.date, inline: true },
-                                { name: "📝 Ringkasan", value: newsObj.content, inline: false }
-                            ],
-                            footer: {
-                                text: "Powered by KopiTrace News Bot"
-                            }
-                        }
-                    ]
-                };
+        async function kirimBeritaKeDiscord() {
+    try {
+        // Mengambil data database.json dengan cache-busting timestamp
+        const response = await fetch(`database.json?t=${new Date().getTime()}`);
+        const data = await response.json();
+
+        // URL Webhook Discord Anda
+        const webhookUrl = 'https://discord.com/api/webhooks/1564681259123474432/YOUR_WEBHOOK_TOKEN';
+
+        for (const item of data) {
+            // Format payload pesan Discord dengan tambahan Link Berita
+            const payload = {
+                content: `📄 **BERITA INDUSTRI KOPI SUMEDANG (NEWS)**\n` +
+                         `📌 **Judul:** ${item.judul}\n` +
+                         `🏷 **Kategori:** ${item.kategori}\n` +
+                         `📅 **Tanggal:** ${item.tanggal}\n` +
+                         `📄 **Ringkasan:** ${item.ringkasan}\n` +
+                         `🔗 **Link:** ${item.link}`
+            };
+
+            // Mengirim request POST ke Discord Webhook
+            const discordResponse = await fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!discordResponse.ok) {
+                console.error('Gagal mengirim ke Discord:', discordResponse.statusText);
+            }
+        }
+    } catch (error) {
+        console.error('Terjadi kesalahan saat mengambil atau mengirim data:', error);
+    }
+}
+
 
                 if (newsObj.foto && newsObj.foto.startsWith('http')) {
                     payload.embeds[0].image = { url: newsObj.foto };
