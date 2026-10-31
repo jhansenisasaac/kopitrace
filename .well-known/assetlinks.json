@@ -1,8 +1,0 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "io.github.jhansenisasaac.twa",
-        "sha256_cert_fingerprints": ["DF:CD:3B:FC:87:2D:15:2B:90:13:0E:31:B2:B0:49:97:8F:B1:F3:21:6F:2F:78:4C:1B:60:09:77:81:AD:6A:0A"]
-      }
-    }]
