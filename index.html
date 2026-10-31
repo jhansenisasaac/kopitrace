@@ -1307,7 +1307,19 @@
             modal.classList.add('hidden'); modal.classList.remove('flex');
         }
 
-        function saveNewsArticle(e) {
+        async function sendNewsNotification(newsObj) {
+            if (!DISCORD_WEBHOOK_NEWS) return;
+            try {
+                const message = `📰 **BERITA INDUSTRI KOPI SUMEDANG (NEWS)**\n• **Judul:** ${newsObj.title}\n• **Kategori:** ${newsObj.category}\n• **Tanggal:** ${newsObj.date}\n• **Ringkasan:** ${newsObj.content.substring(0, 150)}...`;
+                await fetch(DISCORD_WEBHOOK_NEWS, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: message, username: "KopiTrace News Bot", avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png" })
+                });
+            } catch (err) { console.error("News webhook error:", err); }
+        }
+
+        async function saveNewsArticle(e) {
             e.preventDefault();
             const index = parseInt(document.getElementById('news-edit-index').value);
             const existingFoto = index !== -1 && newsData[index] ? newsData[index].foto : '';
@@ -1331,7 +1343,8 @@
             saveToStorage();
             closeNewsModal();
             renderNewsUI();
-            alert('Berita berhasil disimpan!');
+            await sendNewsNotification(newsObj);
+            alert('Berita berhasil disimpan dan dikirim ke Discord!');
         }
 
         function deleteNewsArticle(index) {
