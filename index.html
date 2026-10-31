@@ -46,7 +46,7 @@
 
                 <!-- Desktop Nav -->
                 <div class="hidden md:flex items-center space-x-4 text-sm font-medium">
-                    <button onclick="switchView('public-news')" class="hover:text-amber-400 transition py-2 cursor-pointer">News</button>
+                    <button onclick="switchView('public-news')" class="hover:text-amber-400 transition py-2 cursor-pointer">Coffee News</button>
                     <button onclick="switchView('public-home')" class="hover:text-amber-400 transition py-2 cursor-pointer">Beranda</button>
                     <button onclick="switchView('public-map')" class="hover:text-amber-400 transition py-2 cursor-pointer">Peta Sumedang</button>
                     <button onclick="switchView('public-scanner')" class="hover:text-amber-400 transition py-2 cursor-pointer">Lacak / Scan</button>
@@ -77,7 +77,7 @@
 
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-stone-900 border-t border-stone-800 px-4 pt-3 pb-4 space-y-2 text-sm font-medium">
-            <button onclick="switchView('public-news'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">News</button>
+            <button onclick="switchView('public-news'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Coffee News</button>
             <button onclick="switchView('public-home'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Beranda</button>
             <button onclick="switchView('public-map'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Peta Sumedang</button>
             <button onclick="switchView('public-scanner'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Lacak / Scan Kode</button>
@@ -98,9 +98,9 @@
             <div class="bg-gradient-to-br from-stone-900 via-stone-800 to-amber-950 text-white rounded-2xl p-5 sm:p-8 shadow-xl flex flex-col md:flex-row justify-between items-center relative overflow-hidden gap-6">
                 <div class="space-y-3 sm:space-y-4 max-w-xl z-10">
                     <span class="inline-block bg-amber-700/80 text-amber-200 text-[11px] sm:text-xs px-3 py-1 rounded-full uppercase tracking-wider font-semibold">Sistem Transparansi Kopi Sumedang</span>
-                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">Ketelusuran Kopi Sumedang & Integrasi Data Yang Mencakup Hulu-Hilir </h1>
+                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">Ketelusuran Kopi Sumedang & Integrasi Data Yang Mencakup Hulu-Hilir</h1>
                     <p class="text-stone-300 text-xs sm:text-base leading-relaxed">
-                        Pindai QR Code untuk mengetahui zona kecamatan asal kebun, metode pengolahan, sertifikasi organik, rute logistik, hingga catatan cupping.
+                        Pindai QR Code untuk mengetahui zona kecamatan asal kebun, metode pengolahan, vegetasi, kondisi tanah, sertifikasi organik, hingga catatan cupping.
                     </p>
                     <div class="flex flex-wrap gap-2.5 pt-1">
                         <button onclick="switchView('public-scanner')" class="bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold px-4 sm:px-5 py-2.5 rounded-xl transition flex items-center space-x-2 text-xs sm:text-sm shadow cursor-pointer">
@@ -142,9 +142,6 @@
                     </p>
                     <p>
                         KopiTrace hadir sebagai langkah transformasi untuk membangun ekosistem data kopi Sumedang yang lebih adaptif, transparan, dan informatif. Melalui integrasi data hulu–hilir, KopiTrace menyediakan informasi mengenai wilayah penghasil kopi, asal produksi, proses pengolahan, hingga pergerakan produk dalam rantai pasok.
-                    </p>
-                    <p>
-                        Dengan demikian, setiap wilayah penghasil kopi tidak hanya tercatat sebagai sumber produksi, tetapi juga menjadi bagian dari satu kesatuan sistem informasi yang saling terhubung. KopiTrace mendorong pengelolaan kopi Sumedang menuju tata kelola yang lebih terukur.
                     </p>
                 </div>
             </div>
@@ -243,7 +240,7 @@
             <div class="flex justify-between items-center">
                 <div>
                     <h2 class="text-xl sm:text-2xl font-bold text-stone-900">Peta Sebaran Kopi Kabupaten Sumedang</h2>
-                    <p class="text-xs sm:text-sm text-stone-600">Klik marker pada peta untuk melihat detail blok kebun.</p>
+                    <p class="text-xs sm:text-sm text-stone-600">Klik marker pada peta untuk melihat detail blok kebun, vegetasi, dan kondisi tanah.</p>
                 </div>
                 <button onclick="switchView('public-home')" class="bg-stone-200 hover:bg-stone-300 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium cursor-pointer">Kembali</button>
             </div>
@@ -749,6 +746,22 @@
                     </div>
                 </div>
 
+                <!-- TAMBAHAN INPUT: Vegetasi, Kemiringan, dan Unsur Hara Tanah -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">Vegetasi / Naungan</label>
+                        <input type="text" id="form-vegetasi" placeholder="Cth: Naungan Lamtoro" required class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">Sudut Kemiringan</label>
+                        <input type="text" id="form-kemiringan" placeholder="Cth: 22° (Sedang)" required class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">Unsur Hara Tanah</label>
+                        <input type="text" id="form-hara" placeholder="Cth: pH 6.5, NPK Baik" required class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs">
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block font-semibold text-stone-700 mb-1">Kuantitas Ceri Kopi (Kg)</label>
@@ -868,22 +881,18 @@
             };
         }
 
-        // 1. Webhook Khusus NEWS (Coffee News)
         if (typeof DISCORD_WEBHOOK_NEWS === 'undefined') {
             var DISCORD_WEBHOOK_NEWS = 'https://discord.com/api/webhooks/1565773689897619537/4MG6PiJNLrmvbDX0oTVA4sd2G0IPPp4hgFyaXcTL8Qwp33S_6DHARIDmjwK4CnYMbS12'; 
         }
 
-        // 2. Webhook Khusus LAPORAN STATISTIK KOPI (Grafik & Spreadsheet CSV)
         if (typeof DISCORD_WEBHOOK_STATS === 'undefined') {
             var DISCORD_WEBHOOK_STATS = 'https://discord.com/api/webhooks/1565744285284958270/U6jF7A_UvXs7vRxGcjNY8xZiVb6J3kC-icZRJiDL-31eoHMcMY1IyfVp9GVR_gHt9h98'; 
         }
 
-        // 3. Webhook Khusus LOG KOPITRACE (Aktivitas Umum / Batch)
        if (typeof DISCORD_WEBHOOK_BATCH === 'undefined') {
             var DISCORD_WEBHOOK_BATCH = 'https://discord.com/api/webhooks/1565756724131135589/JC2FM6EO1XUo2aQ_01USwwvEPFYP4jPwEM9yyyC4CnnLt11bGjWDqxqa4QLW8CeXnxdu'; 
         }
 
-        // 4. Webhook Khusus AUTH LOGS (Login & Register)
         if (typeof DISCORD_WEBHOOK_AUTH === 'undefined') {
             var DISCORD_WEBHOOK_AUTH = 'https://discord.com/api/webhooks/1564693546764734504/B7-i_t9keiZuOPG7HIJpWHA55mK5VeQvKxGGJW2WrT_XNWe0SGZWKJearSTsQOUB2wnz';
         }
@@ -947,7 +956,6 @@
         ];
         let processorsData = JSON.parse(localStorage.getItem('kopiTraceProcessors')) || defaultProcessors;
 
-        // Data Berita Industri Kopi (Dilengkapi properti link)
         let defaultNews = [
             {
                 title: "Kopi Arabika Sumedang Kian Diminati Pasar Specialty Internasional",
@@ -970,9 +978,14 @@
         ];
         let newsData = JSON.parse(localStorage.getItem('kopiTraceNews')) || defaultNews;
 
+        // Menyertakan properti vegetasi, kemiringan, dan haraTanah pada data awal
         let defaultCoffeeData = [
             {
-                zona: "UTR", metode: "WASH", tahun: "2026", batch: "001", petani: "Bpk. Hendra", varietas: "Arabica Sumedang", mdpl: "1450 mdpl", kecamatan: "Sumedang Utara", lat: -6.8529, lng: 107.9205, destName: "Gudang Ekspor Sumedang Pusat", destLat: -6.8687, destLng: 107.9150, sertifikasi: "SNI Organik & USDA Organic Certified", cupping: "Brown Sugar, Citrus, Floral", sejarah: "Kopi Sumedang di kawasan utara Gunung Tampomas memiliki akar sejarah panjang sejak era perkebunan kolonial abad ke-19, di mana tanah vulkanik subur menghasilkan biji kopi berkualitas tinggi khas Java Preanger.", fotoUrl: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80", distribusi: [{ tanggal: "2026-06-01", aktivitas: "Panen Selektif Ceri Kopi Sumedang" }], qtyCeri: 150, qtyGb: 120, createdBy: "farmer"
+                zona: "UTR", metode: "WASH", tahun: "2026", batch: "001", petani: "Bpk. Hendra", varietas: "Arabica Sumedang", mdpl: "1450 mdpl", kecamatan: "Sumedang Utara", lat: -6.8529, lng: 107.9205, 
+                vegetasi: "Naungan Lamtoro & Dadap (Kerapatan ±1.100 pohon/ha)",
+                kemiringan: "22° (Lereng Gelombang Sedang)",
+                haraTanah: "pH 6.5 (Netral), N: Tinggi, P: Cukup, K: Tinggi",
+                destName: "Gudang Ekspor Sumedang Pusat", destLat: -6.8687, destLng: 107.9150, sertifikasi: "SNI Organik & USDA Organic Certified", cupping: "Brown Sugar, Citrus, Floral", sejarah: "Kopi Sumedang di kawasan utara Gunung Tampomas memiliki akar sejarah panjang sejak era perkebunan kolonial abad ke-19, di mana tanah vulkanik subur menghasilkan biji kopi berkualitas tinggi khas Java Preanger.", fotoUrl: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80", distribusi: [{ tanggal: "2026-06-01", aktivitas: "Panen Selektif Ceri Kopi Sumedang" }], qtyCeri: 150, qtyGb: 120, createdBy: "farmer"
             }
         ];
 
@@ -1261,7 +1274,6 @@
             container.innerHTML = html;
         } 
 
-        // Render Berita Kopi
         function renderNewsUI() {
             const container = document.getElementById('news-container');
             if (!container) return;
@@ -1386,7 +1398,6 @@
             modal.classList.add('hidden'); modal.classList.remove('flex');
         }
 
-        // Fungsi Kirim Notifikasi Berita ke Discord Webhook Beserta Link Berita
         async function sendNewsNotification(newsObj) {
             if (!DISCORD_WEBHOOK_NEWS) return;
             try {
@@ -2095,6 +2106,28 @@
                         </div>
                     </div>
 
+                    <!-- KOTAK INFORMASI BARU: Vegetasi, Kemiringan, & Hara Tanah di Hasil Pelacakan -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="bg-white p-3.5 rounded-xl border border-stone-200 space-y-1 shadow-sm">
+                            <span class="text-[10px] text-stone-400 font-medium uppercase flex items-center space-x-1">
+                                <i class="fa-solid fa-tree text-amber-700 mr-1"></i> Vegetasi & Naungan
+                            </span>
+                            <div class="font-bold text-stone-900 text-xs">${found.vegetasi || 'Naungan Alami'}</div>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-stone-200 space-y-1 shadow-sm">
+                            <span class="text-[10px] text-stone-400 font-medium uppercase flex items-center space-x-1">
+                                <i class="fa-solid fa-mountain text-amber-700 mr-1"></i> Sudut Kemiringan
+                            </span>
+                            <div class="font-bold text-stone-900 text-xs">${found.kemiringan || '20°'}</div>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-stone-200 space-y-1 shadow-sm">
+                            <span class="text-[10px] text-stone-400 font-medium uppercase flex items-center space-x-1">
+                                <i class="fa-solid fa-flask text-amber-700 mr-1"></i> Unsur Hara Tanah
+                            </span>
+                            <div class="font-bold text-stone-900 text-xs">${found.haraTanah || 'pH & NPK Standar'}</div>
+                        </div>
+                    </div>
+
                     <div class="bg-white p-4 rounded-xl border border-stone-200 space-y-2">
                         <div class="flex justify-between items-center text-xs font-bold text-stone-900">
                             <span><i class="fa-solid fa-route text-amber-700 mr-1.5"></i>Peta Rute Logistik Sumedang</span>
@@ -2146,11 +2179,17 @@
                 const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
                 const lat = item.lat || -6.8587;
                 const lng = item.lng || 107.9213;
+                
+                // Menampilkan Vegetasi, Kemiringan, dan Hara pada popup peta
                 const marker = L.marker([lat, lng]).bindPopup(`
                     <div class="space-y-1 text-xs">
                         <b class="font-mono text-amber-800 text-sm">${code}</b><br>
                         <b>Petani:</b> ${item.petani}<br>
                         <b>Kec. ${item.kecamatan || 'Sumedang'} (${item.zona})</b><br>
+                        <hr class="my-1 border-stone-200">
+                        <b>🌳 Vegetasi:</b> ${item.vegetasi || '-'}<br>
+                        <b>📐 Kemiringan:</b> ${item.kemiringan || '-'}<br>
+                        <b>🧪 Hara Tanah:</b> ${item.haraTanah || '-'}<br>
                         <button onclick="selectAndTrace('${code}')" class="mt-2 bg-amber-700 text-white px-2 py-1 rounded font-semibold w-full cursor-pointer">Lacak</button>
                     </div>
                 `);
