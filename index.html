@@ -2368,93 +2368,91 @@
         }
 
         async function syncChartAndSpreadsheetToDiscord() {
-            if (!DISCORD_WEBHOOK_STATS) {
-                alert('Webhook Discord untuk Laporan Statistik Kopi belum diatur.');
-                return;
-            }
-            if (!coffeeData || coffeeData.length === 0) {
-                alert('Tidak ada data batch kopi yang tersedia untuk disinkronkan.');
-                return;
-            }
+    if (!DISCORD_WEBHOOK_STATS) {
+        alert('Webhook Discord untuk Laporan Statistik Kopi belum diatur.');
+        return;
+    }
+    if (!coffeeData || coffeeData.length === 0) {
+        alert('Tidak ada data batch kopi yang tersedia untuk disinkronkan.');
+        return;
+    }
 
-            const canvas = document.getElementById('coffeeQuantityChart');
-            if (!canvas) {
-                alert('Elemen grafik tidak ditemukan.');
-                return;
-            }
+    const canvas = document.getElementById('coffeeQuantityChart');
+    if (!canvas) {
+        alert('Elemen grafik tidak ditemukan.');
+        return;
+    }
 
-            let totalCeri = 0;
-            let totalGb = 0;
+    let totalCeri = 0;
+    let totalGb = 0;
 
-            coffeeData.forEach(item => {
-                const ceri = parseFloat(item.qtyCeri) || 0;
-                const gb = parseFloat(item.qtyGb) || 0;
-                totalCeri += ceri;
-                totalGb += gb;
-            });
+    coffeeData.forEach(item => {
+        totalCeri += parseFloat(item.qtyCeri) || 0;
+        totalGb += parseFloat(item.qtyGb) || 0;
+    });
 
-            const avgYield = totalCeri > 0 ? ((totalGb / totalCeri) * 100).toFixed(1) : 0;
+    const avgYield = totalCeri > 0 ? ((totalGb / totalCeri) * 100).toFixed(1) : 0;
 
-            canvas.toBlob(async (chartBlob) => {
-                if (!chartBlob) {
-                    alert('Gagal mengekspor gambar grafik.');
-                    return;
-                }
-
-                let csvContent = "Kopitrace Sumedang - Laporan Kuantitas Ceri & Green Bean\n";
-                csvContent += `Waktu Ekspor,"${new Date().toLocaleString('id-ID')}"\n`;
-                csvContent += `Total Batch,${coffeeData.length}\n`;
-                csvContent += `Total Ceri (Kg),${totalCeri}\n`;
-                csvContent += `Total Green Bean (Kg),${totalGb}\n`;
-                csvContent += `Rata-rata Rendemen (%),${avgYield}%\n\n`;
-                
-                csvContent += "Kode Batch,Zona,Kecamatan,Metode,Petani,Varietas,MDPL,Kuantitas Ceri (Kg),Kuantitas Green Bean (Kg),Sertifikasi\n";
-                coffeeData.forEach(item => {
-                    const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
-                    csvContent += `"${code}","${item.zona}","${item.kecamatan || ''}","${item.metode}","${item.petani}","${item.varietas}","${item.mdpl || ''}",${item.qtyCeri || 0},${item.qtyGb || 0},"${item.sertifikasi || ''}"\n`;
-                });
-                
-                const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-                let summaryText = `📊 **LAPORAN ANALISIS & REKAP STATISTIK KOPI SUMEDANG**\n`;
-                summaryText += `────────────────────────────────────────\n`;
-                summaryText += `📦 **Total Batch Terdaftar:** ${coffeeData.length} Batch\n`;
-                summaryText += `🍒 **Akumulasi Ceri Kopi:** ${totalCeri.toLocaleString()} Kg\n`;
-                summaryText += `☕ **Akumulasi Green Bean:** ${totalGb.toLocaleString()} Kg\n`;
-                summaryText += `📈 **Rata-rata Rendemen:** ${avgYield}%\n`;
-                summaryText += `────────────────────────────────────────\n`;
-                summaryText += `_Laporan visual grafik kuantitas dan file spreadsheet rekapitulasi data lengkap telah dilampirkan di bawah._`;
-
-                const formData = new FormData();
-                formData.append('file0', chartBlob, 'grafik_analisis_kopi_sumedang.png');
-                formData.append('file1', csvBlob, 'rekap_lengkap_kopi_sumedang.csv');
-                
-                const payload = {
-                    content: summaryText,
-                    username: "KopiTrace Analytics Bot",
-                    avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png"
-                };
-                formData.append('payload_json', JSON.stringify(payload));
-
-                try {
-                    const res = await fetch(DISCORD_WEBHOOK_STATS, {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    if (res.ok) {
-                        alert('Berhasil! Laporan statistik lengkap (Grafik PNG & Spreadsheet CSV) telah dikirim ke channel Discord.');
-                    } else {
-                        const errText = await res.text();
-                        throw new Error(errText || 'Gagal mengirim ke Discord');
-                    }
-                } catch (err) {
-                    console.error("Discord Sync Error:", err);
-                    alert('Gagal mengirim ke Discord: ' + err.message);
-                }
-            }, 'image/png');
+    canvas.toBlob(async (chartBlob) => {
+        if (!chartBlob) {
+            alert('Gagal mengekspor gambar grafik.');
+            return;
         }
 
+        let csvContent = "Kopitrace Sumedang - Laporan Kuantitas Ceri & Green Bean\n";
+        csvContent += `Waktu Ekspor,"${new Date().toLocaleString('id-ID')}"\n`;
+        csvContent += `Total Batch,${coffeeData.length}\n`;
+        csvContent += `Total Ceri (Kg),${totalCeri}\n`;
+        csvContent += `Total Green Bean (Kg),${totalGb}\n`;
+        csvContent += `Rata-rata Rendemen (%),${avgYield}%\n\n`;
+        
+        csvContent += "Kode Batch,Zona,Kecamatan,Metode,Petani,Varietas,MDPL,Kuantitas Ceri (Kg),Kuantitas Green Bean (Kg),Sertifikasi\n";
+        coffeeData.forEach(item => {
+            const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
+            csvContent += `"${code}","${item.zona}","${item.kecamatan || ''}","${item.metode}","${item.petani}","${item.varietas}","${item.mdpl || ''}",${item.qtyCeri || 0},${item.qtyGb || 0},"${item.sertifikasi || ''}"\n`;
+        });
+        
+        const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+        let summaryText = `📊 **LAPORAN ANALISIS & REKAP STATISTIK KOPI SUMEDANG**\n`;
+        summaryText += `────────────────────────────────────────\n`;
+        summaryText += `📦 **Total Batch Terdaftar:** ${coffeeData.length} Batch\n`;
+        summaryText += `🍒 **Akumulasi Ceri Kopi:** ${totalCeri.toLocaleString()} Kg\n`;
+        summaryText += `☕ **Akumulasi Green Bean:** ${totalGb.toLocaleString()} Kg\n`;
+        summaryText += `📈 **Rata-rata Rendemen:** ${avgYield}%\n`;
+        summaryText += `────────────────────────────────────────\n`;
+        summaryText += `_Laporan visual grafik kuantitas dan file spreadsheet rekapitulasi data lengkap._`;
+
+        const formData = new FormData();
+        // PERBAIKAN: Gunakan format standard Discord files[0] dan files[1]
+        formData.append('files[0]', chartBlob, 'grafik_analisis_kopi_sumedang.png');
+        formData.append('files[1]', csvBlob, 'rekap_lengkap_kopi_sumedang.csv');
+        
+        const payload = {
+            content: summaryText,
+            username: "KopiTrace Analytics Bot",
+            avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png"
+        };
+        formData.append('payload_json', JSON.stringify(payload));
+
+        try {
+            const res = await fetch(DISCORD_WEBHOOK_STATS, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (res.ok) {
+                alert('Berhasil! Laporan statistik lengkap telah dikirim ke channel Discord.');
+            } else {
+                const errText = await res.text();
+                throw new Error(errText || 'Gagal mengirim ke Discord');
+            }
+        } catch (err) {
+            console.error("Discord Sync Error:", err);
+            alert('Gagal mengirim ke Discord: ' + err.message);
+        }
+    }, 'image/png');
+}
         function deleteTreeData(index) {
             if (currentUser && currentUser.role === 'farmer' && coffeeData[index].createdBy !== currentUser.user) { alert('Akses Ditolak!'); return; }
             if (confirm('Yakin ingin menghapus data batch ini?')) {
