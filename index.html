@@ -2767,45 +2767,9 @@
                         .catch((error) => {
                             console.log('Pendaftaran ServiceWorker gagal: ', error);
                     });
+                 }        
     
-            let deferredPrompt;
-
-           // Menangkap event instalasi dari browser
-           window.addEventListener('beforeinstallprompt', (e) => {
-          // Mencegah banner default browser muncul otomatis
-          e.preventDefault();
-         // Simpan event agar bisa dipicu oleh tombol Anda
-        deferredPrompt = e;
-  
-        // Tampilkan tombol instal jika sebelumnya disembunyikan
-        const installBtn = document.getElementById('install-btn');
-        if (installBtn) {
-        installBtn.classList.remove('hidden');
-      }
-   });
-
-      // Fungsi yang dipicu saat tombol Instal diklik
-      function installAppPrompt() {
-      if (!deferredPrompt) {
-       alert("Aplikasi sudah terinstal atau perangkat/browser Anda sedang tidak mendukung instalasi otomatis.");
-       return;
-    }
-  
-       // Tampilkan prompt instalasi bawaan sistem
-      deferredPrompt.prompt();
-  
-      // Periksa respons pengguna terhadap dialog instal
-      deferredPrompt.userChoice.then((choiceResult) => {
-       if (choiceResult.outcome === 'accepted') {
-        console.log('Pengguna menerima instalasi aplikasi');
-     } else {
-      console.log('Pengguna membatalkan instalasi');
-    }
-    // Kosongkan variabel karena prompt hanya bisa dipakai sekali
-    deferredPrompt = null;
-      });
-  });
-}
+            
     </script>
 </body>
 </html>
