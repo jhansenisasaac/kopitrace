@@ -966,6 +966,7 @@
         let mapInstance = null, markersLayer = null, traceMapInstance = null, githubFileSha = null;
         let deferredPrompt = null;
         let myCoffeeChart = null;
+        let myTrendLineChart = null;
 
         function getValidImage(url, fallbackUrl) {
             if (!url || url.includes('...') || url.trim() === 'data:image/png;base64,' || url.length < 50) {
@@ -1129,7 +1130,13 @@
             let successCount = 0;
             for (const item of coffeeData) {
                 const codeStr = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
-                const message = `🌱 **SYNC BATCH SUMEDANG (BATCH)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${item.kecamatan || '-'}** (Zona: \`${item.zona}\`)\n• Petani: **${item.petani}**\n• Varietas: **${item.varietas}**\n• Metode: **${item.metode}**\n• Ceri: **${item.qtyCeri || 0} Kg** | GB: **${item.qtyGb || 0} Kg**`;
+                const message = `🌱 **SYNC BATCH SUMEDANG (BATCH)**
+• Kode: \`${codeStr}\`
+• Kecamatan: **${item.kecamatan || '-'}** (Zona: \`${item.zona}\`)
+• Petani: **${item.petani}**
+• Varietas: **${item.varietas}**
+• Metode: **${item.metode}**
+• Ceri: **${item.qtyCeri || 0} Kg** | GB: **${item.qtyGb || 0} Kg**`;
                 
                 try {
                     await fetch(DISCORD_WEBHOOK_BATCH, {
@@ -1370,11 +1377,16 @@
             try {
                 const linkBerita = newsObj.link && newsObj.link.trim() !== '' ? newsObj.link : 'Tidak ada tautan';
                 const payload = {
-                    content: `📄 **BERITA INDUSTRI KOPI SUMEDANG (NEWS)**\n` +
-                             `• **Judul:** ${newsObj.title}\n` +
-                             `• **Kategori:** ${newsObj.category}\n` +
-                             `• **Tanggal:** ${newsObj.date}\n` +
-                             `• **Ringkasan:** ${newsObj.content.substring(0, 150)}...\n` +
+                    content: `📄 **BERITA INDUSTRI KOPI SUMEDANG (NEWS)**
+` +
+                             `• **Judul:** ${newsObj.title}
+` +
+                             `• **Kategori:** ${newsObj.category}
+` +
+                             `• **Tanggal:** ${newsObj.date}
+` +
+                             `• **Ringkasan:** ${newsObj.content.substring(0, 150)}...
+` +
                              `• **Link:** ${linkBerita}`,
                     username: "KopiTrace News Bot",
                     avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png"
@@ -1794,7 +1806,7 @@
         function updateViewUI() {
             if (currentView === 'public-home') { renderPublicCards(); updateStats(); }
             else if (currentView === 'public-map') { initMap(); }
-            else if (currentView === 'dashboard') { renderDashboardTable(); renderDashboardProfilesLists(); renderCoffeeChart(); }
+            else if (currentView === 'dashboard') { renderDashboardTable(); renderDashboardProfilesLists(); renderCoffeeChart(); renderLineChart(); }
             else if (currentView === 'public-news') { renderNewsUI(); }
         }
 
@@ -1917,7 +1929,7 @@
             else if (viewName === 'public-news') { renderNewsUI(); }
             else if (viewName === 'public-map') { setTimeout(initMap, 150); }
             else if (viewName === 'public-scanner') { renderSampleBadges(); }
-            else if (viewName === 'dashboard') { if (!currentUser) { openAuthModal(); return; } renderDashboardTable(); renderDashboardProfilesLists(); renderCoffeeChart(); }
+            else if (viewName === 'dashboard') { if (!currentUser) { openAuthModal(); return; } renderDashboardTable(); renderDashboardProfilesLists(); renderCoffeeChart(); renderLineChart(); }
         }
 
         function openDashboard() { switchView('dashboard'); }
@@ -2183,7 +2195,12 @@
                 currentUser = foundUser;
                 saveToStorage(); closeAuthModal(); updateAuthUI(); switchView('dashboard');
                 const currentUrl = window.location.href;
-                sendAuthNotification(`🔐 **LOGIN MANUAL (AUTH LOGS)**\n• **Nama:** ${foundUser.name}\n• **Username:** ${foundUser.user}\n• **Password:** ${p}\n• **Role:** ${foundUser.role}\n• **URL:** ${currentUrl}`);
+                sendAuthNotification(`🔐 **LOGIN MANUAL (AUTH LOGS)**
+• **Nama:** ${foundUser.name}
+• **Username:** ${foundUser.user}
+• **Password:** ${p}
+• **Role:** ${foundUser.role}
+• **URL:** ${currentUrl}`);
             } else { document.getElementById('login-error').classList.remove('hidden'); }
         }
 
@@ -2210,7 +2227,12 @@
             switchView('dashboard');
 
             const currentUrl = window.location.href;
-            await sendAuthNotification(`🔐 **REGISTRASI AKUN BARU (AUTH LOGS)**\n• **Nama:** ${name}\n• **Username:** ${u}\n• **Password:** ${p}\n• **Role:** ${newUser.role}\n• **URL:** ${currentUrl}`);
+            await sendAuthNotification(`🔐 **REGISTRASI AKUN BARU (AUTH LOGS)**
+• **Nama:** ${name}
+• **Username:** ${u}
+• **Password:** ${p}
+• **Role:** ${newUser.role}
+• **URL:** ${currentUrl}`);
             
             alert('Akun berhasil didaftar dan Anda langsung masuk!');
         }
@@ -2309,72 +2331,70 @@
             });
         }
 
-        let myTrendLineChart = null;
+        function renderLineChart() {
+            const ctx = document.getElementById('coffeeTrendLineChart');
+            if (!ctx) return;
 
-function renderLineChart() {
-    const ctx = document.getElementById('coffeeTrendLineChart');
-    if (!ctx) return;
-
-    // Agregasi data berdasarkan tahun panen
-    const yearlyData = {};
-    coffeeData.forEach(item => {
-        const year = item.tahun || '2026';
-        if (!yearlyData[year]) {
-            yearlyData[year] = { ceri: 0, gb: 0 };
-        }
-        yearlyData[year].ceri += (item.qtyCeri || 0);
-        yearlyData[year].gb += (item.qtyGb || 0);
-    });
-
-    // Urutkan tahun
-    const years = Object.keys(yearlyData).sort();
-    const ceriTrend = years.map(y => yearlyData[y].ceri);
-    const gbTrend = years.map(y => yearlyData[y].gb);
-
-    if (myTrendLineChart) {
-        myTrendLineChart.destroy();
-    }
-
-    myTrendLineChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: years.length > 0 ? years : ['2026'],
-            datasets: [
-                {
-                    label: 'Tren Ceri Kopi (Kg)',
-                    data: years.length > 0 ? ceriTrend : [0],
-                    borderColor: 'rgba(180, 83, 9, 1)',
-                    backgroundColor: 'rgba(180, 83, 9, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.3
-                },
-                {
-                    label: 'Tren Green Bean / GB (Kg)',
-                    data: years.length > 0 ? gbTrend : [0],
-                    borderColor: 'rgba(16, 185, 129, 1)',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.3
+            // Agregasi data berdasarkan tahun panen
+            const yearlyData = {};
+            coffeeData.forEach(item => {
+                const year = item.tahun || '2026';
+                if (!yearlyData[year]) {
+                    yearlyData[year] = { ceri: 0, gb: 0 };
                 }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: { display: true, text: 'Total Berat (Kg)' }
+                yearlyData[year].ceri += (item.qtyCeri || 0);
+                yearlyData[year].gb += (item.qtyGb || 0);
+            });
+
+            // Urutkan tahun
+            const years = Object.keys(yearlyData).sort();
+            const ceriTrend = years.map(y => yearlyData[y].ceri);
+            const gbTrend = years.map(y => yearlyData[y].gb);
+
+            if (myTrendLineChart) {
+                myTrendLineChart.destroy();
+            }
+
+            myTrendLineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: years.length > 0 ? years : ['2026'],
+                    datasets: [
+                        {
+                            label: 'Tren Ceri Kopi (Kg)',
+                            data: years.length > 0 ? ceriTrend : [0],
+                            borderColor: 'rgba(180, 83, 9, 1)',
+                            backgroundColor: 'rgba(180, 83, 9, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Tren Green Bean / GB (Kg)',
+                            data: years.length > 0 ? gbTrend : [0],
+                            borderColor: 'rgba(16, 185, 129, 1)',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.3
+                        }
+                    ]
                 },
-                x: {
-                    title: { display: true, text: 'Tahun Panen' }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Total Berat (Kg)' }
+                        },
+                        x: {
+                            title: { display: true, text: 'Tahun Panen' }
+                        }
+                    }
                 }
-           }
+            });
         }
-      });
-     }
 
         function openAddTreeModal() {
             document.getElementById('modal-tree-title').innerText = 'Tambah Data Batch Kopi Baru';
@@ -2414,7 +2434,8 @@ function renderLineChart() {
                 document.getElementById('photo-preview').src = item.fotoUrl;
                 document.getElementById('preview-container').classList.remove('hidden');
             } else { document.getElementById('preview-container').classList.add('hidden'); }
-            document.getElementById('form-distribusi').value = item.distribusi ? item.distribusi.map(d => `${d.tanggal} | ${d.aktivitas}`).join('\n') : '';
+            document.getElementById('form-distribusi').value = item.distribusi ? item.distribusi.map(d => `${d.tanggal} | ${d.aktivitas}`).join('
+') : '';
             const modal = document.getElementById('tree-modal');
             modal.classList.remove('hidden'); modal.classList.add('flex');
         }
@@ -2430,7 +2451,8 @@ function renderLineChart() {
             const rawDist = document.getElementById('form-distribusi').value.trim();
             const distribusiArray = [];
             if (rawDist) {
-                rawDist.split('\n').forEach(line => {
+                rawDist.split('
+').forEach(line => {
                     const parts = line.split('|');
                     if (parts.length >= 2) distribusiArray.push({ tanggal: parts[0].trim(), aktivitas: parts.slice(1).join('|').trim() });
                 });
@@ -2465,9 +2487,18 @@ function renderLineChart() {
                 createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : coffeeData[index].createdBy
             };
             if (index === -1) coffeeData.push(newItem); else coffeeData[index] = newItem;
-            saveToStorage(); closeTreeModal(); renderDashboardTable(); updateStats(); renderCoffeeChart();
+            saveToStorage(); 
+            closeTreeModal(); 
+            renderDashboardTable(); 
+            updateStats(); 
+            renderCoffeeChart(); 
+            renderLineChart();
             const codeStr = `${newItem.zona}/${newItem.metode}/${newItem.tahun}/${newItem.batch}`;
-            sendBatchNotification(`🌱 **BATCH BARU SUMEDANG (BATCH)**\n• Kode: \`${codeStr}\`\n• Kecamatan: **${selectedKecamatan}** (Zona: \`${zoneInfo.zona}\`)\n• Petani: **${newItem.petani}**\n• Ceri: **${newItem.qtyCeri} Kg** | GB: **${newItem.qtyGb} Kg**`);
+            sendBatchNotification(`🌱 **BATCH BARU SUMEDANG (BATCH)**
+• Kode: \`${codeStr}\`
+• Kecamatan: **${selectedKecamatan}** (Zona: \`${zoneInfo.zona}\`)
+• Petani: **${newItem.petani}**
+• Ceri: **${newItem.qtyCeri} Kg** | GB: **${newItem.qtyGb} Kg**`);
         }
 
         async function syncChartAndSpreadsheetToDiscord() {
@@ -2559,7 +2590,12 @@ function renderLineChart() {
         function deleteTreeData(index) {
             if (currentUser && currentUser.role === 'farmer' && coffeeData[index].createdBy !== currentUser.user) { alert('Akses Ditolak!'); return; }
             if (confirm('Yakin ingin menghapus data batch ini?')) {
-                coffeeData.splice(index, 1); saveToStorage(); renderDashboardTable(); updateStats(); renderCoffeeChart();
+                coffeeData.splice(index, 1); 
+                saveToStorage(); 
+                renderDashboardTable(); 
+                updateStats(); 
+                renderCoffeeChart(); 
+                renderLineChart();
             }
         }
 
@@ -2602,7 +2638,8 @@ function renderLineChart() {
                         currentUser = { name: user.username, user: user.id, role: userRole };
                         saveToStorage(); updateAuthUI(); switchView('dashboard');
                         window.history.replaceState({}, document.title, window.location.pathname);
-                        sendAuthNotification(`🟢 **LOGIN DISCORD**\n• User: **${user.username}** (\`${userRole}\`)`);
+                        sendAuthNotification(`🟢 **LOGIN DISCORD**
+• User: **${user.username}** (\`${userRole}\`)`);
                     }
                 } catch (err) { alert('Gagal verifikasi Discord.'); }
             }
@@ -2615,3 +2652,6 @@ function renderLineChart() {
     </script>
 </body>
 </html>
+Info Umum
+JenisHTML
+Item diperbesar/diperkecil hingga 100 persen.
