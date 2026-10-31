@@ -128,7 +128,7 @@
                 </div>
             </div>
 
-            <!-- BAGIAN DESKRIPTIF UTAMA (SEJARAH & TRANSFORMASI KOPI SUMEDANG) -->
+            <!-- BAGIAN DESKRIPTIF UTAMA -->
             <div class="bg-white p-5 sm:p-7 rounded-2xl shadow-sm border border-stone-200 space-y-4">
                 <div class="border-b border-stone-100 pb-3">
                     <h2 class="text-lg sm:text-xl font-bold text-stone-900 flex items-center space-x-2">
@@ -346,7 +346,7 @@
                 </div>
             </div>
 
-            <!-- GRAFIK TREN PRODUKSI PER TAHUN (LINE CHART) -->
+            <!-- GRAFIK TREN PRODUKSI PER TAHUN -->
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 space-y-4 mt-6">
                  <div class="flex justify-between items-center border-b border-stone-100 pb-3">
                     <h3 class="font-bold text-stone-900 text-sm sm:text-base flex items-center space-x-2">
@@ -442,7 +442,7 @@
         </div>
     </footer>
 
-    <!-- MODAL EDIT ANALISIS HULU-HILIR (DEV ONLY) -->
+    <!-- MODAL EDIT ANALISIS HULU-HILIR -->
     <div id="supply-edit-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-stone-100 pb-3">
@@ -745,24 +745,23 @@
                         <input type="text" id="form-mdpl" placeholder="1450 mdpl" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
                     </div>
                 </div>
-                <!-- TAMBAHAN INPUT: Skor NDVI & Status Kesejukan Tanaman -->
+
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block font-semibold text-stone-700 mb-1">Skor NDVI (Cth: 0.78)</label>
                         <input type="number" step="0.01" min="-1" max="1" id="form-ndvi" placeholder="0.78" required class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs">
                     </div>
-                <div>
-            <label class="block font-semibold text-stone-700 mb-1">Status NDVI</label>
-               <select id="form-ndvi-status" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs font-medium">
-                     <option value="Sangat Sehat (Dense Canopy)">Sangat Sehat (Dense Canopy)</option>
-                         <option value="Sehat & Optimal">Sehat & Optimal</option>
-                             <option value="Sedang / Perlu Perawatan">Sedang / Perlu Perawatan</option>
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">Status NDVI</label>
+                        <select id="form-ndvi-status" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs font-medium">
+                            <option value="Sangat Sehat (Dense Canopy)">Sangat Sehat (Dense Canopy)</option>
+                            <option value="Sehat & Optimal">Sehat & Optimal</option>
+                            <option value="Sedang / Perlu Perawatan">Sedang / Perlu Perawatan</option>
                             <option value="Stres / Kering">Stres / Kering</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- TAMBAHAN INPUT: Vegetasi, Kemiringan, dan Unsur Hara Tanah -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
                         <label class="block font-semibold text-stone-700 mb-1">Vegetasi / Naungan</label>
@@ -887,7 +886,6 @@
 
     <!-- SCRIPT LOGIC -->
     <script>
-        // Konfigurasi GitHub & Webhook Discord Terpisah
         if (typeof GITHUB_CONFIG === 'undefined') {
             var GITHUB_CONFIG = {
                 owner: 'jhansenisasaac',
@@ -905,7 +903,7 @@
             var DISCORD_WEBHOOK_STATS = 'https://discord.com/api/webhooks/1565744285284958270/U6jF7A_UvXs7vRxGcjNY8xZiVb6J3kC-icZRJiDL-31eoHMcMY1IyfVp9GVR_gHt9h98'; 
         }
 
-       if (typeof DISCORD_WEBHOOK_BATCH === 'undefined') {
+        if (typeof DISCORD_WEBHOOK_BATCH === 'undefined') {
             var DISCORD_WEBHOOK_BATCH = 'https://discord.com/api/webhooks/1565756724131135589/JC2FM6EO1XUo2aQ_01USwwvEPFYP4jPwEM9yyyC4CnnLt11bGjWDqxqa4QLW8CeXnxdu'; 
         }
 
@@ -994,7 +992,6 @@
         ];
         let newsData = JSON.parse(localStorage.getItem('kopiTraceNews')) || defaultNews;
 
-        // Menyertakan properti vegetasi, kemiringan, dan haraTanah pada data awal
         let defaultCoffeeData = [
             {
                 zona: "UTR", metode: "WASH", tahun: "2026", batch: "001", petani: "Bpk. Hendra", varietas: "Arabica Sumedang", mdpl: "1450 mdpl", kecamatan: "Sumedang Utara", lat: -6.8529, lng: 107.9205, 
@@ -2122,7 +2119,6 @@
                         </div>
                     </div>
 
-                    <!-- KOTAK INFORMASI BARU: Vegetasi, Kemiringan, & Hara Tanah di Hasil Pelacakan -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div class="bg-white p-3.5 rounded-xl border border-stone-200 space-y-1 shadow-sm">
                             <span class="text-[10px] text-stone-400 font-medium uppercase flex items-center space-x-1">
@@ -2182,90 +2178,81 @@
         }
 
         function initMap() {
-    const mapEl = document.getElementById('map');
-    if (!mapEl) return;
+            const mapEl = document.getElementById('map');
+            if (!mapEl) return;
 
-    if (!mapInstance) {
-        // Base Layers
-        const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' });
-        const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19, attribution: '&copy; Esri & Contributors' });
+            if (!mapInstance) {
+                const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' });
+                const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19, attribution: '&copy; Esri & Contributors' });
 
-        // Inisialisasi Peta dengan Base Layer Default (Satelit untuk analisis pertanian)
-        mapInstance = L.map('map', {
-            center: [-6.8587, 107.9213],
-            zoom: 11,
-            layers: [satelliteLayer]
-        });
+                mapInstance = L.map('map', {
+                    center: [-6.8587, 107.9213],
+                    zoom: 11,
+                    layers: [satelliteLayer]
+                });
 
-        // Layer Group untuk Marker Petani/Kebun
-        markersLayer = L.layerGroup().addTo(mapInstance);
+                markersLayer = L.layerGroup().addTo(mapInstance);
+                const ndviHeatLayer = L.layerGroup();
 
-        // Layer Group untuk Overlay NDVI (Visualisasi zona hijau berdasarkan skor NDVI)
-        const ndviHeatLayer = L.layerGroup();
+                coffeeData.forEach(item => {
+                    const lat = item.lat || -6.8587;
+                    const lng = item.lng || 107.9213;
+                    const ndviScore = item.ndvi || 0.75;
+                    
+                    let ndviColor = '#10b981';
+                    if (ndviScore < 0.4) ndviColor = '#ef4444';
+                    else if (ndviScore < 0.6) ndviColor = '#f59e0b';
 
-        coffeeData.forEach(item => {
-            const lat = item.lat || -6.8587;
-            const lng = item.lng || 107.9213;
-            const ndviScore = item.ndvi || 0.75;
+                    const ndviCircle = L.circle([lat, lng], {
+                        color: ndviColor,
+                        fillColor: ndviColor,
+                        fillOpacity: 0.35,
+                        radius: 400
+                    }).bindPopup(`<b>Indeks NDVI Area:</b> ${ndviScore} (${item.ndviStatus || 'Optimal'})`);
+                    
+                    ndviHeatLayer.addLayer(ndviCircle);
+                });
+
+                const baseMaps = {
+                    "Citra Satelit (Esri)": satelliteLayer,
+                    "Peta Standar (OSM)": osmLayer
+                };
+
+                const overlayMaps = {
+                    "Marker Kebun & Petani": markersLayer,
+                    "Zona Analisis NDVI": ndviHeatLayer
+                };
+
+                L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(mapInstance);
+
+            } else {
+                mapInstance.invalidateSize();
+            }
+
+            if (markersLayer) markersLayer.clearLayers();
             
-            // Warna lingkaran NDVI berdasarkan skor (Hijau tua = sangat sehat, Kuning/Merah = perlu perhatian)
-            let ndviColor = '#10b981'; // Hijau
-            if (ndviScore < 0.4) ndviColor = '#ef4444'; // Merah
-            else if (ndviScore < 0.6) ndviColor = '#f59e0b'; // Oranye/Kuning
+            coffeeData.forEach(item => {
+                const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
+                const lat = item.lat || -6.8587;
+                const lng = item.lng || 107.9213;
+                const ndviVal = item.ndvi || '0.75';
+                const ndviStat = item.ndviStatus || 'Optimal';
 
-            // Tambahkan Circle Overlay NDVI di sekitar kebun
-            const ndviCircle = L.circle([lat, lng], {
-                color: ndviColor,
-                fillColor: ndviColor,
-                fillOpacity: 0.35,
-                radius: 400
-            }).bindPopup(`<b>Indeks NDVI Area:</b> ${ndviScore} (${item.ndviStatus || 'Optimal'})`);
-            
-            ndviHeatLayer.addLayer(ndviCircle);
-        });
-
-        // Layer Control (Pilihan Tampilan Peta)
-        const baseMaps = {
-            "Citra Satelit (Esri)": satelliteLayer,
-            "Peta Standar (OSM)": osmLayer
-        };
-
-        const overlayMaps = {
-            "Marker Kebun & Petani": markersLayer,
-            "Zona Analisis NDVI": ndviHeatLayer
-        };
-
-        L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(mapInstance);
-
-    } else {
-        mapInstance.invalidateSize();
-    }
-
-    // Perbarui Marker pada Peta
-    if (markersLayer) markersLayer.clearLayers();
-    
-    coffeeData.forEach(item => {
-        const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
-        const lat = item.lat || -6.8587;
-        const lng = item.lng || 107.9213;
-        const ndviVal = item.ndvi || '0.75';
-        const ndviStat = item.ndviStatus || 'Optimal';
-
-        const marker = L.marker([lat, lng]).bindPopup(`
-            <div class="space-y-1 text-xs">
-                <b class="font-mono text-amber-800 text-sm">${code}</b><br>
-                <b>Petani:</b> ${item.petani}<br>
-                <b>Kec. ${item.kecamatan || 'Sumedang'} (${item.zona})</b><br>
-                <hr class="my-1 border-stone-200">
-                <b>🌱 Skor NDVI:</b> <span class="font-bold text-emerald-700">${ndviVal}</span> (${ndviStat})<br>
-                <b>🌳 Vegetasi:</b> ${item.vegetasi || '-'}<br>
-                <b>🧪 Hara Tanah:</b> ${item.haraTanah || '-'}<br>
-                <button onclick="selectAndTrace('${code}')" class="mt-2 bg-amber-700 text-white px-2 py-1 rounded font-semibold w-full cursor-pointer">Lacak Detail</button>
-            </div>
-        `);
-        markersLayer.addLayer(marker);
-    });
-}
+                const marker = L.marker([lat, lng]).bindPopup(`
+                    <div class="space-y-1 text-xs">
+                        <b class="font-mono text-amber-800 text-sm">${code}</b><br>
+                        <b>Petani:</b> ${item.petani}<br>
+                        <b>Kec. ${item.kecamatan || 'Sumedang'} (${item.zona})</b><br>
+                        <hr class="my-1 border-stone-200">
+                        <b>🌱 Skor NDVI:</b> <span class="font-bold text-emerald-700">${ndviVal}</span> (${ndviStat})<br>
+                        <b>🌳 Vegetasi:</b> ${item.vegetasi || '-'}<br>
+                        <b>🧪 Hara Tanah:</b> ${item.haraTanah || '-'}<br>
+                        <button onclick="selectAndTrace('${code}')" class="mt-2 bg-amber-700 text-white px-2 py-1 rounded font-semibold w-full cursor-pointer">Lacak Detail</button>
+                    </div>
+                `);
+                markersLayer.addLayer(marker);
+            });
+        }
 
         let secretClickCount = 0, secretTimer = null;
         function handleSecretLogoClick() {
@@ -2443,7 +2430,6 @@
             const ctx = document.getElementById('coffeeTrendLineChart');
             if (!ctx) return;
 
-            // Agregasi data berdasarkan tahun panen
             const yearlyData = {};
             coffeeData.forEach(item => {
                 const year = item.tahun || '2026';
@@ -2454,7 +2440,6 @@
                 yearlyData[year].gb += (item.qtyGb || 0);
             });
 
-            // Urutkan tahun
             const years = Object.keys(yearlyData).sort();
             const ceriTrend = years.map(y => yearlyData[y].ceri);
             const gbTrend = years.map(y => yearlyData[y].gb);
@@ -2547,6 +2532,9 @@
             modal.classList.remove('hidden'); modal.classList.add('flex');
             document.getElementById('form-ndvi').value = item.ndvi || 0.75;
             document.getElementById('form-ndvi-status').value = item.ndviStatus || 'Sehat & Optimal';
+            document.getElementById('form-vegetasi').value = item.vegetasi || '';
+            document.getElementById('form-kemiringan').value = item.kemiringan || '';
+            document.getElementById('form-hara').value = item.haraTanah || '';
         }
 
         function closeTreeModal() {
@@ -2564,11 +2552,6 @@
                     const parts = line.split('|');
                     if (parts.length >= 2) distribusiArray.push({ tanggal: parts[0].trim(), aktivitas: parts.slice(1).join('|').trim() });
                 });
-                const newItem = {
-                    ndvi: parseFloat(document.getElementById('form-ndvi').value) || 0.75,
-                    ndviStatus: document.getElementById('form-ndvi-status').value,
-                };
-
             }
             const existingFoto = index !== -1 ? coffeeData[index].fotoUrl : '';
             const fotoValue = document.getElementById('form-foto').value.trim() || existingFoto;
@@ -2589,6 +2572,11 @@
                 kecamatan: selectedKecamatan,
                 lat: zoneInfo.lat,
                 lng: zoneInfo.lng,
+                ndvi: parseFloat(document.getElementById('form-ndvi').value) || 0.75,
+                ndviStatus: document.getElementById('form-ndvi-status').value,
+                vegetasi: document.getElementById('form-vegetasi').value.trim(),
+                kemiringan: document.getElementById('form-kemiringan').value.trim(),
+                haraTanah: document.getElementById('form-hara').value.trim(),
                 sejarah: document.getElementById('form-sejarah').value.trim(),
                 destName: document.getElementById('form-dest-name').value.trim() || 'Gudang Pusat Sumedang',
                 destLat: -6.8687,
@@ -2642,28 +2630,28 @@
                     return;
                 }
 
-                let csvContent = "Kopitrace Sumedang - Laporan Kuantitas Ceri & Green Bean\\n";
-                csvContent += `Waktu Ekspor,"${new Date().toLocaleString('id-ID')}"\\n`;
-                csvContent += `Total Batch,${coffeeData.length}\\n`;
-                csvContent += `Total Ceri (Kg),${totalCeri}\\n`;
-                csvContent += `Total Green Bean (Kg),${totalGb}\\n`;
-                csvContent += `Rata-rata Rendemen (%),${avgYield}%\\n\\n`;
+                let csvContent = "Kopitrace Sumedang - Laporan Kuantitas Ceri & Green Bean\n";
+                csvContent += `Waktu Ekspor,"${new Date().toLocaleString('id-ID')}"\n`;
+                csvContent += `Total Batch,${coffeeData.length}\n`;
+                csvContent += `Total Ceri (Kg),${totalCeri}\n`;
+                csvContent += `Total Green Bean (Kg),${totalGb}\n`;
+                csvContent += `Rata-rata Rendemen (%),${avgYield}%\n\n`;
                 
-                csvContent += "Kode Batch,Zona,Kecamatan,Metode,Petani,Varietas,MDPL,Kuantitas Ceri (Kg),Kuantitas Green Bean (Kg),Sertifikasi\\n";
+                csvContent += "Kode Batch,Zona,Kecamatan,Metode,Petani,Varietas,MDPL,Kuantitas Ceri (Kg),Kuantitas Green Bean (Kg),Sertifikasi\n";
                 coffeeData.forEach(item => {
                     const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
-                    csvContent += `"${code}","${item.zona}","${item.kecamatan || ''}","${item.metode}","${item.petani}","${item.varietas}","${item.mdpl || ''}",${item.qtyCeri || 0},${item.qtyGb || 0},"${item.sertifikasi || ''}"\\n`;
+                    csvContent += `"${code}","${item.zona}","${item.kecamatan || ''}","${item.metode}","${item.petani}","${item.varietas}","${item.mdpl || ''}",${item.qtyCeri || 0},${item.qtyGb || 0},"${item.sertifikasi || ''}"\n`;
                 });
                 
                 const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
 
-                let summaryText = `📊 **LAPORAN ANALISIS & REKAP STATISTIK KOPI SUMEDANG**\\n`;
-                summaryText += `────────────────────────────────────────\\n`;
-                summaryText += `📦 **Total Batch Terdaftar:** ${coffeeData.length} Batch\\n`;
-                summaryText += `🍒 **Akumulasi Ceri Kopi:** ${totalCeri.toLocaleString()} Kg\\n`;
-                summaryText += `☕ **Akumulasi Green Bean:** ${totalGb.toLocaleString()} Kg\\n`;
-                summaryText += `📈 **Rata-rata Rendemen:** ${avgYield}%\\n`;
-                summaryText += `────────────────────────────────────────\\n`;
+                let summaryText = `📊 **LAPORAN ANALISIS & REKAP STATISTIK KOPI SUMEDANG**\n`;
+                summaryText += `────────────────────────────────────────\n`;
+                summaryText += `📦 **Total Batch Terdaftar:** ${coffeeData.length} Batch\n`;
+                summaryText += `🍒 **Akumulasi Ceri Kopi:** ${totalCeri.toLocaleString()} Kg\n`;
+                summaryText += `☕ **Akumulasi Green Bean:** ${totalGb.toLocaleString()} Kg\n`;
+                summaryText += `📈 **Rata-rata Rendemen:** ${avgYield}%\n`;
+                summaryText += `────────────────────────────────────────\n`;
                 summaryText += `_Laporan visual grafik kuantitas dan file spreadsheet rekapitulasi data lengkap._`;
 
                 const formData = new FormData();
@@ -2695,6 +2683,7 @@
                 }
             }, 'image/png');
         }
+
         function deleteTreeData(index) {
             if (currentUser && currentUser.role === 'farmer' && coffeeData[index].createdBy !== currentUser.user) { alert('Akses Ditolak!'); return; }
             if (confirm('Yakin ingin menghapus data batch ini?')) {
@@ -2757,18 +2746,18 @@
             else { renderPublicCards(); updateStats(); }
         };
     
-        // Service Worker untuk mendukung instalasi PWA / APK
-            if ('serviceWorker' in navigator) {
+        // Service Worker untuk PWA
+        if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js')
-                .then((registration) => {
-                    console.log('ServiceWorker berhasil terdaftar dengan scope: ', registration.scope);
+                navigator.serviceWorker.register('./sw.js')
+                    .then((registration) => {
+                        console.log('ServiceWorker berhasil terdaftar dengan scope: ', registration.scope);
                     })
-                        .catch((error) => {
-                            console.log('Pendaftaran ServiceWorker gagal: ', error);
+                    .catch((error) => {
+                        console.log('Pendaftaran ServiceWorker gagal: ', error);
                     });
-                 }  
-            
+            });
+        }
     </script>
 </body>
-</html>
+                        </html>
