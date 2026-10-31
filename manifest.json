@@ -1,24 +1,22 @@
 {
-  "id": "KopiTrace",
-  "name": "KopiTrace - Traceability Kopi",
+  "name": "KopiTrace - Pemetaan & Traceability Kopi Sumedang",
   "short_name": "KopiTrace",
   "start_url": "./index.html",
   "display": "standalone",
-  "orientation": "any",
-  "dir": "ltr",
-  "lang": "id",
-  "background_color": "#78350f",
+  "background_color": "#fafaf9",
   "theme_color": "#78350f",
   "icons": [
     {
-      "src": "logo.png",
+      "src": "./logo.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "logo.png",
+      "src": "./logo.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
