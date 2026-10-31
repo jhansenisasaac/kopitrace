@@ -564,6 +564,10 @@
                     </div>
                 </div>
                 <div>
+                    <label class="block font-semibold text-stone-700 mb-1">Link Berita (URL)</label>
+                    <input type="url" id="form-news-link" placeholder="Cth: https://sumber-berita.com/baca" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs sm:text-sm">
+                </div>
+                <div>
                     <label class="block font-semibold text-stone-700 mb-1">Isi Berita / Artikel</label>
                     <textarea id="form-news-content" rows="4" placeholder="Tuliskan ulasan atau informasi lengkap mengenai industri kopi..." required class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs"></textarea>
                 </div>
@@ -829,7 +833,7 @@
             };
         }
 
-         // 1. Webhook Khusus NEWS (Coffee News)
+        // 1. Webhook Khusus NEWS (Coffee News)
         if (typeof DISCORD_WEBHOOK_NEWS === 'undefined') {
             var DISCORD_WEBHOOK_NEWS = 'https://discord.com/api/webhooks/1565773689897619537/4MG6PiJNLrmvbDX0oTVA4sd2G0IPPp4hgFyaXcTL8Qwp33S_6DHARIDmjwK4CnYMbS12'; 
         }
@@ -858,7 +862,6 @@
         if (typeof ROLE_ADMIN_ID === 'undefined') {
             var ROLE_ADMIN_ID = '1564682206830665889';
         }
-
 
         const SUMEDANG_ZONES = {
             "Sumedang Utara": { zona: "UTR", lat: -6.8529, lng: 107.9205 },
@@ -909,7 +912,7 @@
         ];
         let processorsData = JSON.parse(localStorage.getItem('kopiTraceProcessors')) || defaultProcessors;
 
-        // Data Berita Industri Kopi
+        // Data Berita Industri Kopi (Dilengkapi properti link)
         let defaultNews = [
             {
                 title: "Kopi Arabika Sumedang Kian Diminati Pasar Specialty Internasional",
@@ -917,6 +920,7 @@
                 date: "2026-06-01",
                 content: "Kawasan dataran tinggi Gunung Tampomas dan Cimalaka di Sumedang terus menunjukkan peningkatan kualitas produksi green bean. Berkat penerapan proses pasca-panen yang ketat seperti Honey dan Experimental Winey, kopi Sumedang kini dilirik oleh roastery mancanegara.",
                 foto: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80",
+                link: "https://example.com/berita-kopi-sumedang-ekspor",
                 createdBy: "dev"
             },
             {
@@ -925,6 +929,7 @@
                 date: "2026-05-20",
                 content: "Dinas pertanian bersama komunitas penggiat kopi lokal mengadakan pelatihan intensif mengenai pentingnya petik merah (selective harvesting) guna mendongkrak skor cupping quality standar SCAA.",
                 foto: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
+                link: "https://example.com/pelatihan-petik-merah-sumedang",
                 createdBy: "dev"
             }
         ];
@@ -1256,7 +1261,7 @@
                             ${canEdit ? `
                             <div class="flex space-x-1">
                                 <button onclick="openEditNewsModal(${idx})" class="px-2.5 py-1 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold rounded-lg text-xs cursor-pointer"><i class="fa-solid fa-pen-to-square mr-1"></i>Edit</button>
-                                <button onclick="deleteNewsArticle(${idx})" class="px-2.5 py-1 bg-red-100 hover:bg-red-200 text-red-700 font-bold rounded-lg text-xs cursor-pointer"><i class="fa-solid fa-trash mr-1"></i>Hapus</i></button>
+                                <button onclick="deleteNewsArticle(${idx})" class="px-2.5 py-1 bg-red-100 hover:bg-red-200 text-red-700 font-bold rounded-lg text-xs cursor-pointer"><i class="fa-solid fa-trash mr-1"></i>Hapus</button>
                             </div>
                             ` : ''}
                         </div>
@@ -1271,6 +1276,7 @@
             if (!news) return;
             const container = document.getElementById('news-detail-content');
             const newsPhoto = getValidImage(news.foto, 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80');
+            const linkButton = news.link && news.link.trim() !== '' ? `<div class="pt-2"><a href="${news.link}" target="_blank" class="inline-flex items-center space-x-2 bg-amber-700 hover:bg-amber-800 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition shadow"><i class="fa-solid fa-external-link-alt"></i><span>Kunjungi Sumber Berita Asli</span></a></div>` : '';
             
             container.innerHTML = `
                 <div class="space-y-4">
@@ -1285,6 +1291,7 @@
                     <div class="text-sm sm:text-base text-stone-700 leading-relaxed space-y-3 pt-2 whitespace-pre-line">
                         ${news.content}
                     </div>
+                    ${linkButton}
                 </div>
             `;
             switchView('news-detail');
@@ -1309,6 +1316,7 @@
             document.getElementById('news-modal-title').innerHTML = `<i class="fa-solid fa-newspaper text-amber-700"></i><span>Tambah Berita Baru</span>`;
             document.getElementById('news-edit-index').value = -1;
             document.getElementById('news-form').reset();
+            document.getElementById('form-news-link').value = '';
             document.getElementById('form-news-foto').value = '';
             document.getElementById('news-preview-container').classList.add('hidden');
             document.getElementById('form-news-date').valueAsDate = new Date();
@@ -1324,6 +1332,7 @@
             document.getElementById('form-news-title').value = news.title;
             document.getElementById('form-news-category').value = news.category;
             document.getElementById('form-news-date').value = news.date;
+            document.getElementById('form-news-link').value = news.link || '';
             document.getElementById('form-news-content').value = news.content;
             document.getElementById('form-news-foto').value = news.foto || '';
             if (news.foto) {
@@ -1341,56 +1350,30 @@
             modal.classList.add('hidden'); modal.classList.remove('flex');
         }
 
+        // Fungsi Kirim Notifikasi Berita ke Discord Webhook Beserta Link Berita
         async function sendNewsNotification(newsObj) {
-        async function kirimBeritaKeDiscord() {
-    try {
-        // Mengambil data database.json dengan cache-busting timestamp
-        const response = await fetch(`database.json?t=${new Date().getTime()}`);
-        const data = await response.json();
-
-        // URL Webhook Discord Anda
-        const webhookUrl = 'https://discord.com/api/webhooks/1564681259123474432/YOUR_WEBHOOK_TOKEN';
-
-        for (const item of data) {
-            // Format payload pesan Discord dengan tambahan Link Berita
-            const payload = {
-                content: `📄 **BERITA INDUSTRI KOPI SUMEDANG (NEWS)**\n` +
-                         `📌 **Judul:** ${item.judul}\n` +
-                         `🏷 **Kategori:** ${item.kategori}\n` +
-                         `📅 **Tanggal:** ${item.tanggal}\n` +
-                         `📄 **Ringkasan:** ${item.ringkasan}\n` +
-                         `🔗 **Link:** ${item.link}`
-            };
-
-            // Mengirim request POST ke Discord Webhook
-            const discordResponse = await fetch(webhookUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload)
-            });
-
-            if (!discordResponse.ok) {
-                console.error('Gagal mengirim ke Discord:', discordResponse.statusText);
-            }
-        }
-    } catch (error) {
-        console.error('Terjadi kesalahan saat mengambil atau mengirim data:', error);
-    }
-}
-
-
-                if (newsObj.foto && newsObj.foto.startsWith('http')) {
-                    payload.embeds[0].image = { url: newsObj.foto };
-                }
+            if (!DISCORD_WEBHOOK_NEWS) return;
+            try {
+                const linkBerita = newsObj.link && newsObj.link.trim() !== '' ? newsObj.link : 'Tidak ada tautan';
+                const payload = {
+                    content: `📄 **BERITA INDUSTRI KOPI SUMEDANG (NEWS)**\n` +
+                             `• **Judul:** ${newsObj.title}\n` +
+                             `• **Kategori:** ${newsObj.category}\n` +
+                             `• **Tanggal:** ${newsObj.date}\n` +
+                             `• **Ringkasan:** ${newsObj.content.substring(0, 150)}...\n` +
+                             `• **Link:** ${linkBerita}`,
+                    username: "KopiTrace News Bot",
+                    avatar_url: "https://cdn-icons-png.flaticon.com/512/3299/3299943.png"
+                };
 
                 await fetch(DISCORD_WEBHOOK_NEWS, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-            } catch (err) { console.error("News webhook error:", err); }
+            } catch (err) { 
+                console.error("News webhook error:", err); 
+            }
         }
 
         async function saveNewsArticle(e) {
@@ -2551,9 +2534,3 @@
     </script>
 </body>
 </html>
-'''
-
-with open('index_3.html', 'w', encoding='utf-8') as f:
-    f.write(html_content)
-
-print("Updated index_3.html successfully with the requested Discord Embed payload format.")
