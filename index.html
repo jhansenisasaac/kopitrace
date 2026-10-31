@@ -745,6 +745,22 @@
                         <input type="text" id="form-mdpl" placeholder="1450 mdpl" required class="w-full px-3 py-2 border border-stone-300 rounded-lg">
                     </div>
                 </div>
+                <!-- TAMBAHAN INPUT: Skor NDVI & Status Kesejukan Tanaman -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">Skor NDVI (Cth: 0.78)</label>
+                        <input type="number" step="0.01" min="-1" max="1" id="form-ndvi" placeholder="0.78" required class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs">
+                    </div>
+                <div>
+            <label class="block font-semibold text-stone-700 mb-1">Status NDVI</label>
+               <select id="form-ndvi-status" class="w-full px-3 py-2 border border-stone-300 rounded-lg text-xs font-medium">
+                     <option value="Sangat Sehat (Dense Canopy)">Sangat Sehat (Dense Canopy)</option>
+                         <option value="Sehat & Optimal">Sehat & Optimal</option>
+                             <option value="Sedang / Perlu Perawatan">Sedang / Perlu Perawatan</option>
+                            <option value="Stres / Kering">Stres / Kering</option>
+                        </select>
+                    </div>
+                </div>
 
                 <!-- TAMBAHAN INPUT: Vegetasi, Kemiringan, dan Unsur Hara Tanah -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -2166,37 +2182,90 @@
         }
 
         function initMap() {
-            const mapEl = document.getElementById('map');
-            if (!mapEl) return;
-            if (!mapInstance) {
-                mapInstance = L.map('map').setView([-6.8587, 107.9213], 11);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mapInstance);
-            } else { mapInstance.invalidateSize(); }
+    const mapEl = document.getElementById('map');
+    if (!mapEl) return;
 
-            if (markersLayer) mapInstance.removeLayer(markersLayer);
-            markersLayer = L.layerGroup();
-            coffeeData.forEach(item => {
-                const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
-                const lat = item.lat || -6.8587;
-                const lng = item.lng || 107.9213;
-                
-                // Menampilkan Vegetasi, Kemiringan, dan Hara pada popup peta
-                const marker = L.marker([lat, lng]).bindPopup(`
-                    <div class="space-y-1 text-xs">
-                        <b class="font-mono text-amber-800 text-sm">${code}</b><br>
-                        <b>Petani:</b> ${item.petani}<br>
-                        <b>Kec. ${item.kecamatan || 'Sumedang'} (${item.zona})</b><br>
-                        <hr class="my-1 border-stone-200">
-                        <b>🌳 Vegetasi:</b> ${item.vegetasi || '-'}<br>
-                        <b>📐 Kemiringan:</b> ${item.kemiringan || '-'}<br>
-                        <b>🧪 Hara Tanah:</b> ${item.haraTanah || '-'}<br>
-                        <button onclick="selectAndTrace('${code}')" class="mt-2 bg-amber-700 text-white px-2 py-1 rounded font-semibold w-full cursor-pointer">Lacak</button>
-                    </div>
-                `);
-                markersLayer.addLayer(marker);
-            });
-            markersLayer.addTo(mapInstance);
-        }
+    if (!mapInstance) {
+        // Base Layers
+        const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' });
+        const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19, attribution: '&copy; Esri & Contributors' });
+
+        // Inisialisasi Peta dengan Base Layer Default (Satelit untuk analisis pertanian)
+        mapInstance = L.map('map', {
+            center: [-6.8587, 107.9213],
+            zoom: 11,
+            layers: [satelliteLayer]
+        });
+
+        // Layer Group untuk Marker Petani/Kebun
+        markersLayer = L.layerGroup().addTo(mapInstance);
+
+        // Layer Group untuk Overlay NDVI (Visualisasi zona hijau berdasarkan skor NDVI)
+        const ndviHeatLayer = L.layerGroup();
+
+        coffeeData.forEach(item => {
+            const lat = item.lat || -6.8587;
+            const lng = item.lng || 107.9213;
+            const ndviScore = item.ndvi || 0.75;
+            
+            // Warna lingkaran NDVI berdasarkan skor (Hijau tua = sangat sehat, Kuning/Merah = perlu perhatian)
+            let ndviColor = '#10b981'; // Hijau
+            if (ndviScore < 0.4) ndviColor = '#ef4444'; // Merah
+            else if (ndviScore < 0.6) ndviColor = '#f59e0b'; // Oranye/Kuning
+
+            // Tambahkan Circle Overlay NDVI di sekitar kebun
+            const ndviCircle = L.circle([lat, lng], {
+                color: ndviColor,
+                fillColor: ndviColor,
+                fillOpacity: 0.35,
+                radius: 400
+            }).bindPopup(`<b>Indeks NDVI Area:</b> ${ndviScore} (${item.ndviStatus || 'Optimal'})`);
+            
+            ndviHeatLayer.addLayer(ndviCircle);
+        });
+
+        // Layer Control (Pilihan Tampilan Peta)
+        const baseMaps = {
+            "Citra Satelit (Esri)": satelliteLayer,
+            "Peta Standar (OSM)": osmLayer
+        };
+
+        const overlayMaps = {
+            "Marker Kebun & Petani": markersLayer,
+            "Zona Analisis NDVI": ndviHeatLayer
+        };
+
+        L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(mapInstance);
+
+    } else {
+        mapInstance.invalidateSize();
+    }
+
+    // Perbarui Marker pada Peta
+    if (markersLayer) markersLayer.clearLayers();
+    
+    coffeeData.forEach(item => {
+        const code = `${item.zona}/${item.metode}/${item.tahun}/${item.batch}`;
+        const lat = item.lat || -6.8587;
+        const lng = item.lng || 107.9213;
+        const ndviVal = item.ndvi || '0.75';
+        const ndviStat = item.ndviStatus || 'Optimal';
+
+        const marker = L.marker([lat, lng]).bindPopup(`
+            <div class="space-y-1 text-xs">
+                <b class="font-mono text-amber-800 text-sm">${code}</b><br>
+                <b>Petani:</b> ${item.petani}<br>
+                <b>Kec. ${item.kecamatan || 'Sumedang'} (${item.zona})</b><br>
+                <hr class="my-1 border-stone-200">
+                <b>🌱 Skor NDVI:</b> <span class="font-bold text-emerald-700">${ndviVal}</span> (${ndviStat})<br>
+                <b>🌳 Vegetasi:</b> ${item.vegetasi || '-'}<br>
+                <b>🧪 Hara Tanah:</b> ${item.haraTanah || '-'}<br>
+                <button onclick="selectAndTrace('${code}')" class="mt-2 bg-amber-700 text-white px-2 py-1 rounded font-semibold w-full cursor-pointer">Lacak Detail</button>
+            </div>
+        `);
+        markersLayer.addLayer(marker);
+    });
+}
 
         let secretClickCount = 0, secretTimer = null;
         function handleSecretLogoClick() {
@@ -2476,6 +2545,8 @@
             document.getElementById('form-distribusi').value = item.distribusi ? item.distribusi.map(d => `${d.tanggal} | ${d.aktivitas}`).join('\n') : '';
             const modal = document.getElementById('tree-modal');
             modal.classList.remove('hidden'); modal.classList.add('flex');
+            document.getElementById('form-ndvi').value = item.ndvi || 0.75;
+            document.getElementById('form-ndvi-status').value = item.ndviStatus || 'Sehat & Optimal';
         }
 
         function closeTreeModal() {
@@ -2493,6 +2564,11 @@
                     const parts = line.split('|');
                     if (parts.length >= 2) distribusiArray.push({ tanggal: parts[0].trim(), aktivitas: parts.slice(1).join('|').trim() });
                 });
+                const newItem = {
+                    ndvi: parseFloat(document.getElementById('form-ndvi').value) || 0.75,
+                    ndviStatus: document.getElementById('form-ndvi-status').value,
+                };
+
             }
             const existingFoto = index !== -1 ? coffeeData[index].fotoUrl : '';
             const fotoValue = document.getElementById('form-foto').value.trim() || existingFoto;
@@ -2521,7 +2597,7 @@
                 cupping: document.getElementById('form-cupping').value,
                 fotoUrl: fotoValue,
                 distribusi: distribusiArray,
-                createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : coffeeData[index].createdBy
+                createdBy: index === -1 ? (currentUser ? currentUser.user : 'dev') : coffeeData[index].createdBy     
             };
             if (index === -1) coffeeData.push(newItem); else coffeeData[index] = newItem;
             saveToStorage(); 
@@ -2619,7 +2695,6 @@
                 }
             }, 'image/png');
         }
-
         function deleteTreeData(index) {
             if (currentUser && currentUser.role === 'farmer' && coffeeData[index].createdBy !== currentUser.user) { alert('Akses Ditolak!'); return; }
             if (confirm('Yakin ingin menghapus data batch ini?')) {
