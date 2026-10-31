@@ -24,8 +24,8 @@
       "createdBy": "823842225611866183"
     },
     {
-      "zona": "UTR",
-      "metode": "WASH",
+      "zona": "TGR",
+      "metode": "EXP",
       "tahun": "2026",
       "batch": "001",
       "petani": "Bpk. Budi Sitisna",
@@ -33,9 +33,9 @@
       "mdpl": "1450 mdpl",
       "qtyCeri": 100,
       "qtyGb": 80,
-      "kecamatan": "Sumedang Utara",
-      "lat": -6.8529,
-      "lng": 107.9205,
+      "kecamatan": "Rancakalong",
+      "lat": -6.8398,
+      "lng": 107.8489,
       "sejarah": "Kopi Sumedang di kawasan dataran tinggi vulkanik, memiliki sejarah panjang sebagai bagian dari tradisi agraris Java Preanger yang terkenal di pasar internasional.",
       "destName": "jakarta",
       "destLat": -6.8687,
