@@ -1237,74 +1237,7 @@
                 `;
             });
             container.innerHTML = html;
-        }
-
-        let myTrendLineChart = null;
-
-function renderLineChart() {
-    const ctx = document.getElementById('coffeeTrendLineChart');
-    if (!ctx) return;
-
-    // Agregasi data berdasarkan tahun panen
-    const yearlyData = {};
-    coffeeData.forEach(item => {
-        const year = item.tahun || '2026';
-        if (!yearlyData[year]) {
-            yearlyData[year] = { ceri: 0, gb: 0 };
-        }
-        yearlyData[year].ceri += (item.qtyCeri || 0);
-        yearlyData[year].gb += (item.qtyGb || 0);
-    });
-
-    // Urutkan tahun
-    const years = Object.keys(yearlyData).sort();
-    const ceriTrend = years.map(y => yearlyData[y].ceri);
-    const gbTrend = years.map(y => yearlyData[y].gb);
-
-    if (myTrendLineChart) {
-        myTrendLineChart.destroy();
-    }
-
-    myTrendLineChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: years.length > 0 ? years : ['2026'],
-            datasets: [
-                {
-                    label: 'Tren Ceri Kopi (Kg)',
-                    data: years.length > 0 ? ceriTrend : [0],
-                    borderColor: 'rgba(180, 83, 9, 1)',
-                    backgroundColor: 'rgba(180, 83, 9, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.3
-                },
-                {
-                    label: 'Tren Green Bean / GB (Kg)',
-                    data: years.length > 0 ? gbTrend : [0],
-                    borderColor: 'rgba(16, 185, 129, 1)',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.3
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: { display: true, text: 'Total Berat (Kg)' }
-                },
-                x: {
-                    title: { display: true, text: 'Tahun Panen' }
-                }
-            }
-        }
-    });
-}
+        } 
 
         // Render Berita Kopi
         function renderNewsUI() {
