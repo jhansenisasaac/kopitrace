@@ -128,6 +128,27 @@
                 </div>
             </div>
 
+            <!-- BAGIAN DESKRIPTIF UTAMA (SEJARAH & TRANSFORMASI KOPI SUMEDANG) -->
+            <div class="bg-white p-5 sm:p-7 rounded-2xl shadow-sm border border-stone-200 space-y-4">
+                <div class="border-b border-stone-100 pb-3">
+                    <h2 class="text-lg sm:text-xl font-bold text-stone-900 flex items-center space-x-2">
+                        <i class="fa-solid fa-book-bookmark text-amber-700"></i>
+                        <span>Sejarah & Transformasi Ekosistem Kopi Sumedang</span>
+                    </h2>
+                </div>
+                <div class="text-xs sm:text-sm text-stone-600 leading-relaxed space-y-3">
+                    <p>
+                        Kopi Sumedang telah mengawali perjalanan budidaya komersial sejak akhir abad ke-17. Namun, seiring perkembangan industri kopi modern, pengelolaan kopi Sumedang masih menghadapi tantangan dalam integrasi informasi, ketelusuran hasil produksi, dan keterhubungan antarpelaku dari hulu hingga hilir.
+                    </p>
+                    <p>
+                        KopiTrace hadir sebagai langkah transformasi untuk membangun ekosistem data kopi Sumedang yang lebih adaptif, transparan, dan informatif. Melalui integrasi data hulu–hilir, KopiTrace menyediakan informasi mengenai wilayah penghasil kopi, asal produksi, proses pengolahan, hingga pergerakan produk dalam rantai pasok.
+                    </p>
+                    <p>
+                        Dengan demikian, setiap wilayah penghasil kopi tidak hanya tercatat sebagai sumber produksi, tetapi juga menjadi bagian dari satu kesatuan sistem informasi yang saling terhubung. KopiTrace mendorong pengelolaan kopi Sumedang menuju tata kelola yang lebih terukur.
+                    </p>
+                </div>
+            </div>
+
             <!-- ANALISIS KOPI SUMEDANG: HULU SAMPAI HILIR -->
             <div class="bg-white p-5 sm:p-7 rounded-2xl shadow-sm border border-stone-200 space-y-4">
                 <div class="flex justify-between items-center border-b border-stone-100 pb-3">
@@ -1539,7 +1560,7 @@
             const modal = document.getElementById('farmer-modal');
             modal.classList.add('hidden'); modal.classList.remove('flex');
         }
-
+        
         function saveFarmerProfile(e) {
             e.preventDefault();
             const index = parseInt(document.getElementById('farmer-edit-index').value);
