@@ -46,12 +46,12 @@
 
                 <!-- Desktop Nav -->
                 <div class="hidden md:flex items-center space-x-4 text-sm font-medium">
+                    <button onclick="switchView('public-news')" class="hover:text-amber-400 transition py-2 cursor-pointer">Coffee News</button>
                     <button onclick="switchView('public-home')" class="hover:text-amber-400 transition py-2 cursor-pointer">Beranda</button>
                     <button onclick="switchView('public-map')" class="hover:text-amber-400 transition py-2 cursor-pointer">Peta Sumedang</button>
                     <button onclick="switchView('public-scanner')" class="hover:text-amber-400 transition py-2 cursor-pointer">Lacak / Scan</button>
                     <button onclick="switchView('farmer-profile')" class="hover:text-amber-400 transition py-2 cursor-pointer text-amber-200">Profil Petani</button>
                     <button onclick="switchView('processor-profile')" class="hover:text-amber-400 transition py-2 cursor-pointer text-amber-200">Profil Prosesor</button>
-                    <button onclick="switchView('public-news')" class="hover:text-amber-400 transition py-2 cursor-pointer">Coffee News</button>
                     <button onclick="installAppPrompt()" id="install-btn" class="hidden text-amber-400 hover:text-amber-300 transition py-2 items-center space-x-1.5 font-semibold cursor-pointer">
                         <i class="fa-solid fa-download"></i>
                         <span>Instal</span>
@@ -77,12 +77,12 @@
 
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-stone-900 border-t border-stone-800 px-4 pt-3 pb-4 space-y-2 text-sm font-medium">
+            <button onclick="switchView('public-news'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Coffee News</button>
             <button onclick="switchView('public-home'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Beranda</button>
             <button onclick="switchView('public-map'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Peta Sumedang</button>
             <button onclick="switchView('public-scanner'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Lacak / Scan Kode</button>
             <button onclick="switchView('farmer-profile'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition text-amber-300">Profil Petani (Hulu)</button>
             <button onclick="switchView('processor-profile'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition text-amber-300">Profil Prosesor (Pasca-Panen)</button>
-            <button onclick="switchView('public-news'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition">Coffee News</button>
             <button onclick="installAppPrompt(); toggleMobileMenu();" id="mobile-install-btn" class="hidden w-full text-left px-3 py-2 rounded-lg hover:bg-stone-800 transition text-amber-400 font-semibold items-center space-x-2">
                 <i class="fa-solid fa-download mr-1"></i>
                 <span>Instal Aplikasi</span>
@@ -826,7 +826,7 @@
 
         // 2. Webhook Khusus LAPORAN STATISTIK KOPI (Grafik & Spreadsheet CSV)
         if (typeof DISCORD_WEBHOOK_STATS === 'undefined') {
-            var DISCORD_WEBHOOK_STATS = 'https://discord.com/api/webhooks/1565744285284958270/U6jF7A_UvXs7vRxGcjNY8xZiVb6J3kC-icZRJiDL-31eoHMcMY1IyfVp9GVR_gHt9h98'; 
+            var DISCORD_WEBHOOK_STATS = 'https://discord.com/api/webhooks/1564681259123474432/U6jF7A_UvXs7vRxGcjNY8xZiVb6J3kC-icZRJiDL-31eoHMcMY1IyfVp9GVR_gHt9h98'; 
         }
 
         // 3. Webhook Khusus LOG KOPITRACE (Aktivitas Umum / Batch)
